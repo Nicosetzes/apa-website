@@ -1,0 +1,91 @@
+header {
+    align-items: center;
+    background-color: $mainBlue;
+    display: flex;
+    height: $headerHeight;
+    justify-content: space-between;
+    position: fixed;
+    width: 100%;
+    z-index: 3000;
+
+    img {
+        height: 90px;
+        margin-left: 2rem;
+        width: 145px;
+    }
+
+    .nav {
+        background-color: $mainGold;
+        position: absolute;
+        right: 0;
+        text-align: left;
+        top: 100%;
+        transform: scale(1, 0);
+        transform-origin: top;
+        transition: transform 400ms ease-in-out;
+        width: 40%;
+
+        &.show {
+            transform: scale(1, 1);
+
+            .nav__list {
+                .nav__list-option {
+                    .nav__list-option-link {
+                        opacity: 1;
+                        transition: opacity 250ms ease-in-out 250ms; //fade-i
+                    }
+                }
+            }
+        }
+
+        .nav__list {
+            padding: 1.5em 0;
+            list-style: none;
+
+            .nav__list-option {
+                cursor: pointer;
+                padding: 1em 0 1em 2em;
+
+                &:nth-child(3) {
+                    a {
+                        align-items: center;
+                        display: flex;
+                        height: 100%;
+                    }
+                }
+
+                &:hover {
+                    background-color: #e0a769;
+                }
+
+                .nav__list-option-link {
+                    text-decoration: none;
+                    color: #7b4f1f;
+                    text-transform: uppercase;
+                    font-weight: 400;
+                    opacity: 0;
+                    transition: opacity 150ms ease-in-out; //fade-out
+                }
+            }
+        }
+    }
+
+    .hamburger {
+        align-items: center;
+        background-color: transparent;
+        border: 0;
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        font-size: 1.75rem;
+        height: 100%;
+        margin-right: 2rem;
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
