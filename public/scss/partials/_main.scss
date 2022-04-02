@@ -1,0 +1,365 @@
+main {
+    padding-top: $headerHeight;
+
+    .container__tournament {
+        align-items: center;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        margin: auto;
+
+        .flex-container {
+            align-items: flex-end;
+            display: flex;
+            width: 100%;
+
+            .container__tournament-header {
+                align-items: center;
+                background-color: $mainBlue;
+                color: #fff;
+                display: flex;
+                flex-direction: row;
+                height: $firstHeaderHeight;
+                justify-content: space-between;
+                margin: auto 0 0 0;
+                padding: 4rem 0 2rem 0;
+                width: 100%;
+
+                img {
+                    height: 50px;
+                    margin: 0 0 0 auto;
+                    width: 80px;
+                }
+
+                .container__tournament-header-title {
+                    align-items: center;
+                    background-color: $mainGold;
+                    border: $secondaryGold 3.15px solid;
+                    color: $mainBlue;
+                    display: flex;
+                    font-size: 1.25rem;
+                    font-weight: bold;
+                    justify-content: flex-start;
+                    margin: 0 0 0 auto;
+                    padding: 2.5px 0 2.5px 10px;
+                    text-transform: uppercase;
+                    width: 65%;
+                }
+            }
+        }
+
+        .container__tournament-content-stack {
+
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            margin: 0.75rem 0;
+            position: relative;
+            width: 100%;
+
+            .container__tournament-content {
+                border: #000 1.13px solid;
+                position: relative;
+
+                .container__tournament-content-title {
+                    background-color: $mainAquamarine;
+                    border-bottom: #000 1.13px solid;
+                    color: #fff;
+                    font-size: 1.25rem;
+                    padding: 0.25rem 0;
+                    text-align: center;
+                    text-transform: uppercase;
+                }
+
+                .img-gallartie {
+                    width: 100%;
+                }
+
+                .container__tournament-content-champion,
+                .container__tournament-content-finalist {
+                    align-items: center;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-evenly;
+                    text-transform: uppercase;
+                }
+
+                .container__tournament-content-champion {
+                    background-color: $mainGold;
+                    border: $secondaryGold 3.5px solid;
+                    margin: 1.5rem auto 0.75rem auto;
+                    padding: 0.75rem 0.25rem;
+                    width: 85%;
+
+                    .img-team {
+                        height: 75px;
+                        width: 60px;
+                    }
+
+                    .img-country {
+                        height: 60px;
+                        width: 85px;
+                    }
+
+                    .container__tournament-content-champion-details {
+                        display: flex;
+                        flex-direction: column;
+
+                        .span-title {
+                            color: #000;
+                            font-size: 0.95rem;
+                        }
+
+                        .span-name {
+                            color: $mainBlue;
+                            font-size: 3rem;
+                            line-height: 2.5rem;
+                        }
+
+                        .span-team {
+                            color: #000;
+                            font-size: 1.125rem;
+                        }
+                    }
+                }
+
+                .container__tournament-content-finalist {
+                    background-color: $mainGray;
+                    border: $secondaryGray 3.5px solid;
+                    margin: 0.75rem auto 1.5rem auto;
+                    padding: 0.5rem 0;
+                    width: fit-content;
+
+                    .img-team {
+                        height: 50px;
+                        margin: 0 0.5rem 0 1rem;
+                        width: 45px;
+                    }
+
+                    .img-team.img-team-atletico-madrid-small {
+                        width: 35px;
+                    }
+
+                    .img-country {
+                        height: 40px;
+                        margin: 0 0.5rem 0 1rem;
+                        width: 55px;
+                    }
+
+                    .container__tournament-content-finalist-details {
+                        display: flex;
+                        flex-direction: column;
+                        margin: 0 1rem 0 0.5rem;
+
+                        .span-title {
+                            color: #000;
+                            font-size: 0.6rem;
+                        }
+
+                        .span-name {
+                            color: $mainBlue;
+                            font-size: 1.5rem;
+                            line-height: 1.5rem;
+                        }
+
+                        .span-team {
+                            color: #000;
+                            font-size: 0.75rem;
+                        }
+                    }
+                }
+            }
+        }
+
+        .records {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+            width: 100%;
+
+            .records-title {
+                align-items: center;
+                background-color: $mainGold;
+                border: $secondaryGold 3.15px solid;
+                color: $mainBlue;
+                display: flex;
+                font-size: 1.25rem;
+                font-weight: bold;
+                justify-content: flex-start;
+                margin: 0 0 0 auto;
+                padding: 2.5px 0 2.5px 10px;
+                text-transform: uppercase;
+                width: 65%;
+            }
+
+            .records-content-container {
+                align-items: flex-start;
+                display: flex;
+                flex-direction: column;
+
+                .records-content {
+                    align-items: center;
+                    display: flex;
+                    justify-content: center;
+                    margin: 0.75rem;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+
+                    .records-content-img-escudo {
+                        margin: 0 0.75rem;
+                        width: 55px;
+                    }
+
+                    .records-content-img-bandera {
+                        height: 40px;
+                        margin: 0 0.75rem;
+                        width: 60px;
+                    }
+                }
+            }
+        }
+
+        .stack-rosario-central {
+            margin-top: $spaceBetweenStacks * 2;
+
+            &::before {
+                @include estadio(url('./../img/rosario-central-estadio.png'))
+            }
+        }
+
+        .stack-estudiantes {
+            &::before {
+                @include estadio(url('./../img/estudiantes-estadio.png'))
+            }
+        }
+
+        .stack-san-lorenzo {
+            &::before {
+                @include estadio(url('./../img/san-lorenzo-estadio.png'))
+            }
+        }
+
+        .stack-racing {
+            &::before {
+                @include estadio(url('./../img/racing-estadio.png'))
+            }
+        }
+
+        .stack-river {
+            margin-bottom: $spaceBetweenStacks * 2;
+
+            &::before {
+                @include estadio(url('./../img/river-estadio.png'))
+            }
+        }
+
+        .stack-portugal {
+            margin-top: $spaceBetweenStacks * 2;
+
+            &::before {
+                @include estadio(url('./../img/portugal-equipo.png'))
+            }
+        }
+
+        .stack-alemania {
+            &::before {
+                @include estadio(url('./../img/alemania-equipo.png'))
+            }
+        }
+
+        .stack-belgica {
+            margin-bottom: $spaceBetweenStacks * 2;
+
+            &::before {
+                @include estadio(url('./../img/belgica-equipo.png'))
+            }
+        }
+
+        .stack-argentina {
+            margin-bottom: $spaceBetweenStacks * 2;
+
+            &::before {
+                @include estadio(url('./../img/argentina-equipo.png'))
+            }
+        }
+
+        .stack-manchester-united {
+            margin-top: $spaceBetweenStacks * 2;
+
+            &::before {
+                @include estadio(url('./../img/manchester-united-equipo.png'))
+            }
+        }
+
+        .stack-real-madrid {
+            margin-bottom: $spaceBetweenStacks * 2;
+
+            &::before {
+                @include estadio(url('./../img/real-madrid-equipo.png'))
+            }
+        }
+
+        &:last-child {
+            background-color: $mainBlue;
+        }
+
+        .container__trajectory {
+            align-items: center;
+            background-color: $mainBlue;
+            display: flex;
+            height: 150px;
+            justify-content: center;
+            margin: 1rem 0;
+            text-transform: uppercase;
+            width: 100%;
+
+            .trajectory-manager,
+            .trajectory-trophies {
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+
+            }
+
+            .trajectory-manager {
+                align-items: flex-start;
+                color: #fff;
+                justify-content: space-evenly;
+                padding: 0 1rem;
+                width: 45%;
+
+                .trajectory-manager-name {
+                    font-size: 2.75rem;
+                }
+
+                .trajectory-manager-amount {
+                    font-size: 3.25rem;
+                }
+
+                .trajectory-manager-titles {
+                    font-size: 1.75rem;
+                }
+            }
+
+            .trajectory-trophies {
+                background-color: $mainGold;
+                border: $secondaryGold 3.15px solid;
+                justify-content: center;
+                width: 55%;
+
+                span {
+                    font-size: 1rem;
+                    line-height: 1.5rem;
+                }
+
+                .small-description {
+                    font-size: 0.75rem;
+                }
+            }
+        }
+    }
+}
