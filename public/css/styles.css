@@ -28,11 +28,13 @@ header {
   width: 100%;
   z-index: 3000;
 }
+
 header img {
   height: 90px;
   margin-left: 2rem;
   width: 145px;
 }
+
 header .nav {
   background-color: #F5D77F;
   position: absolute;
@@ -49,23 +51,28 @@ header .nav {
   transition: transform 400ms ease-in-out, -webkit-transform 400ms ease-in-out;
   width: 40%;
 }
+
 header .nav.show {
   -webkit-transform: scale(1, 1);
           transform: scale(1, 1);
 }
+
 header .nav.show .nav__list .nav__list-option .nav__list-option-link {
   opacity: 1;
   -webkit-transition: opacity 250ms ease-in-out 250ms;
   transition: opacity 250ms ease-in-out 250ms;
 }
+
 header .nav .nav__list {
   padding: 1.5em 0;
   list-style: none;
 }
+
 header .nav .nav__list .nav__list-option {
   cursor: pointer;
   padding: 1em 0 1em 2em;
 }
+
 header .nav .nav__list .nav__list-option:nth-child(3) a {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -75,9 +82,11 @@ header .nav .nav__list .nav__list-option:nth-child(3) a {
   display: flex;
   height: 100%;
 }
+
 header .nav .nav__list .nav__list-option:hover {
   background-color: #e0a769;
 }
+
 header .nav .nav__list .nav__list-option .nav__list-option-link {
   text-decoration: none;
   color: #7b4f1f;
@@ -87,6 +96,7 @@ header .nav .nav__list .nav__list-option .nav__list-option-link {
   -webkit-transition: opacity 150ms ease-in-out;
   transition: opacity 150ms ease-in-out;
 }
+
 header .hamburger {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -105,6 +115,7 @@ header .hamburger {
   top: 0;
   right: 0;
 }
+
 header .hamburger:focus {
   outline: none;
 }
@@ -112,6 +123,7 @@ header .hamburger:focus {
 main {
   padding-top: 125px;
 }
+
 main .container__tournament {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -129,6 +141,7 @@ main .container__tournament {
           flex-direction: column;
   margin: auto;
 }
+
 main .container__tournament .flex-container {
   -webkit-box-align: end;
       -ms-flex-align: end;
@@ -138,6 +151,11 @@ main .container__tournament .flex-container {
   display: flex;
   width: 100%;
 }
+
+main .container__tournament .flex-container .container__tournament-header.container__tournament-header-first {
+  padding: 4rem 0 2rem 0;
+}
+
 main .container__tournament .flex-container .container__tournament-header {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -156,14 +174,15 @@ main .container__tournament .flex-container .container__tournament-header {
       -ms-flex-pack: justify;
           justify-content: space-between;
   margin: auto 0 0 0;
-  padding: 4rem 0 2rem 0;
   width: 100%;
 }
+
 main .container__tournament .flex-container .container__tournament-header img {
   height: 50px;
   margin: 0 0 0 auto;
   width: 80px;
 }
+
 main .container__tournament .flex-container .container__tournament-header .container__tournament-header-title {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -184,6 +203,7 @@ main .container__tournament .flex-container .container__tournament-header .conta
   text-transform: uppercase;
   width: 65%;
 }
+
 main .container__tournament .container__tournament-content-stack {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -197,10 +217,12 @@ main .container__tournament .container__tournament-content-stack {
   position: relative;
   width: 100%;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content {
   border: #000 1.13px solid;
   position: relative;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-title {
   background-color: #0AB9D8;
   border-bottom: #000 1.13px solid;
@@ -210,9 +232,11 @@ main .container__tournament .container__tournament-content-stack .container__tou
   text-align: center;
   text-transform: uppercase;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .img-gallartie {
   width: 100%;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-champion,
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-finalist {
   -webkit-box-align: center;
@@ -230,6 +254,7 @@ main .container__tournament .container__tournament-content-stack .container__tou
           justify-content: space-evenly;
   text-transform: uppercase;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-champion {
   background-color: #F5D77F;
   border: #DAA813 3.5px solid;
@@ -237,14 +262,17 @@ main .container__tournament .container__tournament-content-stack .container__tou
   padding: 0.75rem 0.25rem;
   width: 85%;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-champion .img-team {
   height: 75px;
   width: 60px;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-champion .img-country {
   height: 60px;
   width: 85px;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-champion .container__tournament-content-champion-details {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -254,19 +282,23 @@ main .container__tournament .container__tournament-content-stack .container__tou
       -ms-flex-direction: column;
           flex-direction: column;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-champion .container__tournament-content-champion-details .span-title {
   color: #000;
   font-size: 0.95rem;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-champion .container__tournament-content-champion-details .span-name {
   color: #004a79;
   font-size: 3rem;
   line-height: 2.5rem;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-champion .container__tournament-content-champion-details .span-team {
   color: #000;
   font-size: 1.125rem;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-finalist {
   background-color: #C5C3C0;
   border: #61605F 3.5px solid;
@@ -276,19 +308,23 @@ main .container__tournament .container__tournament-content-stack .container__tou
   width: -moz-fit-content;
   width: fit-content;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-finalist .img-team {
   height: 50px;
   margin: 0 0.5rem 0 1rem;
   width: 45px;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-finalist .img-team.img-team-atletico-madrid-small {
   width: 35px;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-finalist .img-country {
   height: 40px;
   margin: 0 0.5rem 0 1rem;
   width: 55px;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-finalist .container__tournament-content-finalist-details {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -299,19 +335,23 @@ main .container__tournament .container__tournament-content-stack .container__tou
           flex-direction: column;
   margin: 0 1rem 0 0.5rem;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-finalist .container__tournament-content-finalist-details .span-title {
   color: #000;
   font-size: 0.6rem;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-finalist .container__tournament-content-finalist-details .span-name {
   color: #004a79;
   font-size: 1.5rem;
   line-height: 1.5rem;
 }
+
 main .container__tournament .container__tournament-content-stack .container__tournament-content .container__tournament-content-finalist .container__tournament-content-finalist-details .span-team {
   color: #000;
   font-size: 0.75rem;
 }
+
 main .container__tournament .records {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -323,6 +363,7 @@ main .container__tournament .records {
   margin-bottom: 1.5rem;
   width: 100%;
 }
+
 main .container__tournament .records .records-title {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -343,6 +384,7 @@ main .container__tournament .records .records-title {
   text-transform: uppercase;
   width: 65%;
 }
+
 main .container__tournament .records .records-content-container {
   -webkit-box-align: start;
       -ms-flex-align: start;
@@ -355,6 +397,7 @@ main .container__tournament .records .records-content-container {
       -ms-flex-direction: column;
           flex-direction: column;
 }
+
 main .container__tournament .records .records-content-container .records-content {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -367,21 +410,26 @@ main .container__tournament .records .records-content-container .records-content
           justify-content: center;
   margin: 0.75rem;
 }
+
 main .container__tournament .records .records-content-container .records-content:last-child {
   margin-bottom: 0;
 }
+
 main .container__tournament .records .records-content-container .records-content .records-content-img-escudo {
   margin: 0 0.75rem;
   width: 55px;
 }
+
 main .container__tournament .records .records-content-container .records-content .records-content-img-bandera {
   height: 40px;
   margin: 0 0.75rem;
   width: 60px;
 }
+
 main .container__tournament .stack-rosario-central {
   margin-top: 1.5rem;
 }
+
 main .container__tournament .stack-rosario-central::before {
   content: "";
   display: block;
@@ -396,6 +444,7 @@ main .container__tournament .stack-rosario-central::before {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 main .container__tournament .stack-estudiantes::before {
   content: "";
   display: block;
@@ -410,6 +459,7 @@ main .container__tournament .stack-estudiantes::before {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 main .container__tournament .stack-san-lorenzo::before {
   content: "";
   display: block;
@@ -424,6 +474,7 @@ main .container__tournament .stack-san-lorenzo::before {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 main .container__tournament .stack-racing::before {
   content: "";
   display: block;
@@ -438,9 +489,11 @@ main .container__tournament .stack-racing::before {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 main .container__tournament .stack-river {
   margin-bottom: 1.5rem;
 }
+
 main .container__tournament .stack-river::before {
   content: "";
   display: block;
@@ -455,9 +508,11 @@ main .container__tournament .stack-river::before {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 main .container__tournament .stack-portugal {
   margin-top: 1.5rem;
 }
+
 main .container__tournament .stack-portugal::before {
   content: "";
   display: block;
@@ -472,6 +527,7 @@ main .container__tournament .stack-portugal::before {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 main .container__tournament .stack-alemania::before {
   content: "";
   display: block;
@@ -486,9 +542,11 @@ main .container__tournament .stack-alemania::before {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 main .container__tournament .stack-belgica {
   margin-bottom: 1.5rem;
 }
+
 main .container__tournament .stack-belgica::before {
   content: "";
   display: block;
@@ -503,9 +561,11 @@ main .container__tournament .stack-belgica::before {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 main .container__tournament .stack-argentina {
   margin-bottom: 1.5rem;
 }
+
 main .container__tournament .stack-argentina::before {
   content: "";
   display: block;
@@ -520,9 +580,11 @@ main .container__tournament .stack-argentina::before {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 main .container__tournament .stack-manchester-united {
   margin-top: 1.5rem;
 }
+
 main .container__tournament .stack-manchester-united::before {
   content: "";
   display: block;
@@ -537,9 +599,11 @@ main .container__tournament .stack-manchester-united::before {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 main .container__tournament .stack-real-madrid {
   margin-bottom: 1.5rem;
 }
+
 main .container__tournament .stack-real-madrid::before {
   content: "";
   display: block;
@@ -554,9 +618,11 @@ main .container__tournament .stack-real-madrid::before {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 main .container__tournament:last-child {
   background-color: #004a79;
 }
+
 main .container__tournament .container__trajectory {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -573,6 +639,7 @@ main .container__tournament .container__trajectory {
   text-transform: uppercase;
   width: 100%;
 }
+
 main .container__tournament .container__trajectory .trajectory-manager,
 main .container__tournament .container__trajectory .trajectory-trophies {
   -webkit-box-align: center;
@@ -587,6 +654,7 @@ main .container__tournament .container__trajectory .trajectory-trophies {
           flex-direction: column;
   height: 100%;
 }
+
 main .container__tournament .container__trajectory .trajectory-manager {
   -webkit-box-align: start;
       -ms-flex-align: start;
@@ -598,15 +666,19 @@ main .container__tournament .container__trajectory .trajectory-manager {
   padding: 0 1rem;
   width: 45%;
 }
+
 main .container__tournament .container__trajectory .trajectory-manager .trajectory-manager-name {
   font-size: 2.75rem;
 }
+
 main .container__tournament .container__trajectory .trajectory-manager .trajectory-manager-amount {
   font-size: 3.25rem;
 }
+
 main .container__tournament .container__trajectory .trajectory-manager .trajectory-manager-titles {
   font-size: 1.75rem;
 }
+
 main .container__tournament .container__trajectory .trajectory-trophies {
   background-color: #F5D77F;
   border: #DAA813 3.15px solid;
@@ -615,10 +687,82 @@ main .container__tournament .container__trajectory .trajectory-trophies {
           justify-content: center;
   width: 55%;
 }
+
 main .container__tournament .container__trajectory .trajectory-trophies span {
   font-size: 1rem;
   line-height: 1.5rem;
 }
+
 main .container__tournament .container__trajectory .trajectory-trophies .small-description {
   font-size: 0.75rem;
-}/*# sourceMappingURL=styles.css.map */
+}
+
+.container_table {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: 2rem auto;
+  width: 95%;
+}
+
+.container_table .row {
+  border: black 1px solid;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+}
+
+.container_table .row .column {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: black 1px solid;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.container_table .row .column:first-child {
+  -webkit-box-flex: 3;
+      -ms-flex-positive: 3;
+          flex-grow: 3;
+}
+
+.container_table .row .column:last-child {
+  -webkit-box-flex: 6;
+      -ms-flex-positive: 6;
+          flex-grow: 6;
+}
+
+.container_table .row .column .cell {
+  font-weight: 400;
+  padding: 0.5rem 0;
+}
+
+.container_table .row .column .cell:first-child {
+  font-weight: 700;
+  padding: 1rem 0;
+}
+/*# sourceMappingURL=styles.css.map */
