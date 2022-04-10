@@ -227,9 +227,13 @@ app.get("/failregister", (req, res) => {
 // };
 
 app.get("/face-to-face", async (req, res) => {
+  let finalMatchups = [];
   try {
     const array = [];
     const allMatches = await faceToFaceModel.find();
+    if (allMatches.length === 0) {
+      res.render("face-to-face", { finalMatchups, allMatches });
+    }
     const allPlayers1 = allMatches.map((match) => match.playerP1);
     const allPlayers2 = allMatches.map((match) => match.playerP2);
     const concat = allPlayers1.concat(allPlayers2);
@@ -274,11 +278,11 @@ app.get("/face-to-face", async (req, res) => {
             // winsByTeamP1:
           };
         });
-        const finalMatchups = workedMatchups.filter((element) => {
+        finalMatchups = workedMatchups.filter((element) => {
           return element.matchup !== "undefined (J1) vs undefined (J2)";
         });
         console.log(finalMatchups);
-        res.render("face-to-face", { finalMatchups });
+        res.render("face-to-face", { finalMatchups, allMatches });
       }
     });
   } catch (err) {

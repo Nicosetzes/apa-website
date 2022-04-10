@@ -33,3 +33,31 @@
         }
     }
 }
+
+form {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 2rem auto;
+    width: auto;
+    .form-row {
+        margin: 0.5rem 0;
+        input {
+            margin: 0 0.5rem;
+        }
+    }
+}
+
+.container_matches {
+    background-color: bisque;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 300px;
+    margin: 2rem auto;
+    width: 90%;
+    .match {
+        margin: 0.5rem;
+    }
+}

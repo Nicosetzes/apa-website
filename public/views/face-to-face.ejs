@@ -55,4 +55,15 @@
     </div>
 </form>
 
+<div class="container_matches">
+
+<%allMatches.forEach(function(element, index) {%>
+    
+        <div class="match">
+        <%=element.teamP1%> (<%=element.playerP1%>) <%=element.scoreP1%> vs <%=element.scoreP2%> (<%=element.playerP2%>) <%=element.teamP2%> 
+        </div>
+   
+    <%});%>
+</div>
+
 <%- include('./partials/footer')-%>
