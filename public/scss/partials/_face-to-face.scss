@@ -17,11 +17,11 @@
             flex-grow: 1;
             justify-content: center;
             &:first-child {
-                flex-grow: 3;
+                flex-grow: 4;
             }
-            &:last-child {
-                flex-grow: 6;
-            }
+            // &:last-child {
+            //     flex-grow: 6;
+            // }
             .cell {
                 font-weight: 400;
                 padding: 0.5rem 0;

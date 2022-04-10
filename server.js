@@ -212,18 +212,75 @@ app.get("/failregister", (req, res) => {
 
 // OTHER ROUTES
 
+// const searchMatches = async (model, element) => {
+//   try {
+//     const matches = await model.find({
+//       $or: [
+//         { $and: [{ playerP1: element.p1 }, { rivalOfP1: element.p2 }] },
+//         { $and: [{ playerP1: element.p2 }, { rivalOfP1: element.p1 }] },
+//       ],
+//     });
+//     return matches;
+//   } catch (err) {
+//     return err;
+//   }
+// };
+
 app.get("/face-to-face", async (req, res) => {
   try {
+    const array = [];
     const allMatches = await faceToFaceModel.find();
-    // const p1s = allMatches.map((element) => element.playerP1);
-    // const p2s = allMatches.map((element) => element.playerP2);
-    // const concat = p1s.concat(p2s);
-    // const allPlayers = [...new Set(concat)]; // Con Set puedo eliminar valores repetidos //
-    // let matchups;
-    // allMatches.forEach((element, index) => {
-    //   matchups.push(`${element.playerP1} vs ${element.playerP2}`);
-    // });
-    res.render("face-to-face", { allMatches });
+    const allPlayers1 = allMatches.map((match) => match.playerP1);
+    const allPlayers2 = allMatches.map((match) => match.playerP2);
+    const concat = allPlayers1.concat(allPlayers2);
+    const allPlayers = [...new Set(concat)]; // Con Set puedo eliminar valores repetidos //
+    const allMatchups = allPlayers.flatMap((v, i) =>
+      allPlayers.slice(i + 1).map((w) => {
+        return { p1: v, p2: w };
+      })
+    );
+
+    let itemsProcessed = 0;
+
+    allMatchups.forEach(async (element, index) => {
+      array.push(
+        await faceToFaceModel.find({
+          $or: [
+            { $and: [{ playerP1: element.p1 }, { rivalOfP1: element.p2 }] },
+            { $and: [{ playerP1: element.p2 }, { rivalOfP1: element.p1 }] },
+          ],
+        })
+      );
+      itemsProcessed++;
+      if (itemsProcessed === allMatchups.length) {
+        const workedMatchups = allMatchups.map((element, index) => {
+          return {
+            matchup: `${array[index][0]?.playerP1} (J1) vs ${array[index][0]?.rivalOfP1} (J2)`,
+            matches: array[index],
+            wonByP1: array[index].reduce(
+              (acc, cur) =>
+                cur.outcome.winner === array[index][0].playerP1 ? ++acc : acc,
+              0
+            ),
+            wonByP2: array[index].reduce(
+              (acc, cur) =>
+                cur.outcome.winner === array[index][0].playerP2 ? ++acc : acc,
+              0
+            ),
+            draws: array[index].reduce(
+              (acc, cur) => (cur.outcome === "draw" ? ++acc : acc),
+              0
+            ),
+            // winsByTeamP1:
+          };
+        });
+        const finalMatchups = workedMatchups.filter((element) => {
+          return element.matchup !== "undefined (J1) vs undefined (J2)";
+        });
+        console.log(finalMatchups);
+        res.render("face-to-face", { finalMatchups });
+      }
+    });
   } catch (err) {
     return res.status(400).send(err);
   }
@@ -234,29 +291,31 @@ app.get("/face-to-face", async (req, res) => {
 app.post("/face-to-face", async (req, res) => {
   try {
     let { playerP1, teamP1, scoreP1, playerP2, teamP2, scoreP2 } = req.body;
+    let rivalOfP1 = playerP2;
+    let rivalOfP2 = playerP1;
     let outcome = "draw";
     if (scoreP1 - scoreP2 !== 0) {
-      scoreP1 > scoreP2 ? (outcome = playerP1) : (outcome = playerP2);
+      scoreP1 > scoreP2
+        ? (outcome = { winner: playerP1, teamThatWon: teamP1 })
+        : (outcome = { winner: playerP2, teamThatWon: teamP2 });
     }
     if (scoreP1 - scoreP2 !== 0) {
-      scoreP1 > scoreP2 ? (outcome = playerP1) : (outcome = playerP2);
+      scoreP1 > scoreP2
+        ? (outcome = { winner: playerP1, teamThatWon: teamP1 })
+        : (outcome = { winner: playerP2, teamThatWon: teamP2 });
     } // Si hubo empate, outcome = draw;
-    const objects = [
-      { player: playerP1, team: teamP1, score: scoreP1 },
-      { player: playerP2, team: teamP2, score: scoreP2 },
-    ];
-    const orderedObjects = objects.sort();
+
     const match = {
-      playerP1: orderedObjects[0].player,
-      teamP1: orderedObjects[0].team,
-      scoreP1: orderedObjects[0].score,
-      playerP2: orderedObjects[1].player,
-      teamP2: orderedObjects[1].team,
-      scoreP2: orderedObjects[1].score,
+      playerP1,
+      teamP1,
+      scoreP1,
+      rivalOfP1,
+      playerP2,
+      teamP2,
+      scoreP2,
+      rivalOfP2,
       outcome,
     };
-
-    // AUN NO PUDE ORDENARLOS, REVISAR!!! //
 
     await faceToFaceModel.create(match);
     res.status(200).send("Partido cargado con éxito");
@@ -274,6 +333,50 @@ app.post("/face-to-face", async (req, res) => {
     res.status(500).send("Something went wrong");
   }
 });
+
+// app.post("/face-to-face", async (req, res) => {
+//   try {
+//     let { playerP1, teamP1, scoreP1, playerP2, teamP2, scoreP2 } = req.body;
+//     let outcome = "draw";
+//     if (scoreP1 - scoreP2 !== 0) {
+//       scoreP1 > scoreP2 ? (outcome = playerP1) : (outcome = playerP2);
+//     }
+//     if (scoreP1 - scoreP2 !== 0) {
+//       scoreP1 > scoreP2 ? (outcome = playerP1) : (outcome = playerP2);
+//     } // Si hubo empate, outcome = draw;
+//     const objects = [
+//       { player: playerP1, team: teamP1, score: scoreP1 },
+//       { player: playerP2, team: teamP2, score: scoreP2 },
+//     ];
+//     const orderedObjects = objects.sort();
+//     const match = {
+//       playerP1: orderedObjects[0].player,
+//       teamP1: orderedObjects[0].team,
+//       scoreP1: orderedObjects[0].score,
+//       playerP2: orderedObjects[1].player,
+//       teamP2: orderedObjects[1].team,
+//       scoreP2: orderedObjects[1].score,
+//       outcome,
+//     };
+
+//     // AUN NO PUDE ORDENARLOS, REVISAR!!! //
+
+//     await faceToFaceModel.create(match);
+//     res.status(200).send("Partido cargado con éxito");
+//     // Si falla la validación, se ejecuta el catch //
+//   } catch (err) {
+//     if (err.name === "ValidationError") {
+//       const errors = {};
+
+//       Object.keys(err.errors).forEach((key) => {
+//         errors[key] = err.errors[key].message;
+//       });
+
+//       return res.status(400).send(errors);
+//     }
+//     res.status(500).send("Something went wrong");
+//   }
+// });
 
 /* -------------------- PORT -------------------- */
 

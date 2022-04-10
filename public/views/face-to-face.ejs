@@ -1,90 +1,41 @@
 <%- include('./partials/header')-%>
 
-<% if(allMatches.length > 0){ %> 
-
-    <div>Hola, hay productos</div>
+<% if(finalMatchups.length > 0){ %> 
+    <div>Hola, hay emparejamientos</div>
     <% } 
-    else{ %> <div>Hola, NO hay productos</div> <% } %>
+    else{ %> <div>Hola, NO hay emparejamientos</div> <% } %>
 
 <div class="container_table">
     <div class="row">
         <div class="column">
             <div class="cell">Enfrentamientos</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
+            <%finalMatchups.forEach(function(element, index) {%>
+            <div class="cell"><%=element.matchup%></div>
+            <%});%>
         </div>
         <div class="column">
-            <div class="cell">PJ</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
+            <div class="cell">Partidos jugados</div>
+            <%finalMatchups.forEach(function(element, index) {%>
+            <div class="cell"><%=element.matches.length%></div>
+            <%});%>
         </div>
         <div class="column">
-            <div class="cell">PG (J1)</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
+            <div class="cell">Victorias (J1)</div>
+            <%finalMatchups.forEach(function(element, index) {%>
+            <div class="cell"><%=element.wonByP1%></div>
+            <%});%>
         </div>
         <div class="column">
-            <div class="cell">PE</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
+            <div class="cell">Empates</div>
+            <%finalMatchups.forEach(function(element, index) {%>
+            <div class="cell"><%=element.draws%></div>
+            <%});%>
         </div>
         <div class="column">
-            <div class="cell">PP (J1)</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-        </div>
-        <div class="column">
-            <div class="cell">Victorias por equipo</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
-            <div class="cell">Contenido</div>
+            <div class="cell">Victorias (J2)</div>
+            <%finalMatchups.forEach(function(element, index) {%>
+            <div class="cell"><%=element.wonByP2%></div>
+            <%});%>
         </div>
     </div>
 </div>
