@@ -17,36 +17,54 @@ mongoose
 
 const faceToFaceModel = require("./models/faceToFace.js"); // Modelo mongoose para la carga de partidos
 
+const usersModel = require("./models/users.js"); // Modelo mongoose para la carga de partidos
+
 /* -------------------- SERVER -------------------- */
 
 const express = require("express");
-
-const app = express();
-
-/* -------------------- MIDDLEWARES -------------------- */
-
-// const session = require("express-session"); // login session require session support //
 // const cookieParser = require("cookie-parser");
-// const MongoStore = require("connect-mongo");
+const session = require("express-session"); // login session require session support //
+
+/* --------------- MONGO-SESSION (ATLAS) --------------- */
+
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 // const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
-// app.use(cookieParser("someSecret")); // ¿ES NECESARIO?
-// app.use(
-//   session({
-//     store: MongoStore.create({
-//       //En Atlas connect App :  Make sure to change the node version to 2.2.12:
-//       mongoUrl: `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-shard-00-00.i6ffr.mongodb.net:27017,cluster0-shard-00-01.i6ffr.mongodb.net:27017,cluster0-shard-00-02.i6ffr.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-vzvty3-shard-0&authSource=admin&retryWrites=true&w=majority`,
-//       mongoOptions: advancedOptions,
-//     }),
-//     secret: `${process.env.MONGO_SECRET}`,
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: {
-//       maxAge: 100000,
-//     },
-//   })
-// );
+/* -------------------- MIDDLEWARES -------------------- */
+
+const app = express();
+
+// app.use(cookieParser()); // Since version 1.5.0, the cookie-parser middleware no longer needs to be used for this module to work.
+
+const store = new MongoDBStore({
+  //En Atlas connect App :  Make sure to change the node version to 2.2.12:
+  uri: `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-shard-00-00.i6ffr.mongodb.net:27017,cluster0-shard-00-01.i6ffr.mongodb.net:27017,cluster0-shard-00-02.i6ffr.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-vzvty3-shard-0&authSource=admin&retryWrites=true&w=majority`,
+  collection: "mySessions",
+  connectionOptions: {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    // serverSelectionTimeoutMS: 10000
+  }
+}, function (error) {
+  // Should have gotten an error
+});
+
+store.on('error', function (error) {
+  // Also get an error here
+});
+
+app.use(
+  session({
+    store: store,
+    secret: "sh",
+    resave: false,
+    saveUninitialized: false, // Dejarlo en false es útil para login, dado que la session no se guarda hasta que no se modifica. 
+    cookie: {
+      maxAge: 600000, // 10 MINUTOS
+    },
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -54,14 +72,14 @@ app.use(express.static("public"));
 
 /* -------------------- PASSPORT -------------------- */
 
-// const passport = require("passport");
+const passport = require("passport");
 
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize()); // Busca el passport.user attached to the session. Si no lo encuentra (osea que el user no está autenticado aun) lo crea como req.passport.user = {}.
+app.use(passport.session()); // Se invoca en todas las req. Busca un serialised object user en la session, y si lo encuentra considera que la req está autenticada.
 
-// const LocalStrategy = require("passport-local").Strategy;
+const LocalStrategy = require("passport-local").Strategy;
 
-// const bCrypt = require("bcrypt");
+const bCrypt = require("bcrypt");
 
 // const createHash = (password) => {
 //   return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
@@ -99,48 +117,44 @@ app.use(express.static("public"));
 //   })
 // );
 
-// passport.use(
-//   "login",
-//   new LocalStrategy(
-//     {
-//       passReqToCallback: true, // Allows for req argument to be present!
-//     },
-//     (req, username, password, done) => {
-//       usersModel
-//         .findOne({ username: username })
-//         .then((user) => {
-//           console.log(user);
-//           if (!user)
-//             return done(null, false, {
-//               message: "The user doesn't exist in the DB",
-//             }); // How may I access this object in order to display the message?;
-//           bCrypt.compare(password, user.password, (err, success) => {
-//             console.log(password, user.password);
-//             if (err) throw err;
-//             if (success) {
-//               req.session.username = user.username;
-//               done(null, user);
-//             } else {
-//               done(null, false, {
-//                 message: "User was found in the DB, but passwords don't match",
-//               }); // Same as above;
-//             }
-//           });
-//         })
-//         .catch((err) => {
-//           return done(null, false, { message: err });
-//         });
+passport.use(
+  "login",
+  new LocalStrategy(
+    {
+      passReqToCallback: true, // Allows for req argument to be present!
+    },
+    (req, username, password, done) => { // Chequear el uso de req
+      usersModel
+        .findOne({ username: username })
+        .then((user) => {
+          if (!user) return done(null, false, { message: "The user doesn't exist in the DB", }); // How may I access this object in order to display the message?;
 
-//       passport.serializeUser((user, done) => done(null, user.id));
+          bCrypt.compare(password, user.password, (err, success) => {
+            if (err) throw err;
+            if (success) {
+              req.session.username = user.username; // Necesario?
+              done(null, user);
+            } else {
+              done(null, false, { message: "User was found in the DB, but passwords don't match", }); // Same as above;
+            }
+          });
+        })
+        .catch((err) => {
+          return done(null, false, { message: err });
+        });
 
-//       passport.deserializeUser((id, done) => {
-//         usersModel.findById(id, (err, user) => {
-//           done(err, user);
-//         });
-//       });
-//     }
-//   )
-// );
+      passport.serializeUser(function (user, done) {
+        done(null, user.id)
+      });
+
+      passport.deserializeUser(function (id, done) {
+        usersModel.findById(id, function (err, user) {
+          done(err, user);
+        });
+      });
+    }
+  )
+);
 
 /* -------------------- AUTH -------------------- */
 
@@ -158,8 +172,17 @@ app.set("view engine", "ejs");
 // HOME
 
 app.get("/", (req, res) => {
-  // req.session.cookie.maxAge = 100000;
-  // const userEmail = req.session.username;
+  // req.session.cookie.maxAge = 5000; // Defino el tiempo que le queda a la cookie al hacer el request a "/" //
+  console.log("req.sessionID: ");
+  console.log(req.sessionID);
+  console.log("req.session: ")
+  console.log(req.session)
+  console.log("req.session.cookie.maxAge: ")
+  console.log(req.session.cookie.maxAge);
+  console.log("req.session.passport.user: ")
+  console.log(req.session.passport?.user); // Una vez ejecutado el login, se guarda el ID como propiedad en req.session.passport.user
+  console.log("req.user: ")
+  console.log(req.user); // Una vez ejecutado el login, se guarda el objeto user (completo) en req.user
   res.render("index", {});
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
 });
@@ -171,13 +194,16 @@ app.get("/login", (req, res) => {
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
 });
 
-// app.post(
-//   "/login",
-//   passport.authenticate("login", {
-//     failureRedirect: "/login-error",
-//     successRedirect: "/",
-//   })
-// );
+app.post(
+  "/login",
+  passport.authenticate("login", {
+    failureRedirect: "/login-error",
+    successRedirect: "/",
+  }), (req, res) => {
+    res.render("/");
+    console.log(`Ruta: ${req.url}, Método: ${req.method}`);
+  }
+);
 
 app.get("/login-error", (req, res) => {
   res.render("login-error", {});
@@ -185,17 +211,19 @@ app.get("/login-error", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
+  console.log(req.session)
   req.logout();
+  console.log(req.session)
   res.redirect("/");
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
 });
 
 // PARA REGISTER:
 
-app.get("/register", (req, res) => {
-  res.render("register", {});
-  console.log(`Ruta: ${req.url}, Método: ${req.method}`);
-});
+// app.get("/register", (req, res) => {
+//   res.render("register", {});
+//   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
+// });
 
 // app.post(
 //   "/register",
@@ -205,26 +233,43 @@ app.get("/register", (req, res) => {
 //   })
 // );
 
-app.get("/failregister", (req, res) => {
-  res.render("register-error", {});
-  console.log(`Ruta: ${req.url}, Método: ${req.method}`);
-});
+// app.get("/register-error", (req, res) => {
+//   res.render("register-error", {});
+//   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
+// });
 
 // OTHER ROUTES
 
-// const searchMatches = async (model, element) => {
-//   try {
-//     const matches = await model.find({
-//       $or: [
-//         { $and: [{ playerP1: element.p1 }, { rivalOfP1: element.p2 }] },
-//         { $and: [{ playerP1: element.p2 }, { rivalOfP1: element.p1 }] },
-//       ],
-//     });
-//     return matches;
-//   } catch (err) {
-//     return err;
-//   }
-// };
+app.get("/api", isAuth, (req, res) => {
+
+  const teams = [];
+
+  const axios = require('axios');
+  const config = {
+    method: 'get',
+    url: 'https://v3.football.api-sports.io/teams?league=128&season=2022',
+    headers: {
+      'x-rapidapi-key': 'c6fc4afceaf077867ce47212440002cf',
+      'x-rapidapi-host': 'v3.football.api-sports.io'
+    }
+  };
+
+  axios(config)
+    .then(function (response) {
+      // console.log("JSON STRINGIFY RESPONSE.DATA")
+      // console.log(JSON.stringify(response.data));
+      teams.push(response.data);
+      const { response: apiResponse } = teams[0]
+      // console.log("teams")
+      // console.log(teams)
+      // console.log("apiResponse")
+      // console.log(apiResponse)
+      res.render("api", { apiResponse });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+})
 
 app.get("/face-to-face", async (req, res) => {
   let finalMatchups = [];
@@ -275,13 +320,12 @@ app.get("/face-to-face", async (req, res) => {
               (acc, cur) => (cur.outcome === "draw" ? ++acc : acc),
               0
             ),
-            // winsByTeamP1:
           };
         });
         finalMatchups = workedMatchups.filter((element) => {
           return element.matchup !== "undefined (J1) vs undefined (J2)";
         });
-        console.log(finalMatchups);
+        // console.log(finalMatchups);
         res.render("face-to-face", { finalMatchups, allMatches });
       }
     });
@@ -292,7 +336,7 @@ app.get("/face-to-face", async (req, res) => {
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
 });
 
-app.post("/face-to-face", async (req, res) => {
+app.post("/face-to-face", isAuth, async (req, res) => {
   try {
     let { playerP1, teamP1, scoreP1, playerP2, teamP2, scoreP2 } = req.body;
     let rivalOfP1 = playerP2;

@@ -1,0 +1,43 @@
+<%- include('./partials/header')-%>
+
+    <div class="container_api">
+
+        <%apiResponse.forEach(function(element, index) {%>
+
+            <div class="match-api-first">
+                <div>
+                    <%=element.team.name%>
+                </div>
+                <div>
+                    <%=element.team.code%>
+                </div>
+                <div>
+                    <span>Año de fundación: <%=element.team.founded%></span>
+                </div>
+                <div>
+                    <%=element.team.country%>
+                </div>
+                <div><img src="<%=element.team.logo%>" alt=""></div>
+            </div>
+            <br>
+            <div class="match-api-second">
+                <div>
+                    <%=element.venue.name%>
+                </div>
+                <div>
+                    <span>Dirección: <%=element.venue.address%></span>
+                </div>
+                <div>
+                    <span>Ciudad: <%=element.venue.city%></span>
+                </div>
+                <div>
+                    <span>Capacidad: <%=element.venue.capacity%></span>
+                </div>
+                <div><img src="<%=element.venue.image%>" alt=""></div>
+            </div>
+    </div>
+
+    <%});%>
+        </div>
+
+        <%- include('./partials/footer')-%>
