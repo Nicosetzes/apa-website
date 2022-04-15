@@ -1,0 +1,335 @@
+{
+    "get": "teams",
+    "parameters": {
+        "league": "235",
+        "season": "2021"
+    },
+    "errors": [],
+    "results": 16,
+    "paging": {
+        "current": 1,
+        "total": 1
+    },
+    "response": [
+        {
+            "team": {
+                "id": 555,
+                "name": "CSKA Moscow",
+                "code": "CSK",
+                "country": "Russia",
+                "founded": 1911,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/555.png"
+            },
+            "venue": {
+                "id": 1333,
+                "name": "VEB Arena",
+                "address": "3-ya Peschanaya ul.",
+                "city": "Moskva",
+                "capacity": 30000,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/1333.png"
+            }
+        },
+        {
+            "team": {
+                "id": 558,
+                "name": "Spartak Moscow",
+                "code": "SPA",
+                "country": "Russia",
+                "founded": 1922,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/558.png"
+            },
+            "venue": {
+                "id": 1352,
+                "name": "Otkrytiye Arena",
+                "address": "Volokolamskoye shosse, Tushino",
+                "city": "Moskva",
+                "capacity": 45360,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/1352.png"
+            }
+        },
+        {
+            "team": {
+                "id": 596,
+                "name": "Zenit Saint Petersburg",
+                "code": "ZEN",
+                "country": "Russia",
+                "founded": 1925,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/596.png"
+            },
+            "venue": {
+                "id": 1356,
+                "name": "Saint-Petersburg Stadium",
+                "address": "Futbolnaya al.",
+                "city": "St. Petersburg",
+                "capacity": 68134,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/1356.png"
+            }
+        },
+        {
+            "team": {
+                "id": 597,
+                "name": "Lokomotiv Moscow",
+                "code": "LOK",
+                "country": "Russia",
+                "founded": 1923,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/597.png"
+            },
+            "venue": {
+                "id": 1327,
+                "name": "RZD Arena",
+                "address": "ul. Bol&apos;shaya Cherkizovskaya 125",
+                "city": "Moskva",
+                "capacity": 28800,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/1327.png"
+            }
+        },
+        {
+            "team": {
+                "id": 621,
+                "name": "Krasnodar",
+                "code": "KRA",
+                "country": "Russia",
+                "founded": 2007,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/621.png"
+            },
+            "venue": {
+                "id": 1338,
+                "name": "Stadion FK Krasnodar",
+                "address": "ul. Vostochno-Kruglikovskaya 126",
+                "city": "Krasnodar",
+                "capacity": 35074,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/1338.png"
+            }
+        },
+        {
+            "team": {
+                "id": 779,
+                "name": "FC Rostov",
+                "code": "ROS",
+                "country": "Russia",
+                "founded": 1930,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/779.png"
+            },
+            "venue": {
+                "id": 1339,
+                "name": "Rostov Arena",
+                "address": "ul. Levoberezhnaya",
+                "city": "Rostov-na-Donu",
+                "capacity": 45000,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/1339.png"
+            }
+        },
+        {
+            "team": {
+                "id": 1077,
+                "name": "Arsenal Tula",
+                "code": "ARS",
+                "country": "Russia",
+                "founded": 2008,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/1077.png"
+            },
+            "venue": {
+                "id": 1329,
+                "name": "Stadion Arsenal",
+                "address": "pr. Lenina, 87",
+                "city": "Tula",
+                "capacity": 20048,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/1329.png"
+            }
+        },
+        {
+            "team": {
+                "id": 1078,
+                "name": "FC UFA",
+                "code": "UFA",
+                "country": "Russia",
+                "founded": 2009,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/1078.png"
+            },
+            "venue": {
+                "id": 12043,
+                "name": "BetBoom Аrena",
+                "address": "ul. Komarova 9",
+                "city": "Ufa",
+                "capacity": 15132,
+                "surface": "artificial turf",
+                "image": "https://media.api-sports.io/football/venues/12043.png"
+            }
+        },
+        {
+            "team": {
+                "id": 1079,
+                "name": "Krylya Sovetov",
+                "code": "KRY",
+                "country": "Russia",
+                "founded": 1942,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/1079.png"
+            },
+            "venue": {
+                "id": 11911,
+                "name": "Solidarnost Arena",
+                "address": "ul. Dal&apos;nyaya",
+                "city": "Samara",
+                "capacity": 44918,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/11911.png"
+            }
+        },
+        {
+            "team": {
+                "id": 1083,
+                "name": "Rubin",
+                "code": "RUB",
+                "country": "Russia",
+                "founded": 1958,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/1083.png"
+            },
+            "venue": {
+                "id": 1349,
+                "name": "Kazan' Arena",
+                "address": "Prospekt Husaina Yamasheva 115a",
+                "city": "Kazan&apos;",
+                "capacity": 45105,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/1349.png"
+            }
+        },
+        {
+            "team": {
+                "id": 1084,
+                "name": "Ural",
+                "code": "URA",
+                "country": "Russia",
+                "founded": 1930,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/1084.png"
+            },
+            "venue": {
+                "id": 1355,
+                "name": "Ekaterinburg Arena",
+                "address": "ul. Repina 5",
+                "city": "Ekaterinburg",
+                "capacity": 35696,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/1355.png"
+            }
+        },
+        {
+            "team": {
+                "id": 1085,
+                "name": "Akhmat Grozny",
+                "code": "TER",
+                "country": "Russia",
+                "founded": 1958,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/1085.png"
+            },
+            "venue": {
+                "id": 1353,
+                "name": "Akhmat Arena",
+                "address": "Zhukavskogo per. 9, Staraya Sunzha",
+                "city": "Groznyi",
+                "capacity": 30597,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/1353.png"
+            }
+        },
+        {
+            "team": {
+                "id": 1088,
+                "name": "Dinamo Moscow",
+                "code": "DYN",
+                "country": "Russia",
+                "founded": 1923,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/1088.png"
+            },
+            "venue": {
+                "id": 1334,
+                "name": "VTB Arena",
+                "address": "Leningradskiy pr., 36",
+                "city": "Moskva",
+                "capacity": 26700,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/1334.png"
+            }
+        },
+        {
+            "team": {
+                "id": 1994,
+                "name": "Khimki",
+                "code": "KHI",
+                "country": "Russia",
+                "founded": 1997,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/1994.png"
+            },
+            "venue": {
+                "id": 1337,
+                "name": "Stadion Rodina",
+                "address": "ul. Chkalova 4a",
+                "city": "Khimki",
+                "capacity": 10033,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/1337.png"
+            }
+        },
+        {
+            "team": {
+                "id": 2011,
+                "name": "Nizhny Novgorod",
+                "code": null,
+                "country": "Russia",
+                "founded": 2015,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/2011.png"
+            },
+            "venue": {
+                "id": 2835,
+                "name": "Stadion Nizhny Novgorod",
+                "address": "ul. Dolzhanskaya",
+                "city": "Nizhniy Novgorod",
+                "capacity": 44899,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/2835.png"
+            }
+        },
+        {
+            "team": {
+                "id": 2012,
+                "name": "PFC Sochi",
+                "code": null,
+                "country": "Russia",
+                "founded": 2010,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/2012.png"
+            },
+            "venue": {
+                "id": 2834,
+                "name": "Olimpiyskiy Stadion Fisht",
+                "address": "Olimpiyskiy prospekt 15",
+                "city": "Sochi",
+                "capacity": 48000,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/2834.png"
+            }
+        }
+    ]
+}

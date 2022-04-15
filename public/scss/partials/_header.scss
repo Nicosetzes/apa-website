@@ -84,6 +84,11 @@ header {
         top: 0;
         right: 0;
 
+        svg {
+            height: 25px;
+            width: 25px;
+        }
+
         &:focus {
             outline: none;
         }

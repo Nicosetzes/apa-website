@@ -15,9 +15,13 @@ mongoose
   .then(() => console.log("Base de datos MongoDB conectada"))
   .catch((err) => console.log(err));
 
-const faceToFaceModel = require("./models/faceToFace.js"); // Modelo mongoose para la carga de partidos
+/* -------------- MODELS FOR MONGOOSE -------------- */
 
-const usersModel = require("./models/users.js"); // Modelo mongoose para la carga de partidos
+const tournamentsModel = require("./models/tournaments.js"); // Modelo mongoose para la carga de torneos!
+
+const faceToFaceModel = require("./models/faceToFace.js"); // Modelo mongoose para la carga de los mano a mano!
+
+const usersModel = require("./models/users.js"); // Modelo mongoose para la carga de usuarios!
 
 /* -------------------- SERVER -------------------- */
 
@@ -240,36 +244,103 @@ app.post("/logout", (req, res) => {
 
 // OTHER ROUTES
 
-app.get("/api", isAuth, (req, res) => {
+// app.get("/api", isAuth, (req, res) => {
 
-  const teams = [];
+//   const teams = [];
 
-  const axios = require('axios');
-  const config = {
-    method: 'get',
-    url: 'https://v3.football.api-sports.io/teams?league=128&season=2022',
-    headers: {
-      'x-rapidapi-key': 'c6fc4afceaf077867ce47212440002cf',
-      'x-rapidapi-host': 'v3.football.api-sports.io'
-    }
-  };
+//   const axios = require('axios');
+//   const config = {
+//     method: 'get',
+//     url: 'https://v3.football.api-sports.io/teams?league=128&season=2022',
+//     headers: {
+//       'x-rapidapi-key': 'c6fc4afceaf077867ce47212440002cf',
+//       'x-rapidapi-host': 'v3.football.api-sports.io'
+//     }
+//   };
 
-  axios(config)
-    .then(function (response) {
-      // console.log("JSON STRINGIFY RESPONSE.DATA")
-      // console.log(JSON.stringify(response.data));
-      teams.push(response.data);
-      const { response: apiResponse } = teams[0]
-      // console.log("teams")
-      // console.log(teams)
-      // console.log("apiResponse")
-      // console.log(apiResponse)
-      res.render("api", { apiResponse });
-    })
-    .catch(function (error) {
-      console.log(error);
+//   axios(config)
+//     .then(function (response) {
+//       // console.log("JSON STRINGIFY RESPONSE.DATA")
+//       // console.log(JSON.stringify(response.data));
+//       teams.push(response.data);
+//       const { response: apiResponse } = teams[0]
+//       // console.log("teams")
+//       // console.log(teams)
+//       // console.log("apiResponse")
+//       // console.log(apiResponse)
+//       res.render("api", { apiResponse });
+//     })
+//     .catch(function (error) {
+//       console.log(error);
+//     });
+// })
+
+app.get("/create-tournament", (req, res) => {
+
+  // const axios = require('axios');
+
+  // const config = {
+  //   method: 'get',
+  //   url: `https://v3.football.api-sports.io/teams?league=197&season=2021`,
+  //   headers: {
+  //     'x-rapidapi-key': 'c6fc4afceaf077867ce47212440002cf',
+  //     'x-rapidapi-host': 'v3.football.api-sports.io'
+  //   }
+  // };
+
+  // axios(config)
+  //   .then(function (response) {
+  //     console.log(JSON.stringify(response.data));
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error);
+  //   });
+
+  res.render("create-tournament", {});
+});
+
+app.post("/create-tournament", async (req, res) => {
+
+  try {
+    const arrayFromValues = Object.values(req.body);
+    const tournamentName = arrayFromValues[0];
+    arrayFromValues.splice(0, 1);
+    const humanPlayers = [];
+    const teams = [];
+
+    arrayFromValues.forEach((element, index) => {
+      if (element === "Leo" || element === "Lucho" || element === "Max" || element === "Nico" || element === "Santi") {
+        humanPlayers.push(element);
+      }
+      else {
+        teams.push(element);
+      }
     });
-})
+
+    console.log(tournamentName);
+
+    const tournament = {
+      name: tournamentName,
+      players: humanPlayers,
+      teams,
+    };
+
+    await tournamentsModel.create(tournament);
+    res.status(200).send({ message: "Tournament's been successfully created" })
+    // Si falla la validación, se ejecuta el catch //
+  } catch (err) {
+    if (err.name === "ValidationError") {
+      const errors = {};
+
+      Object.keys(err.errors).forEach((key) => {
+        errors[key] = err.errors[key].message;
+      });
+
+      return res.status(400).send(errors);
+    }
+    res.status(500).send("Something went wrong");
+  }
+});
 
 app.get("/face-to-face", async (req, res) => {
   let finalMatchups = [];
@@ -382,50 +453,25 @@ app.post("/face-to-face", isAuth, async (req, res) => {
   }
 });
 
-// app.post("/face-to-face", async (req, res) => {
-//   try {
-//     let { playerP1, teamP1, scoreP1, playerP2, teamP2, scoreP2 } = req.body;
-//     let outcome = "draw";
-//     if (scoreP1 - scoreP2 !== 0) {
-//       scoreP1 > scoreP2 ? (outcome = playerP1) : (outcome = playerP2);
-//     }
-//     if (scoreP1 - scoreP2 !== 0) {
-//       scoreP1 > scoreP2 ? (outcome = playerP1) : (outcome = playerP2);
-//     } // Si hubo empate, outcome = draw;
-//     const objects = [
-//       { player: playerP1, team: teamP1, score: scoreP1 },
-//       { player: playerP2, team: teamP2, score: scoreP2 },
-//     ];
-//     const orderedObjects = objects.sort();
-//     const match = {
-//       playerP1: orderedObjects[0].player,
-//       teamP1: orderedObjects[0].team,
-//       scoreP1: orderedObjects[0].score,
-//       playerP2: orderedObjects[1].player,
-//       teamP2: orderedObjects[1].team,
-//       scoreP2: orderedObjects[1].score,
-//       outcome,
-//     };
+app.get("/upload-games", async (req, res) => {
+  try {
+    const tournamentsFromBD = await tournamentsModel.find();
 
-//     // AUN NO PUDE ORDENARLOS, REVISAR!!! //
+    console.log(tournamentsFromBD);
 
-//     await faceToFaceModel.create(match);
-//     res.status(200).send("Partido cargado con éxito");
-//     // Si falla la validación, se ejecuta el catch //
-//   } catch (err) {
-//     if (err.name === "ValidationError") {
-//       const errors = {};
+    if (tournamentsFromBD.length === 0) res.render("upload-games", {});
 
-//       Object.keys(err.errors).forEach((key) => {
-//         errors[key] = err.errors[key].message;
-//       });
+    const allTournaments = tournamentsFromBD.map((tournament) => tournament.name);
 
-//       return res.status(400).send(errors);
-//     }
-//     res.status(500).send("Something went wrong");
-//   }
-// });
+    console.log(allTournaments);
 
+    res.send(allTournaments);
+
+  }
+  catch (err) {
+    res.status(500).send("Something went wrong");
+  }
+})
 /* -------------------- PORT -------------------- */
 
 const PORT = process.env.PORT || "8080";

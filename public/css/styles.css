@@ -1,11 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,700;0,800;1,400&display=swap");
-* {
+*,
+::after,
+::before {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   font-family: "Fira Sans", sans-serif;
   font-weight: 800;
   margin: 0;
   padding: 0;
+  list-style: none;
 }
 
 .italic {
@@ -105,8 +108,76 @@ header .hamburger {
   top: 0;
   right: 0;
 }
+header .hamburger svg {
+  height: 25px;
+  width: 25px;
+}
 header .hamburger:focus {
   outline: none;
+}
+
+.modal-profile {
+  display: block;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  -webkit-transition: all 1000ms linear;
+  transition: all 1000ms linear;
+  width: 100%;
+  z-index: 100;
+}
+.modal-profile .modal-profile-container {
+  background-color: bisque;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  height: 100%;
+  padding: 0.5rem;
+  position: relative;
+}
+.modal-profile .modal-profile-container .modal-profile-header {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  width: 100%;
+}
+.modal-profile .modal-profile-container .modal-profile-header img {
+  border: 0;
+  border-radius: 50%;
+  width: 125px;
+}
+.modal-profile .modal-profile-container .modal-profile-header span {
+  margin: 0 2rem;
+  font-size: 2.75rem;
+}
+.modal-profile .modal-profile-container button {
+  border: black 1px solid;
+  border-radius: 50%;
+  height: 2rem;
+  margin: 0.25rem;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 2rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.visuallyHidden {
+  opacity: 0;
 }
 
 main {
@@ -653,70 +724,6 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
   font-size: 0.75rem;
 }
 
-.modal-profile {
-  display: block;
-  height: 100%;
-  position: absolute;
-  inset: 0;
-  -webkit-transition: all 1000ms linear;
-  transition: all 1000ms linear;
-  width: 100%;
-  z-index: 100;
-}
-.modal-profile .modal-profile-container {
-  background-color: bisque;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  height: 100%;
-  padding: 0.5rem;
-  position: relative;
-}
-.modal-profile .modal-profile-container .modal-profile-header {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  width: 100%;
-}
-.modal-profile .modal-profile-container .modal-profile-header img {
-  border: 0;
-  border-radius: 50%;
-  width: 125px;
-}
-.modal-profile .modal-profile-container .modal-profile-header span {
-  margin: 0 2rem;
-  font-size: 2.75rem;
-}
-.modal-profile .modal-profile-container button {
-  border: black 1px solid;
-  border-radius: 50%;
-  height: 2rem;
-  margin: 0.25rem;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 2rem;
-}
-
-.hidden {
-  display: none;
-}
-
-.visuallyHidden {
-  opacity: 0;
-}
-
 .container_table {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -816,6 +823,126 @@ form .form-row input {
 }
 .container_matches .match {
   margin: 0.5rem;
+}
+
+#confirm-countries {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: 1rem auto;
+  padding: 0 1rem;
+}
+#confirm-countries .form__container {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin: 1rem auto;
+}
+#confirm-countries .form__container .form-check {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  padding: 0;
+  width: 125px;
+}
+#confirm-countries .form__container .form-check:nth-child(even) {
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+#confirm-countries .form__container .form-check .form-check-input {
+  float: none;
+  margin: 0 0.5rem;
+}
+#confirm-countries .btn.btn-primary {
+  background-color: darkcyan;
+  border-color: darkslategray;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+#confirmDataForDB {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: 0 auto 1rem auto;
+  padding: 0 0.5rem;
+}
+#confirmDataForDB .form__container {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin: 1rem auto 0 auto;
+}
+#confirmDataForDB .form__container:first-child {
+  margin-top: 0;
+}
+#confirmDataForDB .form__container span {
+  margin: 1rem 0;
+  text-align: center;
+}
+#confirmDataForDB #teamsFromJSON {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+}
+#confirmDataForDB #teamsFromJSON .form-check {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  padding: 0;
+  width: 175px;
+}
+#confirmDataForDB #teamsFromJSON .form-check .form-check-input {
+  float: none;
+  margin: 0 0.5rem;
+}
+#confirmDataForDB #teamsFromJSON .form-check .form-check-label {
+  font-size: 0.85rem;
+}
+#confirmDataForDB #teamsFromJSON img {
+  width: 20px;
+}
+#confirmDataForDB #confirmationButton {
+  margin-top: 1rem;
 }
 
 body {

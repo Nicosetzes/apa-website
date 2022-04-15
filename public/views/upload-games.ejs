@@ -1,0 +1,19 @@
+<%- include('./partials/header')-%>
+
+    <form class="form" action="/face-to-face" method="post" autocomplete="off">
+        <div class="form-row">
+            <input id="playerP1" name='playerP1' placeholder="Jugador 1 (J1)" type="text" required>
+            <input id="teamP1" name='teamP1' placeholder="Equipo J1" type="text" required>
+            <input id="scoreP1" name='scoreP1' placeholder="Marcador J1" type="text" required>
+        </div>
+        <div class="form-row">
+            <input id="playerP2" name='playerP2' placeholder="Jugador 2 (J2)" type="text" required>
+            <input id="teamP2" name='teamP2' placeholder="Equipo J2" type="text" required>
+            <input id="scoreP2" name='scoreP2' placeholder="Marcador J2" type="text" required>
+        </div>
+        <div class="form-row">
+            <input type="submit">
+        </div>
+    </form>
+
+    <%- include('./partials/footer')-%>

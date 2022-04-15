@@ -1,0 +1,415 @@
+{
+    "get": "teams",
+    "parameters": {
+        "league": "71",
+        "season": "2022"
+    },
+    "errors": [],
+    "results": 20,
+    "paging": {
+        "current": 1,
+        "total": 1
+    },
+    "response": [
+        {
+            "team": {
+                "id": 119,
+                "name": "Internacional",
+                "code": "INT",
+                "country": "Brazil",
+                "founded": 1909,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/119.png"
+            },
+            "venue": {
+                "id": 244,
+                "name": "Estádio José Pinheiro Borda",
+                "address": "Avenida Padre Cacique 891, Bairro Menino Deus",
+                "city": "Porto Alegre, Rio Grande do Sul",
+                "capacity": 50128,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/244.png"
+            }
+        },
+        {
+            "team": {
+                "id": 120,
+                "name": "Botafogo",
+                "code": "BOT",
+                "country": "Brazil",
+                "founded": 1904,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/120.png"
+            },
+            "venue": {
+                "id": 218,
+                "name": "Estádio Nilton Santos",
+                "address": "Rua Arquias Cordeiro, Engenho de Dentro",
+                "city": "Rio de Janeiro",
+                "capacity": 46931,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/218.png"
+            }
+        },
+        {
+            "team": {
+                "id": 121,
+                "name": "Palmeiras",
+                "code": "PAL",
+                "country": "Brazil",
+                "founded": 1914,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/121.png"
+            },
+            "venue": {
+                "id": 258,
+                "name": "Allianz Parque",
+                "address": "Rua Turiaçu 1840, Perdizes",
+                "city": "São Paulo, São Paulo",
+                "capacity": 43713,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/258.png"
+            }
+        },
+        {
+            "team": {
+                "id": 124,
+                "name": "Fluminense",
+                "code": "FLU",
+                "country": "Brazil",
+                "founded": 1902,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/124.png"
+            },
+            "venue": {
+                "id": 204,
+                "name": "Estadio Jornalista Mário Filho (Maracanã)",
+                "address": "Rua Professor Eurico Rabelo, Maracanã",
+                "city": "Rio de Janeiro, Rio de Janeiro",
+                "capacity": 78838,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/204.png"
+            }
+        },
+        {
+            "team": {
+                "id": 125,
+                "name": "America Mineiro",
+                "code": "AME",
+                "country": "Brazil",
+                "founded": 1912,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/125.png"
+            },
+            "venue": {
+                "id": 206,
+                "name": "Estádio Raimundo Sampaio",
+                "address": "Avenida Ismênia Tunes, Bairro Horto",
+                "city": "Belo Horizonte, Minas Gerais",
+                "capacity": 23018,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/206.png"
+            }
+        },
+        {
+            "team": {
+                "id": 126,
+                "name": "Sao Paulo",
+                "code": "PAU",
+                "country": "Brazil",
+                "founded": 1930,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/126.png"
+            },
+            "venue": {
+                "id": 269,
+                "name": "Estádio Cícero Pompeu de Toledo (Morumbi)",
+                "address": "Praca Roberto Gomes Pedrosa 1, Morumbi",
+                "city": "São Paulo, São Paulo",
+                "capacity": 73501,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/269.png"
+            }
+        },
+        {
+            "team": {
+                "id": 127,
+                "name": "Flamengo",
+                "code": "FLA",
+                "country": "Brazil",
+                "founded": 1895,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/127.png"
+            },
+            "venue": {
+                "id": 204,
+                "name": "Estadio Jornalista Mário Filho (Maracanã)",
+                "address": "Rua Professor Eurico Rabelo, Maracanã",
+                "city": "Rio de Janeiro, Rio de Janeiro",
+                "capacity": 78838,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/204.png"
+            }
+        },
+        {
+            "team": {
+                "id": 128,
+                "name": "Santos",
+                "code": "SAN",
+                "country": "Brazil",
+                "founded": 1912,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/128.png"
+            },
+            "venue": {
+                "id": 10494,
+                "name": "Estádio Urbano Caldeira",
+                "address": "Rue Princesa Isabel 77, Vila Belmiro",
+                "city": "Santos, São Paulo",
+                "capacity": 21256,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/10494.png"
+            }
+        },
+        {
+            "team": {
+                "id": 129,
+                "name": "Ceara",
+                "code": "CEA",
+                "country": "Brazil",
+                "founded": 1914,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/129.png"
+            },
+            "venue": {
+                "id": 225,
+                "name": "Estádio Governador Plácido Aderaldo Castelo",
+                "address": "Avenida Alberto Craveiro, Passaré",
+                "city": "Fortaleza, Ceará",
+                "capacity": 63903,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/225.png"
+            }
+        },
+        {
+            "team": {
+                "id": 131,
+                "name": "Corinthians",
+                "code": "COR",
+                "country": "Brazil",
+                "founded": 1910,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/131.png"
+            },
+            "venue": {
+                "id": 11531,
+                "name": "Neo Química Arena",
+                "address": "Avenida Miguel Inácio Curi, 111, Vila Carmosina, Itaquera",
+                "city": "São Paulo, São Paulo",
+                "capacity": 49205,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/11531.png"
+            }
+        },
+        {
+            "team": {
+                "id": 134,
+                "name": "Atletico Paranaense",
+                "code": "ATL",
+                "country": "Brazil",
+                "founded": 1924,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/134.png"
+            },
+            "venue": {
+                "id": 10493,
+                "name": "Arena da Baixada",
+                "address": "Rua Buenos Aires 1260, Água Verde",
+                "city": "Curitiba, Paraná",
+                "capacity": 43981,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/10493.png"
+            }
+        },
+        {
+            "team": {
+                "id": 144,
+                "name": "Atletico Goianiense",
+                "code": "ATL",
+                "country": "Brazil",
+                "founded": 1937,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/144.png"
+            },
+            "venue": {
+                "id": 211,
+                "name": "Estádio Antônio Accioly",
+                "address": "Avenida Perimetral 923 / Avenida 24 de Outubro, Bairro Campinas",
+                "city": "Goiânia, Goiás",
+                "capacity": 12500,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/211.png"
+            }
+        },
+        {
+            "team": {
+                "id": 145,
+                "name": "Avai",
+                "code": "AVA",
+                "country": "Brazil",
+                "founded": 1923,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/145.png"
+            },
+            "venue": {
+                "id": 214,
+                "name": "Estádio Aderbal Ramos da Silva",
+                "address": "Avenida Deputado Diomício Freitas 1000, Bairro Carianos",
+                "city": "Florianópolis, Santa Catarina",
+                "capacity": 17252,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/214.png"
+            }
+        },
+        {
+            "team": {
+                "id": 147,
+                "name": "Coritiba",
+                "code": "COR",
+                "country": "Brazil",
+                "founded": 1909,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/147.png"
+            },
+            "venue": {
+                "id": 230,
+                "name": "Estádio Major Antônio Couto Pereira",
+                "address": "Rua Ubaldino do Amaral 37, Bairro Alto da Glória",
+                "city": "Curitiba, Paraná",
+                "capacity": 45563,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/230.png"
+            }
+        },
+        {
+            "team": {
+                "id": 151,
+                "name": "Goias",
+                "code": "GOI",
+                "country": "Brazil",
+                "founded": 1943,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/151.png"
+            },
+            "venue": {
+                "id": 240,
+                "name": "Estádio de Hailé Pinheiro",
+                "address": "Avenida Edmundo Pinheiro de Abreu 721, Setor Bela Vista",
+                "city": "Goiânia, Goiás",
+                "capacity": 12500,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/240.png"
+            }
+        },
+        {
+            "team": {
+                "id": 152,
+                "name": "Juventude",
+                "code": "JUV",
+                "country": "Brazil",
+                "founded": 1913,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/152.png"
+            },
+            "venue": {
+                "id": 248,
+                "name": "Estádio Alfredo Jaconi",
+                "address": "Rua Hércules Galló 1547",
+                "city": "Caxias do Sul, Rio Grande do Sul",
+                "capacity": 19924,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/248.png"
+            }
+        },
+        {
+            "team": {
+                "id": 154,
+                "name": "Fortaleza EC",
+                "code": "FOR",
+                "country": "Brazil",
+                "founded": 1918,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/154.png"
+            },
+            "venue": {
+                "id": 225,
+                "name": "Estádio Governador Plácido Aderaldo Castelo",
+                "address": "Avenida Alberto Craveiro, Passaré",
+                "city": "Fortaleza, Ceará",
+                "capacity": 63903,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/225.png"
+            }
+        },
+        {
+            "team": {
+                "id": 794,
+                "name": "RB Bragantino",
+                "code": "BRA",
+                "country": "Brazil",
+                "founded": 1928,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/794.png"
+            },
+            "venue": {
+                "id": 220,
+                "name": "Estádio Nabi Abi Chedid",
+                "address": "Rua Emílio Coleta",
+                "city": "Bragança Paulista, São Paulo",
+                "capacity": 17128,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/220.png"
+            }
+        },
+        {
+            "team": {
+                "id": 1062,
+                "name": "Atletico-MG",
+                "code": "ATL",
+                "country": "Brazil",
+                "founded": 1908,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/1062.png"
+            },
+            "venue": {
+                "id": 206,
+                "name": "Estádio Raimundo Sampaio",
+                "address": "Avenida Ismênia Tunes, Bairro Horto",
+                "city": "Belo Horizonte, Minas Gerais",
+                "capacity": 23018,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/206.png"
+            }
+        },
+        {
+            "team": {
+                "id": 1193,
+                "name": "Cuiaba",
+                "code": "CUI",
+                "country": "Brazil",
+                "founded": 2001,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/1193.png"
+            },
+            "venue": {
+                "id": 235,
+                "name": "Arena Pantanal",
+                "address": null,
+                "city": "Cuiabá, Mato Grosso",
+                "capacity": 44003,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/235.png"
+            }
+        }
+    ]
+}

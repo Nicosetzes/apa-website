@@ -1,0 +1,295 @@
+{
+    "get": "teams",
+    "parameters": {
+        "league": "197",
+        "season": "2021"
+    },
+    "errors": [],
+    "results": 14,
+    "paging": {
+        "current": 1,
+        "total": 1
+    },
+    "response": [
+        {
+            "team": {
+                "id": 553,
+                "name": "Olympiakos Piraeus",
+                "code": "OLY",
+                "country": "Greece",
+                "founded": 1925,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/553.png"
+            },
+            "venue": {
+                "id": 775,
+                "name": "Stadio Georgios Karaiskáki",
+                "address": "Poseidonos Avenue, Faliro",
+                "city": "Piraeus",
+                "capacity": 33296,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/775.png"
+            }
+        },
+        {
+            "team": {
+                "id": 575,
+                "name": "AEK Athens FC",
+                "code": "AEK",
+                "country": "Greece",
+                "founded": 1924,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/575.png"
+            },
+            "venue": {
+                "id": 761,
+                "name": "Olympiako Stadio Spyros Louis",
+                "address": "37 Kifissias Avenue, Maroussi",
+                "city": "Athens",
+                "capacity": 71030,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/761.png"
+            }
+        },
+        {
+            "team": {
+                "id": 617,
+                "name": "Panathinaikos",
+                "code": "PAN",
+                "country": "Greece",
+                "founded": 1908,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/617.png"
+            },
+            "venue": {
+                "id": 761,
+                "name": "Olympiako Stadio Spyros Louis",
+                "address": "37 Kifissias Avenue, Maroussi",
+                "city": "Athens",
+                "capacity": 71030,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/761.png"
+            }
+        },
+        {
+            "team": {
+                "id": 619,
+                "name": "PAOK",
+                "code": "PAO",
+                "country": "Greece",
+                "founded": 1926,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/619.png"
+            },
+            "venue": {
+                "id": 780,
+                "name": "Stadio Toumbas",
+                "address": "Plateia Mikras Asias",
+                "city": "Thessaloníki",
+                "capacity": 28803,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/780.png"
+            }
+        },
+        {
+            "team": {
+                "id": 949,
+                "name": "Panetolikos",
+                "code": "PAN",
+                "country": "Greece",
+                "founded": 1926,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/949.png"
+            },
+            "venue": {
+                "id": 778,
+                "name": "Stadio Panetolikou",
+                "address": "Nikitara",
+                "city": "Agrinio",
+                "capacity": 7200,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/778.png"
+            }
+        },
+        {
+            "team": {
+                "id": 950,
+                "name": "PAS Giannina",
+                "code": "GIA",
+                "country": "Greece",
+                "founded": 1966,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/950.png"
+            },
+            "venue": {
+                "id": 781,
+                "name": "Stadio Zosimades",
+                "address": "18 Fotis Tzavella",
+                "city": "Ioannina",
+                "capacity": 7652,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/781.png"
+            }
+        },
+        {
+            "team": {
+                "id": 951,
+                "name": "Apollon Smirnis",
+                "code": "APO",
+                "country": "Greece",
+                "founded": 1891,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/951.png"
+            },
+            "venue": {
+                "id": 764,
+                "name": "Stadio Georgios Kamaras",
+                "address": "Atheon, Rizoupoli",
+                "city": "Athens",
+                "capacity": 14856,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/764.png"
+            }
+        },
+        {
+            "team": {
+                "id": 955,
+                "name": "Asteras Tripolis",
+                "code": "AST",
+                "country": "Greece",
+                "founded": 1930,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/955.png"
+            },
+            "venue": {
+                "id": 766,
+                "name": "Stadio Theodoros Kolokotronis",
+                "address": "Liagora",
+                "city": "Tripoli",
+                "capacity": 7717,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/766.png"
+            }
+        },
+        {
+            "team": {
+                "id": 956,
+                "name": "Lamia",
+                "code": "LAM",
+                "country": "Greece",
+                "founded": null,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/956.png"
+            },
+            "venue": {
+                "id": 771,
+                "name": "Dimotiko Athlitiko Kentro Lamias",
+                "address": "Asklipiou 12",
+                "city": "Lamia",
+                "capacity": 5500,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/771.png"
+            }
+        },
+        {
+            "team": {
+                "id": 1123,
+                "name": "Aris Thessalonikis",
+                "code": "ARI",
+                "country": "Greece",
+                "founded": 1914,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/1123.png"
+            },
+            "venue": {
+                "id": 765,
+                "name": "Stadio Harilaou Kleánthis Vikelídis",
+                "address": "69 Alkminis, Charilaou",
+                "city": "Thessaloníki",
+                "capacity": 23220,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/765.png"
+            }
+        },
+        {
+            "team": {
+                "id": 1124,
+                "name": "OFI",
+                "code": "CRE",
+                "country": "Greece",
+                "founded": 1925,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/1124.png"
+            },
+            "venue": {
+                "id": 774,
+                "name": "Stadio Thódoros Vardinoyánnis",
+                "address": "Parnassou",
+                "city": "Heraklion",
+                "capacity": 9000,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/774.png"
+            }
+        },
+        {
+            "team": {
+                "id": 2110,
+                "name": "Volos NFC",
+                "code": null,
+                "country": "Greece",
+                "founded": 2017,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/2110.png"
+            },
+            "venue": {
+                "id": 1918,
+                "name": "Panthessaliko Stadio",
+                "address": "Odos Stadiou",
+                "city": "Volos",
+                "capacity": 22700,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/1918.png"
+            }
+        },
+        {
+            "team": {
+                "id": 7513,
+                "name": "Ionikos",
+                "code": "ION",
+                "country": "Greece",
+                "founded": null,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/7513.png"
+            },
+            "venue": {
+                "id": 5455,
+                "name": "Dimotiko Gipedo Neapolis Nikaias",
+                "address": "Grigoriou Labraki &amp; Parnassou, Neapoli, Nikaia",
+                "city": "Athens",
+                "capacity": 4999,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/5455.png"
+            }
+        },
+        {
+            "team": {
+                "id": 12260,
+                "name": "Atromitos",
+                "code": "ATR",
+                "country": "Greece",
+                "founded": 1923,
+                "national": false,
+                "logo": "https://media.api-sports.io/football/teams/12260.png"
+            },
+            "venue": {
+                "id": 7804,
+                "name": "Stadio Peristeriou",
+                "address": "93 Giannitson, Peristeri",
+                "city": "Athens",
+                "capacity": 9035,
+                "surface": "grass",
+                "image": "https://media.api-sports.io/football/venues/7804.png"
+            }
+        }
+    ]
+}

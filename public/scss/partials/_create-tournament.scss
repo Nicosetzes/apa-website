@@ -1,0 +1,94 @@
+#confirm-countries {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem auto;
+    padding: 0 1rem;
+
+    .form__container {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin: 1rem auto;
+
+        .form-check {
+            align-items: center;
+            display: flex;
+            justify-content: flex-start;
+            padding: 0;
+            width: 125px;
+
+            &:nth-child(even) {
+                justify-content: flex-end;
+            }
+
+            .form-check-input {
+                float: none; // Overriding Bootstrap styling
+                margin: 0 0.5rem; // Overriding Bootstrap styling
+            }
+        }
+    }
+
+    .btn.btn-primary {
+        background-color: darkcyan;
+        border-color: darkslategray;
+        font-size: 0.875rem;
+        margin: 0;
+    }
+}
+
+#confirmDataForDB {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto 1rem auto;
+    padding: 0 0.5rem;
+
+    .form__container {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin: 1rem auto 0 auto;
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        span {
+            margin: 1rem 0;
+            text-align: center;
+        }
+    }
+
+    #teamsFromJSON {
+
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        .form-check {
+            align-items: center;
+            display: flex;
+            justify-content: flex-start;
+            padding: 0;
+            width: 175px;
+
+            .form-check-input {
+                float: none; // Overriding Bootstrap styling
+                margin: 0 0.5rem; // Overriding Bootstrap styling
+            }
+
+            .form-check-label {
+                font-size: 0.85rem;
+            }
+        }
+
+        img {
+            width: 20px;
+        }
+    }
+
+    #confirmationButton {
+        margin-top: 1rem;
+    }
+}
