@@ -22,7 +22,7 @@ const usersModel = require("./models/users.js"); // Modelo mongoose para la carg
 /* -------------------- SERVER -------------------- */
 
 const express = require("express");
-// const cookieParser = require("cookie-parser");
+// const cookieParser = require("cookie-parser"); // Since version 1.5.0, the cookie-parser middleware no longer needs to be used for this module to work.
 const session = require("express-session"); // login session require session support //
 
 /* --------------- MONGO-SESSION (ATLAS) --------------- */
