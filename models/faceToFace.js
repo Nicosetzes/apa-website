@@ -35,6 +35,7 @@ const faceToFaceSchema = new mongoose.Schema(
     },
     rivalOfP2: { type: String, require: true, max: 100 },
     outcome: { type: Object, require: true, max: 100 },
+    tournament: { type: Object, require: true, max: 100 }
   },
   { collection }
 );

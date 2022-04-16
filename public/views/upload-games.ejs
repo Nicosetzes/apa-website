@@ -1,19 +1,119 @@
 <%- include('./partials/header')-%>
 
-    <form class="form" action="/face-to-face" method="post" autocomplete="off">
-        <div class="form-row">
-            <input id="playerP1" name='playerP1' placeholder="Jugador 1 (J1)" type="text" required>
-            <input id="teamP1" name='teamP1' placeholder="Equipo J1" type="text" required>
-            <input id="scoreP1" name='scoreP1' placeholder="Marcador J1" type="text" required>
-        </div>
-        <div class="form-row">
-            <input id="playerP2" name='playerP2' placeholder="Jugador 2 (J2)" type="text" required>
-            <input id="teamP2" name='teamP2' placeholder="Equipo J2" type="text" required>
-            <input id="scoreP2" name='scoreP2' placeholder="Marcador J2" type="text" required>
-        </div>
-        <div class="form-row">
-            <input type="submit">
-        </div>
-    </form>
+    <body>
 
-    <%- include('./partials/footer')-%>
+        <% if(tournamentById){ %>
+            <div>Hola, se cargó un torneo</div>
+            <% } else{ %>
+                <div>Hola, NO se cargó un torneo</div>
+                <% } %>
+
+                    <form class="form needs-validation" novalidate id="uploadGamesForm"
+                        action="/upload-games-from-tournament" method="post" autocomplete="off">
+                        <div class="form__container">
+                            <label>
+                                Torneo:
+                            </label>
+                            <select name="tournamentName" required>
+                                <option selected value="<%=tournamentById.name%>">
+                                    <%=tournamentById.name%>
+                                </option>
+                            </select>
+                            <label>
+                                ID del torneo:
+                            </label>
+                            <select name="tournamentId" required>
+                                <option selected value="<%=tournamentById._id%>">
+                                    <%=tournamentById._id%>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form__container">
+                            <div class="form__container-row">
+                                <label>
+                                    Seleccione el Jugador 1 (J1):
+                                </label>
+                                <select name="playerP1" required>
+                                    <option selected disabled value="">J1</option>
+                                    <%tournamentById.players.forEach(function(element, index) {%>
+                                        <option id="<%=element%>" value="<%=element%>">
+                                            <%=element%>
+                                        </option>
+                                        <%});%>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor, elija el J1.
+                                </div>
+                                <span class="customizedArrow"></span>
+                            </div>
+                            <div class="form__container-row">
+                                <label>
+                                    Seleccione el equipo del J1:
+                                </label>
+                                <select name="teamP1" required>
+                                    <option selected disabled value="">Equipo J1</option>
+                                    <%tournamentById.teams.forEach(function(element, index) {%>
+                                        <option id="<%=element%>" value="<%=element%>">
+                                            <%=element%>
+                                        </option>
+                                        <%});%>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor, elija el equipo del J1.
+                                </div>
+                                <span class="customizedArrow"></span>
+                            </div>
+                            <div class="form__container-row">
+                                <label>Seleccione el score:</label>
+                                <input id="scoreP1" name='scoreP1' placeholder="Marcador J1" type="text" required>
+                            </div>
+                        </div>
+
+                        <div class="form__container">
+                            <div class="form__container-row">
+                                <label>
+                                    Seleccione el Jugador 2 (J2):
+                                </label>
+                                <select name="playerP2" required>
+                                    <option selected disabled value="">J2</option>
+                                    <%tournamentById.players.forEach(function(element, index) {%>
+                                        <option id="<%=element%>" value="<%=element%>">
+                                            <%=element%>
+                                        </option>
+                                        <%});%>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor, elija el J2.
+                                </div>
+                                <span class="customizedArrow"></span>
+                            </div>
+                            <div class="form__container-row">
+                                <label>
+                                    Seleccione el equipo del J2:
+                                </label>
+                                <select name="teamP2" required>
+                                    <option selected disabled value="">Equipo J2</option>
+                                    <%tournamentById.teams.forEach(function(element, index) {%>
+                                        <option id="<%=element%>" value="<%=element%>">
+                                            <%=element%>
+                                        </option>
+                                        <%});%>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Por favor, elija el equipo del J2.
+                                </div>
+                                <span class="customizedArrow"></span>
+                            </div>
+                            <div class="form__container-row">
+                                <label>Seleccione el score:</label>
+                                <input id="scoreP2" name='scoreP2' placeholder="Marcador J2" type="text" required>
+                            </div>
+                        </div>
+
+                        <div class="form__container">
+                            <input type="submit">
+                        </div>
+                    </form>
+                    <script src="js/upload-games.js"></script>
+
+                    <%- include('./partials/footer')-%>

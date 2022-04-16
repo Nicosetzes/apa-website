@@ -1,65 +1,68 @@
 <%- include('./partials/header')-%>
 
-    <% if(finalMatchups.length> 0){ %>
-        <div>Hola, hay emparejamientos</div>
-        <% } else{ %>
-            <div>Hola, NO hay emparejamientos</div>
-            <% } %>
+    <body>
 
-                <div class="container_table">
-                    <div class="row">
-                        <div class="column">
-                            <div class="cell">Enfrentamientos</div>
-                            <%finalMatchups.forEach(function(element, index) {%>
-                                <div class="cell">
-                                    <%=element.matchup%>
-                                </div>
-                                <%});%>
-                        </div>
-                        <div class="column">
-                            <div class="cell">Partidos jugados</div>
-                            <%finalMatchups.forEach(function(element, index) {%>
-                                <div class="cell">
-                                    <%=element.matches.length%>
-                                </div>
-                                <%});%>
-                        </div>
-                        <div class="column">
-                            <div class="cell">Victorias (J1)</div>
-                            <%finalMatchups.forEach(function(element, index) {%>
-                                <div class="cell">
-                                    <%=element.wonByP1%>
-                                </div>
-                                <%});%>
-                        </div>
-                        <div class="column">
-                            <div class="cell">Empates</div>
-                            <%finalMatchups.forEach(function(element, index) {%>
-                                <div class="cell">
-                                    <%=element.draws%>
-                                </div>
-                                <%});%>
-                        </div>
-                        <div class="column">
-                            <div class="cell">Victorias (J2)</div>
-                            <%finalMatchups.forEach(function(element, index) {%>
-                                <div class="cell">
-                                    <%=element.wonByP2%>
-                                </div>
-                                <%});%>
+        <% if(finalMatchups.length> 0){ %>
+            <div>Hola, hay emparejamientos</div>
+            <% } else{ %>
+                <div>Hola, NO hay emparejamientos</div>
+                <% } %>
+
+                    <div class="container_table">
+                        <div class="row">
+                            <div class="column">
+                                <div class="cell">Enfrentamientos</div>
+                                <%finalMatchups.forEach(function(element, index) {%>
+                                    <div class="cell">
+                                        <%=element.matchup%>
+                                    </div>
+                                    <%});%>
+                            </div>
+                            <div class="column">
+                                <div class="cell">Partidos jugados</div>
+                                <%finalMatchups.forEach(function(element, index) {%>
+                                    <div class="cell">
+                                        <%=element.matches.length%>
+                                    </div>
+                                    <%});%>
+                            </div>
+                            <div class="column">
+                                <div class="cell">Victorias (J1)</div>
+                                <%finalMatchups.forEach(function(element, index) {%>
+                                    <div class="cell">
+                                        <%=element.wonByP1%>
+                                    </div>
+                                    <%});%>
+                            </div>
+                            <div class="column">
+                                <div class="cell">Empates</div>
+                                <%finalMatchups.forEach(function(element, index) {%>
+                                    <div class="cell">
+                                        <%=element.draws%>
+                                    </div>
+                                    <%});%>
+                            </div>
+                            <div class="column">
+                                <div class="cell">Victorias (J2)</div>
+                                <%finalMatchups.forEach(function(element, index) {%>
+                                    <div class="cell">
+                                        <%=element.wonByP2%>
+                                    </div>
+                                    <%});%>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="container_matches">
+                    <div class="container_matches">
 
-                    <%allMatches.forEach(function(element, index) {%>
+                        <%allMatches.forEach(function(element, index) {%>
 
-                        <div class="match">
-                            <%=element.teamP1%> (<%=element.playerP1%>) <%=element.scoreP1%> vs <%=element.scoreP2%> (
-                                            <%=element.playerP2%>) <%=element.teamP2%>
-                        </div>
+                            <div class="match">
+                                <%=element.teamP1%> (<%=element.playerP1%>) <%=element.scoreP1%> vs <%=element.scoreP2%>
+                                                (
+                                                <%=element.playerP2%>) <%=element.teamP2%>
+                            </div>
 
-                        <%});%>
-                </div>
+                            <%});%>
+                    </div>
 
-                <%- include('./partials/footer')-%>
+                    <%- include('./partials/footer')-%>

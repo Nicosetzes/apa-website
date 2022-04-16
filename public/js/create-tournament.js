@@ -10,15 +10,40 @@ const teamsFromJSONDiv = document.querySelector("#teamsFromJSON");
 const confirmationButton = document.querySelector("#confirmationButton");
 
 confirmCountriesForm.addEventListener("submit", e => {
+
     e.preventDefault();
+    // swal({
+    //     title: "Confirmación - países",
+    //     text: "¿Está seguro que desea elegir estos países para conformar el torneo?",
+    //     icon: "info",
+    //     buttons: true,
+    //     // dangerMode: true,
+    // })
+    //     .then((willConfirm) => {
+    //         if (willConfirm) {
+    //             swal("Países confirmados", {
+    //                 icon: "success",
+    //             });
+    //         }
+    //         else {
+    //             swal("Vuelva a intentarlo");
+    //         }
+    //     });
+
     const arrayFromValues = Object.values(confirmCountriesForm);
-    console.log(arrayFromValues);
+    // console.log(arrayFromValues);
     const cleanArrayFromValues = arrayFromValues.map((input) => {
 
         return { name: input.name, value: input.checked }
 
     });
     const confirmedCountries = cleanArrayFromValues.filter((input) => input.value) // Me quedo solo con los boxes chequeados
+
+    // console.log(confirmedCountries);
+    // if (!confirmedCountries.length) {
+    //     alert("Ningún país ha sido seleccionado");
+    //     return;
+    // }
 
     let infoFromJSON = [];
 
@@ -40,7 +65,7 @@ confirmCountriesForm.addEventListener("submit", e => {
             console.log(infoFromJSON);
             infoFromJSON.forEach((league, index) => {
                 league.forEach((squad) => {
-                    inyectHTML(squad.team,);
+                    inyectHTML(squad.team);
                 })
             })
         };
@@ -58,9 +83,26 @@ confirmCountriesForm.addEventListener("submit", e => {
     button.innerHTML = `Confirmar torneo`;
     confirmationButton.append(button);
 
+    // confirmationButton.addEventListener("click", () => {
+    //     swal({
+    //         title: "Confirmación - nuevo torneo",
+    //         text: "¿Está seguro de los parámetros elegidos?",
+    //         icon: "info",
+    //         buttons: true,
+    //         // dangerMode: true,
+    //     })
+    //         .then((willConfirm) => {
+    //             if (willConfirm) {
+    //                 swal("Torneo confirmado", {
+    //                     icon: "success",
+    //                 });
+    //             }
+    //             else {
+    //                 swal("Vuelva a intentarlo");
+    //             }
+    //         });
+    // })
 })
-
-
 
 const inyectHTML = (param) => {
 
@@ -79,6 +121,25 @@ const inyectHTML = (param) => {
     div.innerHTML = htmlNode;
 
     teamsFromJSONDiv.appendChild(div);
-
 }
 
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+})()

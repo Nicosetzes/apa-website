@@ -1,0 +1,36 @@
+<%- include('./partials/header')-%>
+
+    <body>
+
+        <% if(tournamentsFromBD.length> 0){ %>
+            <div>Hola, hay torneos</div>
+            <% } else{ %>
+                <div>Hola, NO hay torneos</div>
+                <% } %>
+
+                    <form class="form needs-validation" novalidate id="uploadGamesForm" action="/upload-games"
+                        method="post" autocomplete="off">
+                        <div class="form__container">
+                            <label>
+                                Seleccione el torneo:
+                            </label>
+                            <select name="selection" required>
+                                <option selected disabled value="">Seleccione</option>
+                                <%tournamentsFromBD.forEach(function(element, index) {%>
+                                    <option id="<%=element.name%>" value="<%=element.id%>">
+                                        <%=element.name%>
+                                    </option>
+                                    <%});%>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, elija un torneo.
+                            </div>
+                            <span class="customizedArrow"></span>
+                        </div>
+                        <div class="form__container">
+                            <input type="submit">
+                        </div>
+                    </form>
+                    <script src="js/tournament-selection.js"></script>
+
+                    <%- include('./partials/footer')-%>

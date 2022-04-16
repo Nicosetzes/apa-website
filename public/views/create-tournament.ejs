@@ -1,127 +1,128 @@
 <%- include('./partials/header')-%>
-    <form id="confirm-countries" class="form" autocomplete="off">
-        <span>Por favor, confirme los países de los equipos a utilizar: </span>
-        <div class="form__container">
-            <div class="form-check">
-                <input name="DE" class="form-check-input" type="checkbox" value="Germany" id="DE">
-                <label class="form-check-label" for="inputID">
-                    Alemania
-                </label>
-            </div>
-            <div class="form-check">
-                <label class="form-check-label" for="inputID">
-                    Argentina
-                </label>
-                <input name="AR" class="form-check-input" type="checkbox" value="Argentina" id="AR">
 
+    <body>
+        <form id="confirm-countries" class="form needs-validation" novalidate autocomplete="off">
+            <span>Por favor, confirme los países de los equipos a utilizar: </span>
+            <div class="form__container">
+                <div class="form-check">
+                    <input name="DE" class="form-check-input" type="checkbox" value="Germany" id="DE">
+                    <label class="form-check-label" for="inputID">
+                        Alemania
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label" for="inputID">
+                        Argentina
+                    </label>
+                    <input name="AR" class="form-check-input" type="checkbox" value="Argentina" id="AR">
+
+                </div>
+                <div class="form-check">
+                    <input name="BR" class="form-check-input" type="checkbox" value="Brazil" id="BR">
+                    <label class="form-check-label" for="inputID">
+                        Brasil
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label" for="inputID">
+                        España
+                    </label>
+                    <input name="SP" class="form-check-input" type="checkbox" value="Spain" id="SP">
+                </div>
+                <div class="form-check">
+                    <input name="FR" class="form-check-input" type="checkbox" value="France" id="FR">
+                    <label class="form-check-label" for="inputID">
+                        Francia
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label" for="inputID">
+                        Grecia
+                    </label>
+                    <input name="GR" class="form-check-input" type="checkbox" value="Greece" id="GR">
+                </div>
+                <div class="form-check">
+                    <input name="NL" class="form-check-input" type="checkbox" value="Netherlands" id="NL">
+                    <label class="form-check-label" for="inputID">
+                        Holanda
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label" for="inputID">
+                        Inglaterra
+                    </label>
+                    <input name="GB" class="form-check-input" type="checkbox" value="England" id="GB">
+                </div>
+                <div class="form-check">
+                    <input name="IT" class="form-check-input" type="checkbox" value="Italy" id="IT">
+                    <label class="form-check-label" for="inputID">
+                        Italia
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label" for="inputID">
+                        Portugal
+                    </label>
+                    <input name="PT" class="form-check-input" type="checkbox" value="Portugal" id="PT">
+                </div>
+                <div class="form-check">
+                    <input name="RU" class="form-check-input" type="checkbox" value="Russia" id="RU">
+                    <label class="form-check-label" for="inputID">
+                        Rusia
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label" for="inputID">
+                        Turquía
+                    </label>
+                    <input name="TR" class="form-check-input" type="checkbox" value="Turkey" id="TR">
+                </div>
+                <div class="invalid-feedback">
+                    You must agree before submitting.
+                </div>
             </div>
-            <div class="form-check">
-                <input name="BR" class="form-check-input" type="checkbox" value="Brazil" id="BR">
-                <label class="form-check-label" for="inputID">
-                    Brasil
-                </label>
+            <button type="submit" class="btn btn-primary">Confirmar países</button>
+        </form>
+        <form id="confirmDataForDB" class="form" action="/create-tournament" method="post" autocomplete="off">
+            <div class="form__container">
+                <span>Ingrese el nombre del torneo a generar:</span>
+                <input id="" name="tournamentName" placeholder="Nombre del torneo" type="text" required>
             </div>
-            <div class="form-check">
-                <label class="form-check-label" for="inputID">
-                    España
-                </label>
-                <input name="SP" class="form-check-input" type="checkbox" value="Spain" id="SP">
+            <div class="form__container">
+                <span>¿Qué jugadores humanos participarán del torneo?</span>
+                <div class="form-check">
+                    <input name="firstPlayer" class="form-check-input" type="checkbox" value="Leo" id="">
+                    <label class="form-check-label" for="inputID">
+                        Leo
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input name="secondPlayer" class="form-check-input" type="checkbox" value="Lucho" id="">
+                    <label class="form-check-label" for="inputID">
+                        Lucho
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input name="thirdPlayer" class="form-check-input" type="checkbox" value="Max" id="">
+                    <label class="form-check-label" for="inputID">
+                        Max
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input name="fourthPlayer" class="form-check-input" type="checkbox" value="Nico" id="">
+                    <label class="form-check-label" for="inputID">
+                        Nico
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input name="fifthPlayer" class="form-check-input" type="checkbox" value="Santi" id="">
+                    <label class="form-check-label" for="inputID">
+                        Santi
+                    </label>
+                </div>
             </div>
-            <div class="form-check">
-                <input name="FR" class="form-check-input" type="checkbox" value="France" id="FR">
-                <label class="form-check-label" for="inputID">
-                    Francia
-                </label>
-            </div>
-            <div class="form-check">
-                <label class="form-check-label" for="inputID">
-                    Grecia
-                </label>
-                <input name="GR" class="form-check-input" type="checkbox" value="Greece" id="GR">
-            </div>
-            <div class="form-check">
-                <input name="NL" class="form-check-input" type="checkbox" value="Netherlands" id="NL">
-                <label class="form-check-label" for="inputID">
-                    Holanda
-                </label>
-            </div>
-            <div class="form-check">
-                <label class="form-check-label" for="inputID">
-                    Inglaterra
-                </label>
-                <input name="GB" class="form-check-input" type="checkbox" value="England" id="GB">
-            </div>
-            <div class="form-check">
-                <input name="IT" class="form-check-input" type="checkbox" value="Italy" id="IT">
-                <label class="form-check-label" for="inputID">
-                    Italia
-                </label>
-            </div>
-            <div class="form-check">
-                <label class="form-check-label" for="inputID">
-                    Portugal
-                </label>
-                <input name="PT" class="form-check-input" type="checkbox" value="Portugal" id="PT">
-            </div>
-            <div class="form-check">
-                <input name="RU" class="form-check-input" type="checkbox" value="Russia" id="RU">
-                <label class="form-check-label" for="inputID">
-                    Rusia
-                </label>
-            </div>
-            <div class="form-check">
-                <label class="form-check-label" for="inputID">
-                    Turquía
-                </label>
-                <input name="TR" class="form-check-input" type="checkbox" value="Turkey" id="TR">
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Confirmar países</button>
-    </form>
-    <form id="confirmDataForDB" class="form" action="/create-tournament" method="post" autocomplete="off">
-        <div class="form__container">
-            <span>Ingrese el nombre del torneo a generar:</span>
-            <input id="" name="tournamentName" placeholder="Nombre del torneo" type="text" required>
-        </div>
-        <div class="form__container">
-            <span>¿Qué jugadores humanos participarán del torneo?</span>
-            <div class="form-check">
-                <input name="firstPlayer" class="form-check-input" type="checkbox" value="Leo" id="">
-                <label class="form-check-label" for="inputID">
-                    Leo
-                </label>
-            </div>
-            <div class="form-check">
-                <input name="secondPlayer" class="form-check-input" type="checkbox" value="Lucho" id="">
-                <label class="form-check-label" for="inputID">
-                    Lucho
-                </label>
-            </div>
-            <div class="form-check">
-                <input name="thirdPlayer" class="form-check-input" type="checkbox" value="Max" id="">
-                <label class="form-check-label" for="inputID">
-                    Max
-                </label>
-            </div>
-            <div class="form-check">
-                <input name="fourthPlayer" class="form-check-input" type="checkbox" value="Nico" id="">
-                <label class="form-check-label" for="inputID">
-                    Nico
-                </label>
-            </div>
-            <div class="form-check">
-                <input name="fifthPlayer" class="form-check-input" type="checkbox" value="Santi" id="">
-                <label class="form-check-label" for="inputID">
-                    Santi
-                </label>
-            </div>
-        </div>
-        <div id="teamsFromJSON" class="form__container"></div>
-        <div id="confirmationButton"></div>
-    </form>
-    <script src="js/create-tournament.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-    </body>
-    <%- include('./partials/footer')-%>
+            <div id="teamsFromJSON" class="form__container"></div>
+            <div id="confirmationButton"></div>
+        </form>
+        <script src="js/create-tournament.js"></script>
+        <%- include('./partials/footer')-%>
