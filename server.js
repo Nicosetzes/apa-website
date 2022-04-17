@@ -85,42 +85,6 @@ const LocalStrategy = require("passport-local").Strategy;
 
 const bCrypt = require("bcrypt");
 
-// const createHash = (password) => {
-//   return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-// };
-
-// passport.use(
-//   "register",
-//   new LocalStrategy((username, password, done) => {
-//     usersModel
-//       .findOne({ username: username })
-//       .then((user) => {
-//         if (!user) {
-//           const newUser = new usersModel({
-//             username: username,
-//             password: createHash(password),
-//           });
-//           console.log(newUser);
-//           usersModel
-//             .create(newUser)
-//             .then((user) => {
-//               return done(null, user);
-//             })
-//             .catch((err) => {
-//               return done(null, false, { message: err });
-//             });
-//         } else {
-//           return done(null, false, {
-//             message: "This user has already been registered",
-//           });
-//         }
-//       })
-//       .catch((err) => {
-//         return done(null, false, { message: err });
-//       });
-//   })
-// );
-
 passport.use(
   "login",
   new LocalStrategy(
@@ -222,26 +186,6 @@ app.post("/logout", (req, res) => {
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
 });
 
-// PARA REGISTER:
-
-// app.get("/register", (req, res) => {
-//   res.render("register", {});
-//   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
-// });
-
-// app.post(
-//   "/register",
-//   passport.authenticate("register", {
-//     failureRedirect: "/failregister",
-//     successRedirect: "/",
-//   })
-// );
-
-// app.get("/register-error", (req, res) => {
-//   res.render("register-error", {});
-//   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
-// });
-
 // OTHER ROUTES
 
 // app.get("/api", isAuth, (req, res) => {
@@ -281,7 +225,7 @@ app.get("/create-tournament", (req, res) => {
 
   // const config = {
   //   method: 'get',
-  //   url: `https://v3.football.api-sports.io/teams?league=197&season=2021`,
+  //   url: `https://v3.football.api-sports.io/teams?league=119&season=2021`,
   //   headers: {
   //     'x-rapidapi-key': 'c6fc4afceaf077867ce47212440002cf',
   //     'x-rapidapi-host': 'v3.football.api-sports.io'
@@ -296,6 +240,8 @@ app.get("/create-tournament", (req, res) => {
   //     console.log(error);
   //   });
 
+  // const oldMatchesArray = [];
+
   res.render("create-tournament", {});
 });
 
@@ -303,6 +249,7 @@ app.post("/create-tournament", async (req, res) => {
 
   try {
     const arrayFromValues = Object.values(req.body);
+
     const tournamentName = arrayFromValues[0];
     arrayFromValues.splice(0, 1);
     const humanPlayers = [];
@@ -316,8 +263,6 @@ app.post("/create-tournament", async (req, res) => {
         teams.push(element);
       }
     });
-
-    console.log(tournamentName);
 
     const tournament = {
       name: tournamentName,
@@ -345,27 +290,150 @@ app.post("/create-tournament", async (req, res) => {
 
 app.get("/face-to-face", async (req, res) => {
 
-  let finalMatchups = [];
-
-  const tournamentId = req.query.id;
-
   try {
 
-    let idExists;
+    const tournamentId = req.query.id;
+
+    const allTournaments = await tournamentsModel.find({}, "id name status");
+
+    console.log(allTournaments);
+
+    const array = [];
+    let finalMatchups = [];
 
     if (tournamentId) {
-      const allMatches = await faceToFaceModel.find({ tournament: { id: tournamentId } }, "playerP1, playerP2");
-      if (allMatches.length === 0) {
-        res.render("face-to-face", { finalMatchups, allMatches });
-      }
-      displayMatchupInformation(allMatches, tournamentId);
+
+      // console.log("Entré por el lado de Tournament ID")
+
+      const allMatches = await faceToFaceModel.find({ "tournament.id": tournamentId }, "playerP1 teamP1 scoreP1 playerP2 teamP2 scoreP2");
+
+      // console.log(allMatches);
+
+      if (allMatches.length === 0) res.render("face-to-face-error", { tournamentId })
+
+      const allPlayers1 = allMatches.map((match) => match.playerP1);
+      const allPlayers2 = allMatches.map((match) => match.playerP2);
+      const concat = allPlayers1.concat(allPlayers2);
+      const allPlayers = [...new Set(concat)]; // Con Set puedo eliminar valores repetidos //
+      const allMatchups = allPlayers.flatMap((v, i) =>
+        allPlayers.slice(i + 1).map((w) => {
+          return { p1: v, p2: w };
+        })
+      );
+
+      let itemsProcessed = 0;
+
+      // console.log(allMatchups);
+
+      allMatchups.forEach(async (element, index) => {
+        array.push(
+          await faceToFaceModel.find({
+            "tournament.id": tournamentId,
+            $or: [
+              { $and: [{ playerP1: element.p1 }, { rivalOfP1: element.p2 }] },
+              { $and: [{ playerP1: element.p2 }, { rivalOfP1: element.p1 }] },
+            ],
+          })
+        ); // ESTE LLAMADO NO DEBERÍA CAMBIARLO POR UN FILTER? ESTA INFO YA LA TENGO, ES INNECESARIA UNA NUEVA LLAMADA A LA BD! //
+
+        itemsProcessed++;
+
+        if (itemsProcessed === allMatchups.length) {
+
+          const workedMatchups = allMatchups.map((element, index) => {
+            return {
+              matchup: `${array[index][0]?.playerP1} (J1) vs ${array[index][0]?.rivalOfP1} (J2)`,
+              matches: array[index],
+              wonByP1: array[index].reduce(
+                (acc, cur) =>
+                  cur.outcome.playerThatWon === array[index][0].playerP1 ? ++acc : acc,
+                0
+              ),
+              wonByP2: array[index].reduce(
+                (acc, cur) =>
+                  cur.outcome.playerThatWon === array[index][0].playerP2 ? ++acc : acc,
+                0
+              ),
+              draws: array[index].reduce(
+                (acc, cur) => (cur.outcome.draw) ? ++acc : acc,
+                0
+              ),
+            };
+          });
+
+          const finalMatchups = workedMatchups.filter((element) => {
+            return element.matchup !== "undefined (J1) vs undefined (J2)";
+          });
+
+          res.render("face-to-face", { finalMatchups, allMatches, allTournaments });
+        }
+      })
     }
+
     else {
-      const allMatches = await faceToFaceModel.find({}, "playerP1, playerP2");
+
+      // console.log("Entré por el lado de GLOBAL")
+
+      const allMatches = await faceToFaceModel.find({}, "playerP1 teamP1 scoreP1 playerP2 teamP2 scoreP2");
+
       if (allMatches.length === 0) {
-        res.render("face-to-face", { finalMatchups, allMatches });
+        res.render("face-to-face", { finalMatchups, allMatches, allTournaments });
       }
-      displayMatchupInformation(allMatches);
+
+      // console.log(allMatches);
+
+      const allPlayers1 = allMatches.map((match) => match.playerP1);
+      const allPlayers2 = allMatches.map((match) => match.playerP2);
+      const concat = allPlayers1.concat(allPlayers2);
+      const allPlayers = [...new Set(concat)]; // Con Set puedo eliminar valores repetidos //
+      const allMatchups = allPlayers.flatMap((v, i) =>
+        allPlayers.slice(i + 1).map((w) => {
+          return { p1: v, p2: w };
+        })
+      )
+
+      let itemsProcessed = 0;
+
+      allMatchups.forEach(async (element, index) => {
+        array.push(
+          await faceToFaceModel.find({
+            $or: [
+              { $and: [{ playerP1: element.p1 }, { rivalOfP1: element.p2 }] },
+              { $and: [{ playerP1: element.p2 }, { rivalOfP1: element.p1 }] },
+            ],
+          })
+        ); // ESTE LLAMADO NO DEBERÍA CAMBIARLO POR UN FILTER? ESTA INFO YA LA TENGO, ES INNECESARIA UNA NUEVA LLAMADA A LA BD! //
+        itemsProcessed++;
+        if (itemsProcessed === allMatchups.length) {
+
+          console.log("array")
+          console.log(array);
+          // const goalsForP1 = 
+
+          const workedMatchups = allMatchups.map((element, index) => ({
+            matchup: `${array[index][0]?.playerP1} (J1) vs ${array[index][0]?.rivalOfP1} (J2)`,
+            matches: array[index],
+            wonByP1: array[index].reduce(
+              (acc, cur) => cur.outcome.playerThatWon === array[index][0].playerP1 ? ++acc : acc,
+              0
+            ),
+            wonByP2: array[index].reduce(
+              (acc, cur) => cur.outcome.playerThatWon === array[index][0].playerP2 ? ++acc : acc,
+              0
+            ),
+            draws: array[index].reduce(
+              (acc, cur) => (cur.outcome.draw) ? ++acc : acc,
+              0
+            ),
+          }));
+
+          const finalMatchups = workedMatchups.filter((element) => {
+            return element.matchup !== "undefined (J1) vs undefined (J2)";
+          });
+
+          res.render("face-to-face", { finalMatchups, allMatches, allTournaments });
+        }
+      })
     }
   }
   catch (err) {
@@ -373,6 +441,7 @@ app.get("/face-to-face", async (req, res) => {
   }
 
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
+
 });
 
 app.get("/upload-games", async (req, res) => {
@@ -399,6 +468,7 @@ app.get("/upload-games/:id", async (req, res) => {
   const idProvided = req.params.id;
   try {
     const tournamentById = await tournamentsModel.findById(idProvided);
+    console.log(tournamentById);
     res.render("upload-games", { tournamentById })
   }
   catch (err) {
@@ -407,22 +477,26 @@ app.get("/upload-games/:id", async (req, res) => {
 });
 
 app.post("/upload-games-from-tournament", async (req, res) => {
-  // console.log(req.body)
+
   try {
-    let { playerP1, teamP1, scoreP1, playerP2, teamP2, scoreP2, tournamentName, tournamentId } = req.body;
+    let { playerP1, teamP1, scoreP1, playerP2, teamP2, scoreP2, tournamentName, tournamentId, typeOfMatch } = req.body;
     let rivalOfP1 = playerP2;
     let rivalOfP2 = playerP1;
-    let outcome = "draw";
+    let outcome;
+
     if (scoreP1 - scoreP2 !== 0) {
       scoreP1 > scoreP2
-        ? (outcome = { winner: playerP1, teamThatWon: teamP1 })
-        : (outcome = { winner: playerP2, teamThatWon: teamP2 });
+        ? (outcome = { playerThatWon: playerP1, teamThatWon: teamP1, draw: false })
+        : (outcome = { playerThatWon: playerP2, teamThatWon: teamP2, draw: false });
     }
     if (scoreP1 - scoreP2 !== 0) {
       scoreP1 > scoreP2
-        ? (outcome = { winner: playerP1, teamThatWon: teamP1 })
-        : (outcome = { winner: playerP2, teamThatWon: teamP2 });
-    } // Si hubo empate, outcome = draw;
+        ? (outcome = { playerThatWon: playerP1, teamThatWon: teamP1, draw: false })
+        : (outcome = { playerThatWon: playerP2, teamThatWon: teamP2, draw: false });
+    }
+    if (scoreP1 - scoreP2 === 0) {
+      outcome = { playerThatWon: "none", teamThatWon: "none", draw: true }
+    }
 
     const match = {
       playerP1,
@@ -434,6 +508,7 @@ app.post("/upload-games-from-tournament", async (req, res) => {
       scoreP2,
       rivalOfP2,
       outcome,
+      typeOfMatch,
       tournament: {
         name: tournamentName,
         id: tournamentId
@@ -441,8 +516,9 @@ app.post("/upload-games-from-tournament", async (req, res) => {
     };
 
     await faceToFaceModel.create(match);
-    res.status(200).send("Partido cargado con éxito");
-    // Si falla la validación, se ejecuta el catch //
+
+    res.redirect("/");
+
   } catch (err) {
     if (err.name === "ValidationError") {
       const errors = {};
@@ -456,71 +532,6 @@ app.post("/upload-games-from-tournament", async (req, res) => {
     res.status(500).send("Something went wrong");
   }
 });
-
-/* -------------------- NECESSARY FUNCTIONS -------------------- */
-
-const displayMatchupInformation = (allMatches, tournamentId) => {
-
-  const array = [];
-
-  console.log(allMatches);
-
-  console.log(tournamentId);
-
-  const allPlayers1 = allMatches.map((match) => match.playerP1);
-  const allPlayers2 = allMatches.map((match) => match.playerP2);
-  const concat = allPlayers1.concat(allPlayers2);
-  const allPlayers = [...new Set(concat)]; // Con Set puedo eliminar valores repetidos //
-  const allMatchups = allPlayers.flatMap((v, i) =>
-    allPlayers.slice(i + 1).map((w) => {
-      return { p1: v, p2: w };
-    })
-  );
-
-  let itemsProcessed = 0;
-
-  allMatchups.forEach(async (element, index) => {
-    array.push(
-      await faceToFaceModel.find({
-        tournament: { tournamentId }, // CHEQUEAR!
-        $or: [
-          { $and: [{ playerP1: element.p1 }, { rivalOfP1: element.p2 }] },
-          { $and: [{ playerP1: element.p2 }, { rivalOfP1: element.p1 }] },
-        ],
-      })
-    ); // ESTE LLAMADO NO DEBERÍA CAMBIARLO POR UN FILTER? ESTA INFO YA LA TENGO, ES INNECESARIA UNA NUEVA LLAMADA A LA BD! //
-    itemsProcessed++;
-    if (itemsProcessed === allMatchups.length) {
-      const workedMatchups = allMatchups.map((element, index) => {
-        return {
-          matchup: `${array[index][0]?.playerP1} (J1) vs ${array[index][0]?.rivalOfP1} (J2)`,
-          matches: array[index],
-          wonByP1: array[index].reduce(
-            (acc, cur) =>
-              cur.outcome.winner === array[index][0].playerP1 ? ++acc : acc,
-            0
-          ),
-          wonByP2: array[index].reduce(
-            (acc, cur) =>
-              cur.outcome.winner === array[index][0].playerP2 ? ++acc : acc,
-            0
-          ),
-          draws: array[index].reduce(
-            (acc, cur) => (cur.outcome === "draw" ? ++acc : acc),
-            0
-          ),
-        };
-      });
-
-      const finalMatchups = workedMatchups.filter((element) => {
-        return element.matchup !== "undefined (J1) vs undefined (J2)";
-      });
-
-      // console.log(finalMatchups);
-      res.render("face-to-face", { finalMatchups, allMatches });  // PROBAR, SINO TRASLADAR EL RENDER A LA HTTP REQ Y ENVIAR EL RETURN DE ESTA FUNCIÓN COMO OBJ!
-    }
-  });
-}
 
 /* -------------------- PORT -------------------- */
 

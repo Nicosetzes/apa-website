@@ -8,8 +8,8 @@
                 <div>Hola, NO se cargó un torneo</div>
                 <% } %>
 
-                    <form class="form needs-validation" novalidate id="uploadGamesForm"
-                        action="/upload-games-from-tournament" method="post" autocomplete="off">
+                    <form class="form needs-validation" id="uploadGamesForm" action="/upload-games-from-tournament"
+                        method="post" autocomplete="off">
                         <div class="form__container">
                             <label>
                                 Torneo:
@@ -107,6 +107,14 @@
                             <div class="form__container-row">
                                 <label>Seleccione el score:</label>
                                 <input id="scoreP2" name='scoreP2' placeholder="Marcador J2" type="text" required>
+                            </div>
+                            <div class="form__container-row">
+                                <label>Tipo de partido</label>
+                                <select name="typeOfMatch" required>
+                                    <option selected disabled value="">Tipo</option>
+                                    <option id="regular" value="regular">Temporada</option>
+                                    <option id="playoff" value="playoff">Eliminatoria</option>
+                                </select>
                             </div>
                         </div>
 

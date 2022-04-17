@@ -12,6 +12,22 @@ const confirmationButton = document.querySelector("#confirmationButton");
 confirmCountriesForm.addEventListener("submit", e => {
 
     e.preventDefault();
+
+    const isChecked = atLeastOneCheckboxIsChecked("countries");
+
+    console.log(isChecked);
+
+    if (!isChecked) {
+        swal({
+            title: "Error en la validación",
+            text: "Por favor, elija al menos una casilla para conformar el torneo",
+            icon: "error",
+            buttons: true,
+            // dangerMode: true,
+        });
+        return;
+    }
+
     // swal({
     //     title: "Confirmación - países",
     //     text: "¿Está seguro que desea elegir estos países para conformar el torneo?",
@@ -31,7 +47,7 @@ confirmCountriesForm.addEventListener("submit", e => {
     //     });
 
     const arrayFromValues = Object.values(confirmCountriesForm);
-    // console.log(arrayFromValues);
+
     const cleanArrayFromValues = arrayFromValues.map((input) => {
 
         return { name: input.name, value: input.checked }
@@ -56,7 +72,7 @@ confirmCountriesForm.addEventListener("submit", e => {
                 return response.json()
             })
             .then(data => {
-                infoFromJSON.push(data.response); // PROBAR DATA.RESPONSE
+                infoFromJSON.push(data.response);
             });
 
         itemsProcessed++;
@@ -82,26 +98,6 @@ confirmCountriesForm.addEventListener("submit", e => {
     button.classList.add("btn-primary");
     button.innerHTML = `Confirmar torneo`;
     confirmationButton.append(button);
-
-    // confirmationButton.addEventListener("click", () => {
-    //     swal({
-    //         title: "Confirmación - nuevo torneo",
-    //         text: "¿Está seguro de los parámetros elegidos?",
-    //         icon: "info",
-    //         buttons: true,
-    //         // dangerMode: true,
-    //     })
-    //         .then((willConfirm) => {
-    //             if (willConfirm) {
-    //                 swal("Torneo confirmado", {
-    //                     icon: "success",
-    //                 });
-    //             }
-    //             else {
-    //                 swal("Vuelva a intentarlo");
-    //             }
-    //         });
-    // })
 })
 
 const inyectHTML = (param) => {
@@ -112,8 +108,8 @@ const inyectHTML = (param) => {
     // div.append(p)
     let htmlNode;
 
-    htmlNode = `<input name="${param.code}" class="form-check-input" type="checkbox" value="${param.name}" id="${param.code}">
-                <label class="form-check-label" for="${param.code}">
+    htmlNode = `<input name="ID${param.id}" class="form-check-input form-check-input-teams" type="checkbox" value="${param.name}" id="ID${param.id}">
+                <label class="form-check-label" for="ID${param.id}">
                 ${param.name}
                 </label>
                 <img src="${param.logo}">`
@@ -123,23 +119,41 @@ const inyectHTML = (param) => {
     teamsFromJSONDiv.appendChild(div);
 }
 
-// Example starter JavaScript for disabling form submissions if there are invalid fields
-(function () {
-    'use strict'
+const confirmDataForDbForm = document.querySelector("#confirmDataForDB");
 
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const forms = document.querySelectorAll('.needs-validation')
+console.log(confirmDataForDbForm);
 
-    // Loop over them and prevent submission
-    Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
+confirmDataForDbForm.addEventListener("submit", e => {
 
-                form.classList.add('was-validated')
-            }, false)
-        })
-})()
+    const isCheckedForPlayers = atLeastOneCheckboxIsChecked("players");
+
+    const isCheckedForTeams = atLeastOneCheckboxIsChecked("teams");
+
+    console.log("isCheckedForPlayers: " + isCheckedForPlayers);
+
+    console.log("isCheckedForTeams: " + isCheckedForTeams);
+
+    if (!isCheckedForPlayers) {
+        e.preventDefault()
+        swal({
+            title: "Error en la validación",
+            text: "Por favor, elija al menos un jugador para conformar el torneo",
+            icon: "error",
+            // buttons: true,
+        });
+    }
+    if (!isCheckedForTeams) {
+        e.preventDefault()
+        swal({
+            title: "Error en la validación",
+            text: "Por favor, elija al menos un equipo para conformar el torneo",
+            icon: "error",
+            // buttons: true,
+        });
+    }
+});
+
+function atLeastOneCheckboxIsChecked(section) {
+    const checkboxes = Array.from(document.querySelectorAll(`.form-check-input-${section}`));
+    return checkboxes.reduce((acc, curr) => acc || curr.checked, false);
+}

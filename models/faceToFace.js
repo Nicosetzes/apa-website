@@ -12,7 +12,7 @@ const scoreLimit = (upperLimit) => {
 
 const faceToFaceSchema = new mongoose.Schema(
   {
-    playerP1: { type: String, require: true, max: 100 },
+    playerP1: { type: Object, require: true, max: 100 },
     teamP1: { type: String, require: true, max: 100 },
     scoreP1: {
       type: Number,
@@ -35,6 +35,7 @@ const faceToFaceSchema = new mongoose.Schema(
     },
     rivalOfP2: { type: String, require: true, max: 100 },
     outcome: { type: Object, require: true, max: 100 },
+    typeOfMatch: { type: String, require: true, max: 100 },
     tournament: { type: Object, require: true, max: 100 }
   },
   { collection }
