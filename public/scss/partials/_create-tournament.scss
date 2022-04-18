@@ -54,10 +54,27 @@
             margin-top: 0;
         }
 
+        input {
+            text-align: center;
+        }
+
         span {
             margin: 1rem 0;
             text-align: center;
         }
+
+        &.select__container {
+            display: flex;
+            flex-direction: column;
+            select {
+                background-color: aqua;
+                margin: 1rem 0;
+                text-align: center;
+                &:nth-child(2) {
+                    width: 175px;
+                }
+            }
+        } 
     }
 
     #teamsFromJSON {

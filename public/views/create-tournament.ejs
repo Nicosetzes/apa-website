@@ -150,6 +150,19 @@
                     </label>
                 </div>
             </div>
+            <div class="form__container select__container">
+                <select name="format" required>
+                    <option selected disabled value="">Tipo de torneo</option>
+                    <option id="" value="league">Temporada</option>
+                    <option id="" value="playoff">Eliminatoria</option>
+                    <option id="" value="league_playoff">Temporada + eliminatoria</option>
+                </select>
+                <select name="origin" required>
+                    <option selected disabled value="">Tipos de equipo</option>
+                    <option id="league" value="clubs">Clubes</option>
+                    <option id="playoff" value="national">Selecciones</option>
+                </select>
+            </div>
             <div id="teamsFromJSON" class="form__container"></div>
             <div id="confirmationButton"></div>
         </form>

@@ -1,0 +1,33 @@
+<%- include('./partials/header')-%>
+
+<% if(allTournaments.length> 0){ %>
+    <div>Hola, hay al menos un torneo en la base de datos</div>
+    <span>
+        Cantidad de torneos: <%=allTournaments.length%>
+    </span>
+    <% } else{ %>
+        <div>Hola, NO hay torneos cargados en la base de datos</div>
+        <% } %>
+
+        <div>
+            <div>
+                Torneos: <%allTournaments.forEach(function(element, index) {%>  <%=element.name%> <%});%>
+            </div>
+            <div>
+                Jugadores: <%allTournaments.forEach(function(element, index) {%>
+                    <%=element.players%>
+                        <%});%>
+            </div>
+            <div>
+                Equipos: <%allTournaments.forEach(function(element, index) {%>
+                    <%=element.teams%>
+                        <%});%>
+            </div>
+            <div>
+                Tipo de torneo: <%allTournaments.forEach(function(element, index) {%>
+                    <%=element.format%>
+                        <%});%>
+            </div>
+            </div>
+
+<%- include('./partials/footer')-%>

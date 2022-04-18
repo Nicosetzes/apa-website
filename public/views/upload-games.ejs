@@ -2,31 +2,67 @@
 
     <body>
 
-        <% if(tournamentById){ %>
-            <div>Hola, se cargó un torneo</div>
-            <% } else{ %>
-                <div>Hola, NO se cargó un torneo</div>
-                <% } %>
-
                     <form class="form needs-validation" id="uploadGamesForm" action="/upload-games-from-tournament"
                         method="post" autocomplete="off">
                         <div class="form__container">
-                            <label>
-                                Torneo:
-                            </label>
-                            <select name="tournamentName" required>
-                                <option selected value="<%=tournamentById.name%>">
-                                    <%=tournamentById.name%>
-                                </option>
-                            </select>
-                            <label>
-                                ID del torneo:
-                            </label>
-                            <select name="tournamentId" required>
-                                <option selected value="<%=tournamentById._id%>">
-                                    <%=tournamentById._id%>
-                                </option>
-                            </select>
+                            <div class="form__container-row">
+                                <label>
+                                    Torneo:
+                                </label>
+                                <select name="tournamentName" required>
+                                    <option selected value="<%=tournamentById.name%>">
+                                        <%=tournamentById.name%>
+                                    </option>
+                                </select>
+                                <label>
+                                    ID del torneo:
+                                </label>
+                                <select name="tournamentId" required>
+                                    <option selected value="<%=tournamentById._id%>">
+                                        <%=tournamentById._id%>
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form__container-row">
+                                <label>
+                                    Tipo de torneo:
+                                </label>                        
+                            <% if(tournamentById.format === "league"){ %>
+                                <select name="format" required>
+                                    <option selected value="<%=tournamentById.format%>">
+                                        Temporada
+                                    </option>
+                                </select>
+                                <% } else if (tournamentById.format === "playoff"){ %>
+                                <select name="format" required>
+                                    <option selected value="<%=tournamentById.format%>">
+                                        Eliminatoria
+                                    </option>
+                                </select>
+                                    <% } else{ %>
+                                <select name="format" required>
+                                    <option selected value="<%=tournamentById.format%>">
+                                        Temporada + Eliminatoria
+                                    </option>
+                                </select>
+                                    <% } %>
+                                <label>
+                                    Tipo de equipos:
+                                </label>
+                            <% if(tournamentById.origin === "clubs" ){ %>
+                                <select name="origin" required>
+                                    <option selected value="<%=tournamentById.origin%>">
+                                        Clubes
+                                    </option>
+                                </select>
+                                    <% } else{ %>
+                                <select name="origin" required>
+                                    <option selected value="<%=tournamentById.origin%>">
+                                        Selecciones
+                                    </option>
+                                </select>
+                                        <% } %>
+                        </div>
                         </div>
                         <div class="form__container">
                             <div class="form__container-row">
@@ -41,9 +77,6 @@
                                         </option>
                                         <%});%>
                                 </select>
-                                <div class="invalid-feedback">
-                                    Por favor, elija el J1.
-                                </div>
                                 <span class="customizedArrow"></span>
                             </div>
                             <div class="form__container-row">
@@ -58,9 +91,6 @@
                                         </option>
                                         <%});%>
                                 </select>
-                                <div class="invalid-feedback">
-                                    Por favor, elija el equipo del J1.
-                                </div>
                                 <span class="customizedArrow"></span>
                             </div>
                             <div class="form__container-row">
@@ -82,9 +112,6 @@
                                         </option>
                                         <%});%>
                                 </select>
-                                <div class="invalid-feedback">
-                                    Por favor, elija el J2.
-                                </div>
                                 <span class="customizedArrow"></span>
                             </div>
                             <div class="form__container-row">
@@ -99,22 +126,11 @@
                                         </option>
                                         <%});%>
                                 </select>
-                                <div class="invalid-feedback">
-                                    Por favor, elija el equipo del J2.
-                                </div>
                                 <span class="customizedArrow"></span>
                             </div>
                             <div class="form__container-row">
                                 <label>Seleccione el score:</label>
                                 <input id="scoreP2" name='scoreP2' placeholder="Marcador J2" type="text" required>
-                            </div>
-                            <div class="form__container-row">
-                                <label>Tipo de partido</label>
-                                <select name="typeOfMatch" required>
-                                    <option selected disabled value="">Tipo</option>
-                                    <option id="regular" value="regular">Temporada</option>
-                                    <option id="playoff" value="playoff">Eliminatoria</option>
-                                </select>
                             </div>
                         </div>
 

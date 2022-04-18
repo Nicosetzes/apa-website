@@ -19,7 +19,7 @@ mongoose
 
 const tournamentsModel = require("./models/tournaments.js"); // Modelo mongoose para la carga de torneos!
 
-const faceToFaceModel = require("./models/faceToFace.js"); // Modelo mongoose para la carga de los mano a mano!
+const matchesModel = require("./models/matches.js"); // Modelo mongoose para la carga de los mano a mano!
 
 const usersModel = require("./models/users.js"); // Modelo mongoose para la carga de usuarios!
 
@@ -31,7 +31,7 @@ const session = require("express-session"); // login session require session sup
 
 /* --------------- MONGO-SESSION (ATLAS) --------------- */
 
-const MongoDBStore = require('connect-mongodb-session')(session);
+const MongoDBStore = require("connect-mongodb-session")(session);
 
 // const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
@@ -41,20 +41,23 @@ const app = express();
 
 // app.use(cookieParser()); // Since version 1.5.0, the cookie-parser middleware no longer needs to be used for this module to work.
 
-const store = new MongoDBStore({
-  //En Atlas connect App :  Make sure to change the node version to 2.2.12:
-  uri: `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-shard-00-00.i6ffr.mongodb.net:27017,cluster0-shard-00-01.i6ffr.mongodb.net:27017,cluster0-shard-00-02.i6ffr.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-vzvty3-shard-0&authSource=admin&retryWrites=true&w=majority`,
-  collection: "mySessions",
-  connectionOptions: {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    // serverSelectionTimeoutMS: 10000
+const store = new MongoDBStore(
+  {
+    //En Atlas connect App :  Make sure to change the node version to 2.2.12:
+    uri: `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-shard-00-00.i6ffr.mongodb.net:27017,cluster0-shard-00-01.i6ffr.mongodb.net:27017,cluster0-shard-00-02.i6ffr.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-vzvty3-shard-0&authSource=admin&retryWrites=true&w=majority`,
+    collection: "mySessions",
+    connectionOptions: {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      // serverSelectionTimeoutMS: 10000
+    },
+  },
+  function (error) {
+    // Should have gotten an error
   }
-}, function (error) {
-  // Should have gotten an error
-});
+);
 
-store.on('error', function (error) {
+store.on("error", function (error) {
   // Also get an error here
 });
 
@@ -63,7 +66,7 @@ app.use(
     store: store,
     secret: "sh",
     resave: false,
-    saveUninitialized: false, // Dejarlo en false es útil para login, dado que la session no se guarda hasta que no se modifica. 
+    saveUninitialized: false, // Dejarlo en false es útil para login, dado que la session no se guarda hasta que no se modifica.
     cookie: {
       maxAge: 600000, // 10 MINUTOS
     },
@@ -91,11 +94,15 @@ passport.use(
     {
       passReqToCallback: true, // Allows for req argument to be present!
     },
-    (req, username, password, done) => { // Chequear el uso de req
+    (req, username, password, done) => {
+      // Chequear el uso de req
       usersModel
         .findOne({ username: username })
         .then((user) => {
-          if (!user) return done(null, false, { message: "The user doesn't exist in the DB", }); // How may I access this object in order to display the message?;
+          if (!user)
+            return done(null, false, {
+              message: "The user doesn't exist in the DB",
+            }); // How may I access this object in order to display the message?;
 
           bCrypt.compare(password, user.password, (err, success) => {
             if (err) throw err;
@@ -103,7 +110,9 @@ passport.use(
               req.session.username = user.username; // Necesario?
               done(null, user);
             } else {
-              done(null, false, { message: "User was found in the DB, but passwords don't match", }); // Same as above;
+              done(null, false, {
+                message: "User was found in the DB, but passwords don't match",
+              }); // Same as above;
             }
           });
         })
@@ -112,7 +121,7 @@ passport.use(
         });
 
       passport.serializeUser(function (user, done) {
-        done(null, user.id)
+        done(null, user.id);
       });
 
       passport.deserializeUser(function (id, done) {
@@ -143,13 +152,13 @@ app.get("/", (req, res) => {
   // req.session.cookie.maxAge = 5000; // Defino el tiempo que le queda a la cookie al hacer el request a "/" //
   console.log("req.sessionID: ");
   console.log(req.sessionID);
-  console.log("req.session: ")
-  console.log(req.session)
-  console.log("req.session.cookie.maxAge: ")
+  console.log("req.session: ");
+  console.log(req.session);
+  console.log("req.session.cookie.maxAge: ");
   console.log(req.session.cookie.maxAge);
-  console.log("req.session.passport.user: ")
+  console.log("req.session.passport.user: ");
   console.log(req.session.passport?.user); // Una vez ejecutado el login, se guarda el ID como propiedad en req.session.passport.user
-  console.log("req.user: ")
+  console.log("req.user: ");
   console.log(req.user); // Una vez ejecutado el login, se guarda el objeto user (completo) en req.user
   res.render("index", {});
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
@@ -165,23 +174,24 @@ app.get("/login", (req, res) => {
 app.post(
   "/login",
   passport.authenticate("login", {
-    failureRedirect: "/login-error",
+    failureRedirect: "./errors/login-error",
     successRedirect: "/",
-  }), (req, res) => {
+  }),
+  (req, res) => {
     res.render("/");
     console.log(`Ruta: ${req.url}, Método: ${req.method}`);
   }
 );
 
 app.get("/login-error", (req, res) => {
-  res.render("login-error", {});
+  res.render("./errors/login-error", {});
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
 });
 
 app.post("/logout", (req, res) => {
-  console.log(req.session)
+  console.log(req.session);
   req.logout();
-  console.log(req.session)
+  console.log(req.session);
   res.redirect("/");
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
 });
@@ -219,8 +229,30 @@ app.post("/logout", (req, res) => {
 //     });
 // })
 
-app.get("/create-tournament", (req, res) => {
+app.get("/tournaments", async (req, res) => {
+  try {
+    const allTournaments = await tournamentsModel.find({}, "name");
+    res.render("tournaments", { allTournaments });
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+});
 
+app.get("/tournaments/:id", async (req, res) => {
+  const idProvided = req.params.id;
+  try {
+    const tournamentById = await tournamentsModel.findById(idProvided); // Mismo problema, si no existe la BD va al catch
+    if (!tournamentById.length) {
+      res.render("./errors/tournaments-id-error", { idProvided });
+      return;
+    }
+    res.render("tournaments-id", { tournamentById });
+  } catch (err) {
+    return res.status(400).send("Something went wrong!!");
+  }
+});
+
+app.get("/create-tournament", (req, res) => {
   // const axios = require('axios');
 
   // const config = {
@@ -246,20 +278,31 @@ app.get("/create-tournament", (req, res) => {
 });
 
 app.post("/create-tournament", async (req, res) => {
-
   try {
+    // console.log(req.body);
+
+    const { tournamentName, format, origin } = req.body;
+
     const arrayFromValues = Object.values(req.body);
 
-    const tournamentName = arrayFromValues[0];
-    arrayFromValues.splice(0, 1);
+    const filteredArrayFromValues = arrayFromValues.filter(
+      (element) =>
+        element !== tournamentName && element !== format && element !== origin
+    ); // Creo un array que solo tenga jugadores y equipos
+
     const humanPlayers = [];
     const teams = [];
 
-    arrayFromValues.forEach((element, index) => {
-      if (element === "Leo" || element === "Lucho" || element === "Max" || element === "Nico" || element === "Santi") {
+    filteredArrayFromValues.forEach((element, index) => {
+      if (
+        element === "Leo" ||
+        element === "Lucho" ||
+        element === "Max" ||
+        element === "Nico" ||
+        element === "Santi"
+      ) {
         humanPlayers.push(element);
-      }
-      else {
+      } else {
         teams.push(element);
       }
     });
@@ -267,12 +310,14 @@ app.post("/create-tournament", async (req, res) => {
     const tournament = {
       name: tournamentName,
       players: humanPlayers,
+      format,
+      origin,
       teams,
-      status: "ok" // TO DO: I may use a PUT request to inform that a tournament has finished. // 
+      status: "running", // TO DO: I may use a PUT request to inform that a tournament has finished. //
     };
 
     await tournamentsModel.create(tournament);
-    res.status(200).send({ message: "Tournament's been successfully created" })
+    res.status(200).send({ message: "Tournament's been successfully created" });
     // Si falla la validación, se ejecuta el catch //
   } catch (err) {
     if (err.name === "ValidationError") {
@@ -289,27 +334,26 @@ app.post("/create-tournament", async (req, res) => {
 });
 
 app.get("/face-to-face", async (req, res) => {
-
   try {
-
     const tournamentId = req.query.id;
 
     const allTournaments = await tournamentsModel.find({}, "id name status");
-
-    console.log(allTournaments);
 
     const array = [];
     let finalMatchups = [];
 
     if (tournamentId) {
-
       // console.log("Entré por el lado de Tournament ID")
 
-      const allMatches = await faceToFaceModel.find({ "tournament.id": tournamentId }, "playerP1 teamP1 scoreP1 playerP2 teamP2 scoreP2");
+      const allMatches = await matchesModel.find(
+        { "tournament.id": tournamentId },
+        "playerP1 teamP1 scoreP1 playerP2 teamP2 scoreP2"
+      );
 
       // console.log(allMatches);
 
-      if (allMatches.length === 0) res.render("face-to-face-error", { tournamentId })
+      if (allMatches.length === 0)
+        res.render("./errors/face-to-face-error", { tournamentId });
 
       const allPlayers1 = allMatches.map((match) => match.playerP1);
       const allPlayers2 = allMatches.map((match) => match.playerP2);
@@ -327,7 +371,7 @@ app.get("/face-to-face", async (req, res) => {
 
       allMatchups.forEach(async (element, index) => {
         array.push(
-          await faceToFaceModel.find({
+          await matchesModel.find({
             "tournament.id": tournamentId,
             $or: [
               { $and: [{ playerP1: element.p1 }, { rivalOfP1: element.p2 }] },
@@ -339,23 +383,26 @@ app.get("/face-to-face", async (req, res) => {
         itemsProcessed++;
 
         if (itemsProcessed === allMatchups.length) {
-
           const workedMatchups = allMatchups.map((element, index) => {
             return {
               matchup: `${array[index][0]?.playerP1} (J1) vs ${array[index][0]?.rivalOfP1} (J2)`,
               matches: array[index],
               wonByP1: array[index].reduce(
                 (acc, cur) =>
-                  cur.outcome.playerThatWon === array[index][0].playerP1 ? ++acc : acc,
+                  cur.outcome.playerThatWon === array[index][0].playerP1
+                    ? ++acc
+                    : acc,
                 0
               ),
               wonByP2: array[index].reduce(
                 (acc, cur) =>
-                  cur.outcome.playerThatWon === array[index][0].playerP2 ? ++acc : acc,
+                  cur.outcome.playerThatWon === array[index][0].playerP2
+                    ? ++acc
+                    : acc,
                 0
               ),
               draws: array[index].reduce(
-                (acc, cur) => (cur.outcome.draw) ? ++acc : acc,
+                (acc, cur) => (cur.outcome.draw ? ++acc : acc),
                 0
               ),
             };
@@ -365,19 +412,27 @@ app.get("/face-to-face", async (req, res) => {
             return element.matchup !== "undefined (J1) vs undefined (J2)";
           });
 
-          res.render("face-to-face", { finalMatchups, allMatches, allTournaments });
+          res.render("face-to-face", {
+            finalMatchups,
+            allMatches,
+            allTournaments,
+          });
         }
-      })
-    }
-
-    else {
-
+      });
+    } else {
       // console.log("Entré por el lado de GLOBAL")
 
-      const allMatches = await faceToFaceModel.find({}, "playerP1 teamP1 scoreP1 playerP2 teamP2 scoreP2");
+      const allMatches = await matchesModel.find(
+        {},
+        "playerP1 teamP1 scoreP1 playerP2 teamP2 scoreP2"
+      );
 
       if (allMatches.length === 0) {
-        res.render("face-to-face", { finalMatchups, allMatches, allTournaments });
+        res.render("face-to-face", {
+          finalMatchups,
+          allMatches,
+          allTournaments,
+        });
       }
 
       // console.log(allMatches);
@@ -390,13 +445,13 @@ app.get("/face-to-face", async (req, res) => {
         allPlayers.slice(i + 1).map((w) => {
           return { p1: v, p2: w };
         })
-      )
+      );
 
       let itemsProcessed = 0;
 
       allMatchups.forEach(async (element, index) => {
         array.push(
-          await faceToFaceModel.find({
+          await matchesModel.find({
             $or: [
               { $and: [{ playerP1: element.p1 }, { rivalOfP1: element.p2 }] },
               { $and: [{ playerP1: element.p2 }, { rivalOfP1: element.p1 }] },
@@ -405,24 +460,25 @@ app.get("/face-to-face", async (req, res) => {
         ); // ESTE LLAMADO NO DEBERÍA CAMBIARLO POR UN FILTER? ESTA INFO YA LA TENGO, ES INNECESARIA UNA NUEVA LLAMADA A LA BD! //
         itemsProcessed++;
         if (itemsProcessed === allMatchups.length) {
-
-          console.log("array")
-          console.log(array);
-          // const goalsForP1 = 
-
           const workedMatchups = allMatchups.map((element, index) => ({
             matchup: `${array[index][0]?.playerP1} (J1) vs ${array[index][0]?.rivalOfP1} (J2)`,
             matches: array[index],
             wonByP1: array[index].reduce(
-              (acc, cur) => cur.outcome.playerThatWon === array[index][0].playerP1 ? ++acc : acc,
+              (acc, cur) =>
+                cur.outcome.playerThatWon === array[index][0].playerP1
+                  ? ++acc
+                  : acc,
               0
             ),
             wonByP2: array[index].reduce(
-              (acc, cur) => cur.outcome.playerThatWon === array[index][0].playerP2 ? ++acc : acc,
+              (acc, cur) =>
+                cur.outcome.playerThatWon === array[index][0].playerP2
+                  ? ++acc
+                  : acc,
               0
             ),
             draws: array[index].reduce(
-              (acc, cur) => (cur.outcome.draw) ? ++acc : acc,
+              (acc, cur) => (cur.outcome.draw ? ++acc : acc),
               0
             ),
           }));
@@ -431,71 +487,102 @@ app.get("/face-to-face", async (req, res) => {
             return element.matchup !== "undefined (J1) vs undefined (J2)";
           });
 
-          res.render("face-to-face", { finalMatchups, allMatches, allTournaments });
+          res.render("face-to-face", {
+            finalMatchups,
+            allMatches,
+            allTournaments,
+          });
         }
-      })
+      });
     }
-  }
-  catch (err) {
+  } catch (err) {
     return res.status(400).send(err);
   }
 
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
-
 });
 
 app.get("/upload-games", async (req, res) => {
   try {
-
     const tournamentsFromBD = await tournamentsModel.find({}, "name id");
-
-    if (!tournamentsFromBD) res.render("upload-games", { tournamentsFromBD }); // REVISAR //
-
+    if (!tournamentsFromBD.length) {
+      res.render("./errors/upload-games-error", {});
+      return;
+    }
     res.render("tournament-selection", { tournamentsFromBD });
-
-  }
-  catch (err) {
+  } catch (err) {
     res.status(500).send("Something went wrong");
   }
 });
 
 app.post("/upload-games", (req, res) => {
+  // POST O GET?
   const selectedTournamentId = req.body.selection; // I must use the select "name" property;
-  res.redirect(`/upload-games/${selectedTournamentId}`)
+  res.redirect(`/upload-games/${selectedTournamentId}`);
 });
 
 app.get("/upload-games/:id", async (req, res) => {
   const idProvided = req.params.id;
   try {
-    const tournamentById = await tournamentsModel.findById(idProvided);
-    console.log(tournamentById);
-    res.render("upload-games", { tournamentById })
-  }
-  catch (err) {
-    res.status(500).send("Something went wrong");
+    const tournamentById = await tournamentsModel.findById(idProvided); // SI NO ESTÁ CREADA LA COLECCIÓN, ENTRA AL CATCH
+    if (tournamentById.length === 0) {
+      // REVISAR, POR QUÉ NO PUEDE SER (!tournamentById.length)?
+      res.render("./errors/upload-games-error", {});
+      return;
+    }
+    res.render("upload-games", { tournamentById });
+  } catch (err) {
+    res.status(500).send("Something went wrongggg");
   }
 });
 
 app.post("/upload-games-from-tournament", async (req, res) => {
-
   try {
-    let { playerP1, teamP1, scoreP1, playerP2, teamP2, scoreP2, tournamentName, tournamentId, typeOfMatch } = req.body;
+    let {
+      playerP1,
+      teamP1,
+      scoreP1,
+      playerP2,
+      teamP2,
+      scoreP2,
+      tournamentName,
+      tournamentId,
+      format,
+      origin,
+    } = req.body;
+
     let rivalOfP1 = playerP2;
     let rivalOfP2 = playerP1;
     let outcome;
 
     if (scoreP1 - scoreP2 !== 0) {
       scoreP1 > scoreP2
-        ? (outcome = { playerThatWon: playerP1, teamThatWon: teamP1, draw: false })
-        : (outcome = { playerThatWon: playerP2, teamThatWon: teamP2, draw: false });
+        ? (outcome = {
+            playerThatWon: playerP1,
+            teamThatWon: teamP1,
+            draw: false,
+          })
+        : (outcome = {
+            playerThatWon: playerP2,
+            teamThatWon: teamP2,
+            draw: false,
+          });
     }
     if (scoreP1 - scoreP2 !== 0) {
       scoreP1 > scoreP2
-        ? (outcome = { playerThatWon: playerP1, teamThatWon: teamP1, draw: false })
-        : (outcome = { playerThatWon: playerP2, teamThatWon: teamP2, draw: false });
+        ? (outcome = {
+            playerThatWon: playerP1,
+            teamThatWon: teamP1,
+            draw: false,
+          })
+        : (outcome = {
+            playerThatWon: playerP2,
+            teamThatWon: teamP2,
+            draw: false,
+          });
     }
     if (scoreP1 - scoreP2 === 0) {
-      outcome = { playerThatWon: "none", teamThatWon: "none", draw: true }
+      outcome = { playerThatWon: "none", teamThatWon: "none", draw: true };
     }
 
     const match = {
@@ -508,17 +595,17 @@ app.post("/upload-games-from-tournament", async (req, res) => {
       scoreP2,
       rivalOfP2,
       outcome,
-      typeOfMatch,
       tournament: {
         name: tournamentName,
-        id: tournamentId
-      }
+        id: tournamentId,
+        format,
+        origin,
+      },
     };
 
-    await faceToFaceModel.create(match);
+    await matchesModel.create(match);
 
     res.redirect("/");
-
   } catch (err) {
     if (err.name === "ValidationError") {
       const errors = {};
