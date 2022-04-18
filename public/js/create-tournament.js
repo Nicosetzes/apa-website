@@ -1,8 +1,3 @@
-// CREATE TOURNAMENT //
-
-// const confirmTeamsButton = document.querySelector("#countries-submit")
-// console.log(confirmTeamsButton);
-
 const confirmCountriesForm = document.querySelector("#confirm-countries")
 
 const teamsFromJSONDiv = document.querySelector("#teamsFromJSON");
@@ -18,33 +13,15 @@ confirmCountriesForm.addEventListener("submit", e => {
     console.log(isChecked);
 
     if (!isChecked) {
-        swal({
+        Swal.fire({
             title: "Error en la validación",
             text: "Por favor, elija al menos una casilla para conformar el torneo",
             icon: "error",
-            buttons: true,
-            // dangerMode: true,
         });
         return;
     }
 
-    // swal({
-    //     title: "Confirmación - países",
-    //     text: "¿Está seguro que desea elegir estos países para conformar el torneo?",
-    //     icon: "info",
-    //     buttons: true,
-    //     // dangerMode: true,
-    // })
-    //     .then((willConfirm) => {
-    //         if (willConfirm) {
-    //             swal("Países confirmados", {
-    //                 icon: "success",
-    //             });
-    //         }
-    //         else {
-    //             swal("Vuelva a intentarlo");
-    //         }
-    //     });
+    confirmCountriesForm.querySelector("button").setAttribute("disabled", ""); // Agrego atributo disabled en estado true //
 
     const arrayFromValues = Object.values(confirmCountriesForm);
 
@@ -54,12 +31,6 @@ confirmCountriesForm.addEventListener("submit", e => {
 
     });
     const confirmedCountries = cleanArrayFromValues.filter((input) => input.value) // Me quedo solo con los boxes chequeados
-
-    // console.log(confirmedCountries);
-    // if (!confirmedCountries.length) {
-    //     alert("Ningún país ha sido seleccionado");
-    //     return;
-    // }
 
     let infoFromJSON = [];
 
@@ -104,8 +75,6 @@ const inyectHTML = (param) => {
 
     let div = document.createElement("div");
     div.classList.add("form-check");
-    // let p = document.createElement("p")
-    // div.append(p)
     let htmlNode;
 
     htmlNode = `<input name="ID${param.id}" class="form-check-input form-check-input-teams" type="checkbox" value="${param.name}" id="ID${param.id}">
@@ -121,9 +90,9 @@ const inyectHTML = (param) => {
 
 const confirmDataForDbForm = document.querySelector("#confirmDataForDB");
 
-console.log(confirmDataForDbForm);
-
 confirmDataForDbForm.addEventListener("submit", e => {
+
+    e.preventDefault()
 
     const isCheckedForPlayers = atLeastOneCheckboxIsChecked("players");
 
@@ -134,23 +103,94 @@ confirmDataForDbForm.addEventListener("submit", e => {
     console.log("isCheckedForTeams: " + isCheckedForTeams);
 
     if (!isCheckedForPlayers) {
-        e.preventDefault()
-        swal({
+        Swal.fire({
             title: "Error en la validación",
             text: "Por favor, elija al menos un jugador para conformar el torneo",
             icon: "error",
-            // buttons: true,
         });
+        return;
     }
+
     if (!isCheckedForTeams) {
-        e.preventDefault()
-        swal({
+        Swal.fire({
             title: "Error en la validación",
             text: "Por favor, elija al menos un equipo para conformar el torneo",
             icon: "error",
-            // buttons: true,
         });
+        return;
     }
+
+    const tournamentNameValue = confirmDataForDbForm.querySelector("#tournamentName").value;
+    const formatValue = confirmDataForDbForm.querySelector("#format").value;
+    const originValue = confirmDataForDbForm.querySelector("#origin").value;
+
+    const humanPlayerCheckboxes = confirmDataForDbForm.querySelector("#humanPlayerCheckboxes");
+    const teamsFromJSON = confirmDataForDbForm.querySelector("#teamsFromJSON");
+
+    const amountOfPlayers = humanPlayerCheckboxes.querySelectorAll('input[type="checkbox"]:checked').length
+    const amountOfTeams = teamsFromJSON.querySelectorAll('input[type="checkbox"]:checked').length
+
+    const translateValue = (value) => {
+        if (value === "league") {
+            return "Temporada";
+        }
+        if (value === "playoff") {
+            return "Eliminatoria";
+        }
+        if (value === "league_playoff") {
+            return "Temporada + eliminatoria";
+        }
+        if (value === "clubs") {
+            return "Clubes";
+        }
+        else {
+            return "Selecciones";
+        }
+    }
+
+    Swal.fire({
+        title: "Confirmación - torneo",
+        html: `Nombre: <b>${tournamentNameValue}</b> <br>
+                Tipo de torneo: <b>${translateValue(formatValue)}</b> <br>
+                Tipos de equipo: <b>${translateValue(originValue)}</b> <br>
+                Cantidad de jugadores: <b>${amountOfPlayers}</b> <br>
+                Cantidad de equipos: <b>${amountOfTeams}</b>`,
+        icon: "info",
+        showCancelButton: true,
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Confirmar',
+        reverseButtons: true,
+        customClass: {
+            htmlContainer: 'text-align:center'
+        }
+    })
+        .then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "El torneo ha sido creado con éxito",
+                    text: "Será redirigido en breve...",
+                    icon: "success",
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false
+                });
+                setTimeout(() => {
+                    confirmDataForDbForm.submit();
+                }, 3000)
+            }
+            else {
+                Swal.fire({
+                    title: "Cancelado",
+                    text: "La creación del torneo ha sido detenida, vuelva a intentarlo",
+                    icon: "error",
+                    showCancelButton: false,
+                });
+            };
+        });
 });
 
 function atLeastOneCheckboxIsChecked(section) {

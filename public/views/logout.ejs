@@ -1,16 +1,15 @@
 <%- include('./partials/encabezado')-%>
 
-    <body>
-        <script>
-            setTimeout(() => {
-                window.location = "/";
-            }, 2000)
-        </script>
-
+    <script>
+        setTimeout(() => {
+            window.location = "/";
+        }, 2000)
+    </script>
+    <main>
         <div class="container mt-3">
             <div class="jumbotron">
                 <h1 style="color:blue;">Hasta luego!</h1>
             </div>
         </div>
-
-        <%- include('./partials/pie')-%>
+    </main>
+    <%- include('./partials/pie')-%>

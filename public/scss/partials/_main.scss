@@ -15,7 +15,7 @@ main {
       width: 100%;
 
       .container__tournament-header.container__tournament-header-first {
-        padding: 4rem 0 2rem 0;
+        padding: 1.5rem 0;
       }
 
       .container__tournament-header {
@@ -115,6 +115,7 @@ main {
               .container__tournament-content-champion,
               .container__tournament-content-finalist {
                 align-items: center;
+                cursor: pointer;
                 display: flex;
                 flex-direction: row;
                 justify-content: space-evenly;

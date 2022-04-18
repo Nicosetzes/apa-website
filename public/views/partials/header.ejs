@@ -9,14 +9,49 @@
     <meta name="description" content="" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="./../../js/navbar.js" defer></script>
+    <!-- <script src="sweetalert2.min.js"></script> -->
+    <!-- <link rel="stylesheet" href="sweetalert2.min.css"> -->
     <link rel="stylesheet" href="./../../css/styles.css" />
     <!-- <link rel="shortcut icon" href="img/isotipo.ico" /> -->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+
 </head>
 
-<body>
+<body id="body" class="preload">
+
+    <header>
+        <a href="./">
+            <img class="header__img" src="./../img/logo.jpg" alt="" />
+        </a>
+        <button id="hamburger" class="hamburger">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+            </svg>
+        </button>
+        <nav class="nav">
+            <ul id="nav__list" class="nav__list">
+                <li id="" class="nav__list-option">
+                    <a class="nav__list-option-link" href="./">Inicio</a>
+                </li>
+                <li id="" class="nav__list-option">
+                    <a class="nav__list-option-link" href="./login">Login</a>
+                </li>
+                <li id="" class="nav__list-option">
+                    <a class="nav__list-option-link" href="./tournaments">Torneos</a>
+                </li>
+                <li id="" class="nav__list-option">
+                    <a class="nav__list-option-link" href="./create-tournament">Crear torneo</a>
+                </li>
+                <li id="" class="nav__list-option">
+                    <a class="nav__list-option-link" href="./upload-games">Cargar partidos</a>
+                </li>
+                <li id="" class="nav__list-option">
+                    <a class="nav__list-option-link" href="./face-to-face">Mano a mano</a>
+                </li>
+            </ul>
+        </nav>
+    </header>

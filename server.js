@@ -227,6 +227,26 @@ app.post("/logout", (req, res) => {
 //     .catch(function (error) {
 //       console.log(error);
 //     });
+
+// const axios = require('axios');
+
+// const config = {
+//   method: 'get',
+//   url: `https://v3.football.api-sports.io/teams?league=119&season=2021`,
+//   headers: {
+//     'x-rapidapi-key': 'c6fc4afceaf077867ce47212440002cf',
+//     'x-rapidapi-host': 'v3.football.api-sports.io'
+//   }
+// };
+
+// axios(config)
+//   .then(function (response) {
+//     console.log(JSON.stringify(response.data));
+//   })
+//   .catch(function (error) {
+//     console.log(error);
+//   });
+
 // })
 
 app.get("/tournaments", async (req, res) => {
@@ -234,46 +254,31 @@ app.get("/tournaments", async (req, res) => {
     const allTournaments = await tournamentsModel.find({}, "name");
     res.render("tournaments", { allTournaments });
   } catch (err) {
-    return res.status(400).send(err);
+    return res.status(500).send("Something went wrong!" + err);
   }
 });
 
 app.get("/tournaments/:id", async (req, res) => {
+
   const idProvided = req.params.id;
+
+  // Chequeo mediante RegEx si, en potencia, el ID proporcionado es válido (en formato) //
+
   try {
-    const tournamentById = await tournamentsModel.findById(idProvided); // Mismo problema, si no existe la BD va al catch
-    if (!tournamentById.length) {
+    if (idProvided.match(/^[0-9a-fA-F]{24}$/)) {
+      const tournamentById = await tournamentsModel.findById(idProvided);
+      res.render("tournaments-id", { tournamentById });
+    }
+    else {
       res.render("./errors/tournaments-id-error", { idProvided });
       return;
     }
-    res.render("tournaments-id", { tournamentById });
   } catch (err) {
-    return res.status(400).send("Something went wrong!!");
+    return res.status(400).send("Something went wrong!" + err);
   }
 });
 
 app.get("/create-tournament", (req, res) => {
-  // const axios = require('axios');
-
-  // const config = {
-  //   method: 'get',
-  //   url: `https://v3.football.api-sports.io/teams?league=119&season=2021`,
-  //   headers: {
-  //     'x-rapidapi-key': 'c6fc4afceaf077867ce47212440002cf',
-  //     'x-rapidapi-host': 'v3.football.api-sports.io'
-  //   }
-  // };
-
-  // axios(config)
-  //   .then(function (response) {
-  //     console.log(JSON.stringify(response.data));
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //   });
-
-  // const oldMatchesArray = [];
-
   res.render("create-tournament", {});
 });
 
@@ -317,7 +322,7 @@ app.post("/create-tournament", async (req, res) => {
     };
 
     await tournamentsModel.create(tournament);
-    res.status(200).send({ message: "Tournament's been successfully created" });
+    res.redirect("/");
     // Si falla la validación, se ejecuta el catch //
   } catch (err) {
     if (err.name === "ValidationError") {
@@ -496,7 +501,7 @@ app.get("/face-to-face", async (req, res) => {
       });
     }
   } catch (err) {
-    return res.status(400).send(err);
+    return res.status(500).send(err);
   }
 
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
@@ -511,7 +516,7 @@ app.get("/upload-games", async (req, res) => {
     }
     res.render("tournament-selection", { tournamentsFromBD });
   } catch (err) {
-    res.status(500).send("Something went wrong");
+    res.status(500).send("Something went wrong" + err);
   }
 });
 
@@ -523,16 +528,20 @@ app.post("/upload-games", (req, res) => {
 
 app.get("/upload-games/:id", async (req, res) => {
   const idProvided = req.params.id;
+
+  // Chequeo mediante RegEx si, en potencia, el ID proporcionado es válido (en formato) //
+
   try {
-    const tournamentById = await tournamentsModel.findById(idProvided); // SI NO ESTÁ CREADA LA COLECCIÓN, ENTRA AL CATCH
-    if (tournamentById.length === 0) {
-      // REVISAR, POR QUÉ NO PUEDE SER (!tournamentById.length)?
-      res.render("./errors/upload-games-error", {});
+    if (idProvided.match(/^[0-9a-fA-F]{24}$/)) {
+      const tournamentById = await tournamentsModel.findById(idProvided);
+      res.render("upload-games", { tournamentById });
+    }
+    else {
+      res.render("./errors/upload-games-error", { idProvided });
       return;
     }
-    res.render("upload-games", { tournamentById });
   } catch (err) {
-    res.status(500).send("Something went wrongggg");
+    res.status(500).send("Something went wrongggg" + err);
   }
 });
 
@@ -558,28 +567,28 @@ app.post("/upload-games-from-tournament", async (req, res) => {
     if (scoreP1 - scoreP2 !== 0) {
       scoreP1 > scoreP2
         ? (outcome = {
-            playerThatWon: playerP1,
-            teamThatWon: teamP1,
-            draw: false,
-          })
+          playerThatWon: playerP1,
+          teamThatWon: teamP1,
+          draw: false,
+        })
         : (outcome = {
-            playerThatWon: playerP2,
-            teamThatWon: teamP2,
-            draw: false,
-          });
+          playerThatWon: playerP2,
+          teamThatWon: teamP2,
+          draw: false,
+        });
     }
     if (scoreP1 - scoreP2 !== 0) {
       scoreP1 > scoreP2
         ? (outcome = {
-            playerThatWon: playerP1,
-            teamThatWon: teamP1,
-            draw: false,
-          })
+          playerThatWon: playerP1,
+          teamThatWon: teamP1,
+          draw: false,
+        })
         : (outcome = {
-            playerThatWon: playerP2,
-            teamThatWon: teamP2,
-            draw: false,
-          });
+          playerThatWon: playerP2,
+          teamThatWon: teamP2,
+          draw: false,
+        });
     }
     if (scoreP1 - scoreP2 === 0) {
       outcome = { playerThatWon: "none", teamThatWon: "none", draw: true };
@@ -605,7 +614,7 @@ app.post("/upload-games-from-tournament", async (req, res) => {
 
     await matchesModel.create(match);
 
-    res.redirect("/");
+    res.redirect("/upload-games");
   } catch (err) {
     if (err.name === "ValidationError") {
       const errors = {};
@@ -616,7 +625,7 @@ app.post("/upload-games-from-tournament", async (req, res) => {
 
       return res.status(400).send(errors);
     }
-    res.status(500).send("Something went wrong");
+    res.status(500).send("Something went wrong" + err);
   }
 });
 

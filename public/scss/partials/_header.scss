@@ -5,6 +5,7 @@ header {
     height: $headerHeight;
     justify-content: space-between;
     position: fixed;
+    top: 0;
     width: 100%;
     z-index: 3000;
 
@@ -16,19 +17,24 @@ header {
 
     .nav {
         background-color: $mainGold;
+        justify-content: center;
         position: absolute;
         right: 0;
-        text-align: left;
         top: 100%;
         transform: scale(1, 0);
         transform-origin: top;
         transition: transform 400ms ease-in-out;
-        width: 40%;
+        width: 45%;
 
         &.show {
+            justify-content: center;
             transform: scale(1, 1);
 
             .nav__list {
+                margin: 0;
+                text-align: center;
+                width: 100%;
+
                 .nav__list-option {
                     .nav__list-option-link {
                         opacity: 1;
@@ -39,20 +45,13 @@ header {
         }
 
         .nav__list {
-            padding: 1.5em 0;
             list-style: none;
+            padding: 1rem 0;
+            text-align: center;
 
             .nav__list-option {
                 cursor: pointer;
-                padding: 1em 0 1em 2em;
-
-                &:nth-child(3) {
-                    a {
-                        align-items: center;
-                        display: flex;
-                        height: 100%;
-                    }
-                }
+                padding: 1rem 0;
 
                 &:hover {
                     background-color: #e0a769;

@@ -1,11 +1,10 @@
 <%- include('./partials/header')-%>
-
-    <body>
-
+    <main>
         <% if(finalMatchups.length> 0){ %>
             <div>Hola, hay emparejamientos</div>
             <% } else{ %>
                 <div>Hola, NO hay emparejamientos</div>
+                <div>¿Desea <a href="/upload-games">cargar un partido</a>?</div>
                 <% } %>
 
                     <table class="table">
@@ -19,7 +18,6 @@
                                 <th scope="col">GF (J1)</th>
                                 <th scope="col">GF (J2)</th>
                                 <th scope="col">DIF</th>
-                                <th scope="col">Equipo + ganador</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,9 +37,6 @@
                                     </td>
                                     <td>
                                         <%=finalMatchups[i].wonByP2%>
-                                    </td>
-                                    <td>
-                                        -
                                     </td>
                                     <td>
                                         -
@@ -72,6 +67,7 @@
                         </ul>
                         <% } else{ %>
                             <div>Hola, NO hay torneos</div>
+                            <div>¿Desea <a href="/create-tournament">crear un torneo</a>?</div>
                             <% } %>
 
                                 <div class="container_matches">
@@ -86,5 +82,5 @@
 
                                         <%});%>
                                 </div>
-
-                                <%- include('./partials/footer')-%>
+    </main>
+    <%- include('./partials/footer')-%>

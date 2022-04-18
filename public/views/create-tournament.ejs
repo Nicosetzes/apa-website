@@ -1,6 +1,5 @@
 <%- include('./partials/header')-%>
-
-    <body>
+    <main>
         <form id="confirm-countries" class="form" autocomplete="off">
             <span>Por favor, confirme los países de los equipos a utilizar (clubes) o elija "internacional" en caso de
                 emplear combinados nacionales: </span>
@@ -110,9 +109,9 @@
         <form id="confirmDataForDB" class="form" action="/create-tournament" method="post" autocomplete="off">
             <div class="form__container">
                 <span>Ingrese el nombre del torneo a generar:</span>
-                <input id="" name="tournamentName" placeholder="Nombre del torneo" type="text" required>
+                <input id="tournamentName" name="tournamentName" placeholder="Nombre del torneo" type="text" required>
             </div>
-            <div class="form__container">
+            <div id="humanPlayerCheckboxes" class="form__container">
                 <span>¿Qué jugadores humanos participarán del torneo?</span>
                 <div class="form-check">
                     <input name="firstPlayer" class="form-check-input form-check-input-players" type="checkbox"
@@ -151,13 +150,13 @@
                 </div>
             </div>
             <div class="form__container select__container">
-                <select name="format" required>
+                <select id="format" name="format" required>
                     <option selected disabled value="">Tipo de torneo</option>
-                    <option id="" value="league">Temporada</option>
-                    <option id="" value="playoff">Eliminatoria</option>
-                    <option id="" value="league_playoff">Temporada + eliminatoria</option>
+                    <option value="league">Temporada</option>
+                    <option value="playoff">Eliminatoria</option>
+                    <option value="league_playoff">Temporada + eliminatoria</option>
                 </select>
-                <select name="origin" required>
+                <select id="origin" name="origin" required>
                     <option selected disabled value="">Tipos de equipo</option>
                     <option id="league" value="clubs">Clubes</option>
                     <option id="playoff" value="national">Selecciones</option>
@@ -166,6 +165,7 @@
             <div id="teamsFromJSON" class="form__container"></div>
             <div id="confirmationButton"></div>
         </form>
-        <script src="js/create-tournament.js"></script>
+    </main>
+    <script src="js/create-tournament.js"></script>
 
-        <%- include('./partials/footer')-%>
+    <%- include('./partials/footer')-%>

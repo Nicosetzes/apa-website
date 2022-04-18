@@ -1,0 +1,37 @@
+<%- include('./partials/header')-%>
+
+    <main>
+
+        <% if(tournamentById.length> 0){ %>
+            <div>Hola, el torneo de id: <%=tournamentById.id%> es: <%=tournamentById.name%>
+            </div>
+            <div>
+                <div>
+                    Torneos: <%allTournaments.forEach(function(element, index) {%>
+                        <%=element.name%>
+                            <%});%>
+                </div>
+                <div>
+                    Jugadores: <%allTournaments.forEach(function(element, index) {%>
+                        <%=element.players%>
+                            <%});%>
+                </div>
+                <div>
+                    Equipos: <%allTournaments.forEach(function(element, index) {%>
+                        <%=element.teams%>
+                            <%});%>
+                </div>
+                <div>
+                    Tipo de torneo: <%allTournaments.forEach(function(element, index) {%>
+                        <%=element.format%>
+                            <%});%>
+                </div>
+            </div>
+            <% } else{ %>
+                <div>Hola, NO hay torneos cargados en la base de datos</div>
+                <div>¿Desea <a href="/create-tournament">crear un torneo</a>?</div>
+                <% } %>
+
+    </main>
+
+    <%- include('./partials/footer')-%>
