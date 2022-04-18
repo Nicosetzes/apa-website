@@ -265,7 +265,7 @@ app.get("/tournaments/:id", async (req, res) => {
   // Chequeo mediante RegEx si, en potencia, el ID proporcionado es válido (en formato) //
 
   try {
-    if (idProvided.match(/^[0-9a-fA-F]{24}$/)) {
+    if (idProvided.match(/^[0-9a-fA-F]{24}$/)) { // Y si ingresan un id válido por formato pero NO coincide con uno de la BD? REVISAR - TESTEAR - Debería traer [] ?
       const tournamentById = await tournamentsModel.findById(idProvided);
       res.render("tournaments-id", { tournamentById });
     }
@@ -274,7 +274,7 @@ app.get("/tournaments/:id", async (req, res) => {
       return;
     }
   } catch (err) {
-    return res.status(400).send("Something went wrong!" + err);
+    return res.status(400).send("Something went wrong!" + err); // MANEJO DE ERRORES: UTILIZAR UN IF DONDE, SI COINCIDE CON UN ERROR PREVISTO, RENDERIZO UNA VISTA ADECUADA //
   }
 });
 
@@ -508,10 +508,11 @@ app.get("/face-to-face", async (req, res) => {
 });
 
 app.get("/upload-games", async (req, res) => {
+  const idProvided = false;
   try {
     const tournamentsFromBD = await tournamentsModel.find({}, "name id");
     if (!tournamentsFromBD.length) {
-      res.render("./errors/upload-games-error", {});
+      res.render("./errors/upload-games-error", { idProvided });
       return;
     }
     res.render("tournament-selection", { tournamentsFromBD });

@@ -745,6 +745,9 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
 }
 
 #confirm-countries {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -795,6 +798,7 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
   border-color: darkslategray;
   font-size: 0.875rem;
   margin: 0;
+  max-width: 200px;
 }
 
 #confirmDataForDB {
@@ -841,7 +845,7 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
           flex-direction: column;
 }
 #confirmDataForDB .form__container.select__container select {
-  background-color: aqua;
+  background-color: rgb(209, 230, 255);
   margin: 1rem 0;
   text-align: center;
 }
