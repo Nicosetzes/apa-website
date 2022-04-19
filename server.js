@@ -174,7 +174,7 @@ app.get("/login", (req, res) => {
 app.post(
   "/login",
   passport.authenticate("login", {
-    failureRedirect: "./errors/login-error",
+    failureRedirect: "./login-error",
     successRedirect: "/",
   }),
   (req, res) => {
@@ -410,6 +410,17 @@ app.get("/face-to-face", async (req, res) => {
                 (acc, cur) => (cur.outcome.draw ? ++acc : acc),
                 0
               ),
+              scoreByP1: (array[index].filter((element) => element.playerP1 === array[index][0].playerP1)
+                .reduce(
+                  (acc, cur) => acc + cur.scoreP1, 0)) + (array[index].filter((element) => element.playerP1 === array[index][0].playerP2)
+                    .reduce(
+                      (acc, cur) => acc + cur.scoreP2, 0)), // Para calcular, filtro por posición y sumo ambas posibilidades. 
+
+              scoreByP2: (array[index].filter((element) => element.playerP2 === array[index][0].playerP2)
+                .reduce(
+                  (acc, cur) => acc + cur.scoreP2, 0)) + (array[index].filter((element) => element.playerP2 === array[index][0].playerP1)
+                    .reduce(
+                      (acc, cur) => acc + cur.scoreP1, 0))
             };
           });
 
@@ -461,7 +472,7 @@ app.get("/face-to-face", async (req, res) => {
               { $and: [{ playerP1: element.p1 }, { rivalOfP1: element.p2 }] },
               { $and: [{ playerP1: element.p2 }, { rivalOfP1: element.p1 }] },
             ],
-          })
+          }),
         ); // ESTE LLAMADO NO DEBERÍA CAMBIARLO POR UN FILTER? ESTA INFO YA LA TENGO, ES INNECESARIA UNA NUEVA LLAMADA A LA BD! //
         itemsProcessed++;
         if (itemsProcessed === allMatchups.length) {
@@ -486,6 +497,17 @@ app.get("/face-to-face", async (req, res) => {
               (acc, cur) => (cur.outcome.draw ? ++acc : acc),
               0
             ),
+            scoreByP1: (array[index].filter((element) => element.playerP1 === array[index][0].playerP1)
+              .reduce(
+                (acc, cur) => acc + cur.scoreP1, 0)) + (array[index].filter((element) => element.playerP1 === array[index][0].playerP2)
+                  .reduce(
+                    (acc, cur) => acc + cur.scoreP2, 0)), // Para calcular, filtro por posición y sumo ambas posibilidades. 
+
+            scoreByP2: (array[index].filter((element) => element.playerP2 === array[index][0].playerP2)
+              .reduce(
+                (acc, cur) => acc + cur.scoreP2, 0)) + (array[index].filter((element) => element.playerP2 === array[index][0].playerP1)
+                  .reduce(
+                    (acc, cur) => acc + cur.scoreP1, 0))
           }));
 
           const finalMatchups = workedMatchups.filter((element) => {

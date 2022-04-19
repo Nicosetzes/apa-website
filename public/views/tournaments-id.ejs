@@ -2,29 +2,26 @@
 
     <main>
 
-        <% if(tournamentById.length> 0){ %>
-            <div>Hola, el torneo de id: <%=tournamentById.id%> es: <%=tournamentById.name%>
+        <% if(tournamentById){ %>
+            <div>Hola, el ID del torneo es: <%=tournamentById.id%>
             </div>
             <div>
                 <div>
-                    Torneos: <%allTournaments.forEach(function(element, index) {%>
-                        <%=element.name%>
+                    Torneo: <%=tournamentById.name%>
+                </div>
+                <div>
+                    Jugadores: <%tournamentById.players.forEach(function(element, index) {%>
+                        <%=element%>
                             <%});%>
                 </div>
                 <div>
-                    Jugadores: <%allTournaments.forEach(function(element, index) {%>
-                        <%=element.players%>
+                    Equipos: <%tournamentById.teams.forEach(function(element, index) {%>
+                        <%=element%>
                             <%});%>
                 </div>
                 <div>
-                    Equipos: <%allTournaments.forEach(function(element, index) {%>
-                        <%=element.teams%>
-                            <%});%>
-                </div>
-                <div>
-                    Tipo de torneo: <%allTournaments.forEach(function(element, index) {%>
-                        <%=element.format%>
-                            <%});%>
+                    <div>Volver a <a href="/tournaments">torneos</a></div>
+                    <div>Volver al <a href="/">home</a></div>
                 </div>
             </div>
             <% } else{ %>

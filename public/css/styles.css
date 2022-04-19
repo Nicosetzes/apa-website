@@ -728,6 +728,13 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
   font-size: 0.75rem;
 }
 
+table thead tr th {
+  text-align: center;
+}
+table tbody tr td {
+  text-align: center;
+}
+
 .container_matches {
   background-color: bisque;
   display: -webkit-box;
@@ -918,6 +925,9 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
   padding: 1rem;
   width: 75%;
 }
+#uploadGamesForm .form__container select {
+  text-align: center;
+}
 #uploadGamesForm .form__container:first-child .form__container-row {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -967,7 +977,8 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
 #uploadGamesForm .form__container .form__container-row label:first-child {
   margin-top: 0;
 }
-#uploadGamesForm .form__container .form__container-row select, #uploadGamesForm .form__container .form__container-row input {
+#uploadGamesForm .form__container .form__container-row select,
+#uploadGamesForm .form__container .form__container-row input {
   text-align: center;
 }
 

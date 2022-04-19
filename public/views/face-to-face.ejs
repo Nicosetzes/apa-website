@@ -39,13 +39,13 @@
                                         <%=finalMatchups[i].wonByP2%>
                                     </td>
                                     <td>
-                                        -
+                                        <%=finalMatchups[i].scoreByP1%>
                                     </td>
                                     <td>
-                                        -
+                                        <%=finalMatchups[i].scoreByP2%>
                                     </td>
                                     <td>
-                                        -
+                                        <%= Math.abs(finalMatchups[i].scoreByP1 - finalMatchups[i].scoreByP2)%>
                                     </td>
                                 </tr>
                                 <%};%>
@@ -55,11 +55,11 @@
                     <% if(allTournaments.length> 0){ %>
                         <ul>
                             <li class="">
-                                <a href="./face-to-face">Ver estadísticas globales</a>
+                                <a href="/face-to-face">Ver estadísticas globales</a>
                             </li>
                             <%allTournaments.forEach(function(element, index) {%>
                                 <li class="">
-                                    <a href="./face-to-face?id=<%=element.id%>">Ver estadísticas de "
+                                    <a href="/face-to-face?id=<%=element.id%>">Ver estadísticas de "
                                         <%=element.name%>"
                                     </a>
                                 </li>

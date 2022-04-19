@@ -1,3 +1,21 @@
+table {
+    thead {
+        tr {
+            th {
+                text-align: center;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            td {
+                text-align: center;
+            }
+        }
+    }
+}
+
 .container_matches {
     background-color: bisque;
     display: flex;

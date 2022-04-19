@@ -12,7 +12,7 @@ uploadGamesForm.addEventListener("submit", e => {
 
     Swal.fire({
         title: "Confirmación - partido",
-        html: `${playerP1Value} vs ${playerP2Value} <br>
+        html: `<b>${playerP1Value}</b> vs <b>${playerP2Value}</b> <br>
         ${teamP1Value} <b>${scoreP1Value}</b> vs <b>${scoreP2Value}</b> ${teamP2Value}`,
         icon: "info",
         showCancelButton: true,

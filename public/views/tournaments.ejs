@@ -10,24 +10,12 @@
             <div>
                 <div>
                     Torneos: <%allTournaments.forEach(function(element, index) {%>
-                        <%=element.name%>
-                            <%});%>
+                        <a href="/tournaments/<%=element.id%>">
+                            <%=element.name%>
+                        </a>
+                        <%});%>
                 </div>
-                <div>
-                    Jugadores: <%allTournaments.forEach(function(element, index) {%>
-                        <%=element.players%>
-                            <%});%>
-                </div>
-                <div>
-                    Equipos: <%allTournaments.forEach(function(element, index) {%>
-                        <%=element.teams%>
-                            <%});%>
-                </div>
-                <div>
-                    Tipo de torneo: <%allTournaments.forEach(function(element, index) {%>
-                        <%=element.format%>
-                            <%});%>
-                </div>
+                <a href="/">Volver al home</a>
             </div>
             <% } else{ %>
                 <div>Hola, NO hay torneos cargados en la base de datos</div>
