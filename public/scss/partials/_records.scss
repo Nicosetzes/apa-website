@@ -1,0 +1,68 @@
+.records {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 1rem auto;
+
+    .records__container {
+        align-items: center;
+        border: $mainBlue 2px solid;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 0.25rem auto;
+        padding: 0.75rem 0.5rem;
+        width: 75%;
+
+        &:nth-child(1) {
+            background-color: azure;
+        }
+
+        &:nth-child(2) {
+            background-color: aliceblue
+        }
+
+        &:nth-child(3) {
+            background-color: gainsboro
+        }
+
+        &:nth-child(4) {
+            background-color: honeydew
+        }
+
+        &:nth-child(5) {
+            background-color: antiquewhite
+        }
+
+        &:nth-child(6) {
+            background-color: beige;
+        }
+
+        &:nth-child(7) {
+            background-color: burlywood
+        }
+
+        &:nth-child(8) {
+            background-color: ivory;
+        }
+
+        .title {
+            margin: 0.5rem 0;
+        }
+
+        ol {
+            margin: 0;
+            padding: 0;
+        }
+
+        .bold {
+            font-weight: 800;
+        }
+
+        span {
+            font-weight: 400;
+        }
+    }
+}

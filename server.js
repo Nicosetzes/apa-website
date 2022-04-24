@@ -249,68 +249,237 @@ app.post("/logout", (req, res) => {
 
 // })
 
-// const sortByScoreDif = (array) => {
+const sortByMostWins = (array) => {
+  array.sort(function (a, b) {
+    let valueA = a.wins;
+    let valueB = b.wins;
+    if (valueA < valueB) {
+      return 1;
+    }
+    if (valueA > valueB) {
+      return -1;
+    }
+    else {
+      return 0;
+    }
+  })
+  return array;
+}
 
-//   array.sort(function (a, b) {
+const sortByMostDraws = (array) => {
+  array.sort(function (a, b) {
+    let valueA = a.draws;
+    let valueB = b.draws;
+    if (valueA < valueB) {
+      return 1;
+    }
+    if (valueA > valueB) {
+      return -1;
+    }
+    else {
+      return 0;
+    }
+  })
+  return array;
+}
 
-//     let scoreDifferenceA = Math.abs(a.scoreByP1 - a.scoreByP2);
-//     let scoreDifferenceB = Math.abs(b.scoreByP1 - b.scoreByP2);
+const sortByMostLoses = (array) => {
+  array.sort(function (a, b) {
+    let valueA = a.loses;
+    let valueB = b.loses;
+    if (valueA < valueB) {
+      return 1;
+    }
+    if (valueA > valueB) {
+      return -1;
+    }
+    else {
+      return 0;
+    }
+  })
+  return array;
+}
 
-//     if (scoreDifferenceA < scoreDifferenceB) {
-//       return -1;
-//     }
-//     if (scoreDifferenceA > scoreDifferenceB) {
-//       return 1;
-//     }
-//     else {
-//       return 0;
-//     }
+const sortByAverageWins = (array) => {
+  array.sort(function (a, b) {
+    let valueA = a.averageWins;
+    let valueB = b.averageWins;
+    if (valueA < valueB) {
+      return 1;
+    }
+    if (valueA > valueB) {
+      return -1;
+    }
+    else {
+      return 0;
+    }
+  })
+  return array;
+}
 
-//   })
+const sortByAverageDraws = (array) => { // Averiguar si no puedo introducir una prop como parámetro, y así me ahorraría redundancia en estas funciones //
+  array.sort(function (a, b) {
+    let valueA = a.averageDraws;
+    let valueB = b.averageDraws;
+    if (valueA < valueB) {
+      return 1;
+    }
+    if (valueA > valueB) {
+      return -1;
+    }
+    else {
+      return 0;
+    }
+  })
+  return array;
+}
 
-//   return array;
-// }
+const sortByAverageLoses = (array) => { // Averiguar si no puedo introducir una prop como parámetro, y así me ahorraría redundancia en estas funciones //
+  array.sort(function (a, b) {
+    let valueA = a.averageLoses;
+    let valueB = b.averageLoses;
+    if (valueA < valueB) {
+      return 1;
+    }
+    if (valueA > valueB) {
+      return -1;
+    }
+    else {
+      return 0;
+    }
+  })
+  return array;
+}
+
+const sortByAveragePoints = (array) => {
+  array.sort(function (a, b) {
+    let valueA = a.averagePoints;
+    let valueB = b.averagePoints;
+    if (valueA < valueB) {
+      return 1;
+    }
+    if (valueA > valueB) {
+      return -1;
+    }
+    else {
+      return 0;
+    }
+  })
+  return array;
+}
 
 app.get("/records", async (req, res) => {
+
   try {
-    console.log("hola")
-    const allMatches = await matchesModel.find({});
 
-    console.log(allMatches.length)
+    const matchesByLeo = await matchesModel.countDocuments({ $or: [{ playerP1: "Leo" }, { playerP2: "Leo" }] });
 
-    allMatches.forEach(async (element, index) => {
+    const winsByLeo = await matchesModel.countDocuments({ "outcome.playerThatWon": "Leo" })
 
-      let scoreDifference = Math.abs(element.scoreP1 - element.scoreP2);
+    const losesByLeo = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Leo" }, { playerP2: "Leo" }] }, { $nor: [{ "outcome.playerThatWon": "Leo" }, { "outcome.playerThatWon": "none" }] }] });
 
-      element.outcome.scoringDifference = scoreDifference;
+    const drawsByLeo = matchesByLeo - winsByLeo - losesByLeo;
 
-      console.log(element.outcome);
+    const averageWinsByLeo = winsByLeo / matchesByLeo; // Promedio de victorias por partido
 
-      // await matchesModel.findByIdAndUpdate(element.id, { outcome: element.outcome });
+    const averageLosesByLeo = losesByLeo / matchesByLeo; // Promedio de derrotas por partido
 
-    });
+    const averageDrawsByLeo = 1 - averageWinsByLeo - averageLosesByLeo // Promedio de empates por partido
 
-    res.send("Ok")
+    const averagePointsByLeo = (winsByLeo * 3) / matchesByLeo; // Promedio de puntos por partido
 
-    // const matchesRecord = await matchesModel.find({})
-    //   .limit(5)
-    //   .exec(function (err, instances) {
+    const matchesByMax = await matchesModel.countDocuments({ $or: [{ playerP1: "Max" }, { playerP2: "Max" }] });
 
-    //     console.log(instances.length)
+    const winsByMax = await matchesModel.countDocuments({ "outcome.playerThatWon": "Max" })
 
-    //     const sorted = sortByScoreDif(instances);
-    //     // Boilerplate output that has nothing to do with the sorting.
-    //     let response = {};
+    const losesByMax = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Max" }, { playerP2: "Max" }] }, { $nor: [{ "outcome.playerThatWon": "Max" }, { "outcome.playerThatWon": "none" }] }] });
 
-    //     if (err) {
-    //       response = handleError(err);
-    //     } else {
-    //       res.send(sorted)
-    //     }
-    //     console.log(matchesRecord)
+    const drawsByMax = matchesByMax - winsByMax - losesByMax;
+
+    const averageWinsByMax = winsByMax / matchesByMax; // Promedio de victorias por partido
+
+    const averageLosesByMax = losesByMax / matchesByMax; // Promedio de derrotas por partido
+
+    const averageDrawsByMax = 1 - averageWinsByMax - averageLosesByMax // Promedio de empates por partido
+
+    const averagePointsByMax = (winsByMax * 3) / matchesByMax; // Promedio de puntos por partido
+
+    const matchesByNico = await matchesModel.countDocuments({ $or: [{ playerP1: "Max" }, { playerP2: "Max" }] });
+
+    const winsByNico = await matchesModel.countDocuments({ "outcome.playerThatWon": "Nico" })
+
+    const losesByNico = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Nico" }, { playerP2: "Nico" }] }, { $nor: [{ "outcome.playerThatWon": "Nico" }, { "outcome.playerThatWon": "none" }] }] });
+
+    const drawsByNico = matchesByNico - winsByNico - losesByNico;
+
+    const averageWinsByNico = winsByNico / matchesByNico; // Promedio de victorias por partido
+
+    const averageLosesByNico = losesByNico / matchesByNico; // Promedio de derrotas por partido
+
+    const averageDrawsByNico = 1 - averageWinsByNico - averageLosesByNico // Promedio de empates por partido
+
+    const averagePointsByNico = (winsByNico * 3) / matchesByNico; // Promedio de puntos por partido
+
+    const matchesBySanti = await matchesModel.countDocuments({ $or: [{ playerP1: "Santi" }, { playerP2: "Santi" }] });
+
+    const winsBySanti = await matchesModel.countDocuments({ "outcome.playerThatWon": "Santi" })
+
+    const losesBySanti = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Santi" }, { playerP2: "Santi" }] }, { $nor: [{ "outcome.playerThatWon": "Santi" }, { "outcome.playerThatWon": "none" }] }] });
+
+    const drawsBySanti = matchesBySanti - winsBySanti - losesBySanti;
+
+    const averageWinsBySanti = winsBySanti / matchesBySanti; // Promedio de victorias por partido
+
+    const averageLosesBySanti = losesBySanti / matchesBySanti; // Promedio de derrotas por partido
+
+    const averageDrawsBySanti = 1 - averageWinsBySanti - averageLosesBySanti // Promedio de empates por partido
+
+    const averagePointsBySanti = (winsBySanti * 3) / matchesBySanti; // Promedio de puntos por partido
+
+    const matchesByLucho = await matchesModel.countDocuments({ $or: [{ playerP1: "Lucho" }, { playerP2: "Lucho" }] });
+
+    const winsByLucho = await matchesModel.countDocuments({ "outcome.playerThatWon": "Lucho" })
+
+    const losesByLucho = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Lucho" }, { playerP2: "Lucho" }] }, { $nor: [{ "outcome.playerThatWon": "Lucho" }, { "outcome.playerThatWon": "none" }] }] });
+
+    const drawsByLucho = matchesByLucho - winsByLucho - losesByLucho;
+
+    const averageWinsByLucho = winsByLucho / matchesByLucho; // Promedio de victorias por partido
+
+    const averageLosesByLucho = losesByLucho / matchesByLucho; // Promedio de derrotas por partido
+
+    const averageDrawsByLucho = 1 - averageWinsByLucho - averageLosesByLucho // Promedio de empates por partido
+
+    const averagePointsByLucho = (winsByLucho * 3) / matchesByLucho; // Promedio de puntos por partido
+
+    const orderedByScoringDif = await matchesModel.find({}, "playerP1 scoreP1 teamP1 playerP2 scoreP2 teamP2 tournament")
+      .sort({ "outcome.scoringDifference": -1 })
+      .limit(5);
+
+    const orderedByMostWins = sortByMostWins([{ player: "Leo", wins: winsByLeo }, { player: "Max", wins: winsByMax }, { player: "Nico", wins: winsByNico }, { player: "Santi", wins: winsBySanti },
+    { player: "Lucho", wins: winsByLucho }]);
+
+    const orderedByMostDraws = sortByMostDraws([{ player: "Leo", draws: drawsByLeo }, { player: "Max", draws: drawsByMax }, { player: "Nico", draws: drawsByNico }, { player: "Santi", draws: drawsBySanti },
+    { player: "Lucho", draws: drawsByLucho }]);
+
+    const orderedByMostLoses = sortByMostLoses([{ player: "Leo", loses: losesByLeo }, { player: "Max", loses: losesByMax }, { player: "Nico", loses: losesByNico }, { player: "Santi", loses: losesBySanti },
+    { player: "Lucho", loses: losesByLucho }]);
+
+    const orderedByMostAverageWins = sortByAverageWins([{ player: "Leo", averageWins: averageWinsByLeo }, { player: "Max", averageWins: averageWinsByMax }, { player: "Nico", averageWins: averageWinsByNico }, { player: "Santi", averageWins: averageWinsBySanti },
+    { player: "Lucho", averageWins: averageWinsByLucho }]);
+
+    const orderedByMostAverageDraws = sortByAverageDraws([{ player: "Leo", averageDraws: averageDrawsByLeo }, { player: "Max", averageDraws: averageDrawsByMax }, { player: "Nico", averageDraws: averageDrawsByNico }, { player: "Santi", averageDraws: averageDrawsBySanti },
+    { player: "Lucho", averageDraws: averageDrawsByLucho }]);
+
+    const orderedByMostAverageLoses = sortByAverageLoses([{ player: "Leo", averageLoses: averageLosesByLeo }, { player: "Max", averageLoses: averageLosesByMax }, { player: "Nico", averageLoses: averageLosesByNico }, { player: "Santi", averageLoses: averageLosesBySanti },
+    { player: "Lucho", averageLoses: averageLosesByLucho }]);
+
+    const orderedByMostAveragePoints = sortByAveragePoints([{ player: "Leo", averagePoints: averagePointsByLeo }, { player: "Max", averagePoints: averagePointsByMax }, { player: "Nico", averagePoints: averagePointsByNico }, { player: "Santi", averagePoints: averagePointsBySanti },
+    { player: "Lucho", averagePoints: averagePointsByLucho }]);
+
+    res.render("records", { orderedByScoringDif, orderedByMostWins, orderedByMostDraws, orderedByMostAverageWins, orderedByMostAverageDraws, orderedByMostLoses, orderedByMostAverageLoses, orderedByMostAveragePoints })
 
   }
-  // res.render("records", {})
   catch (err) {
     return res.status(500).send("Something went wrong!" + err);
   }
@@ -660,28 +829,18 @@ app.post("/upload-games-from-tournament", async (req, res) => {
           playerThatWon: playerP1,
           teamThatWon: teamP1,
           draw: false,
+          scoringDifference: Math.abs(scoreP1 - scoreP2) // Es indistinto el orden, pues calculo valor absoluto.
         })
         : (outcome = {
           playerThatWon: playerP2,
           teamThatWon: teamP2,
           draw: false,
+          scoringDifference: Math.abs(scoreP1 - scoreP2) // Es indistinto el orden, pues calculo valor absoluto.
         });
     }
-    if (scoreP1 - scoreP2 !== 0) {
-      scoreP1 > scoreP2
-        ? (outcome = {
-          playerThatWon: playerP1,
-          teamThatWon: teamP1,
-          draw: false,
-        })
-        : (outcome = {
-          playerThatWon: playerP2,
-          teamThatWon: teamP2,
-          draw: false,
-        });
-    }
-    if (scoreP1 - scoreP2 === 0) {
-      outcome = { playerThatWon: "none", teamThatWon: "none", draw: true };
+
+    else { // En caso de empate
+      outcome = { playerThatWon: "none", teamThatWon: "none", draw: true, scoringDifference: 0 };
     }
 
     const match = {

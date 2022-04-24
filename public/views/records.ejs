@@ -1,7 +1,161 @@
 <%- include('./partials/header')-%>
 
     <main>
-        <div>Esta será la página de récords</div>
+        <div class="records">
+            <div class="records__container records__container-score">
+                <span class="title bold">Mayor diferencia de gol</span>
+                <ol class="list-group-numbered">
+                    <%orderedByScoringDif.forEach(function(element, index) {%>
+                        <li>
+                            <span>
+                                <%=element.playerP1%>
+                            </span>
+                            <span>
+                                <% if(element.teamP1==="Central Cordoba de Santiago" ){ %>
+                                    Central Cordoba
+                                    <% } else{ %>
+                                        <%=element.teamP1%>
+                                            <% } %>
+                            </span>
+                            <span class="bold">
+                                <%=element.scoreP1%>
+                            </span>
+                            <span>-</span>
+                            <span class="bold">
+                                <%=element.scoreP2%>
+                            </span>
+                            <span>
+                                <% if(element.teamP2==="Central Cordoba de Santiago" ){ %>
+                                    Central Cordoba
+                                    <% } else{ %>
+                                        <%=element.teamP2%>
+                                            <% } %>
+                            </span>
+                            <span>
+                                <%=element.playerP2%>
+                            </span>
+                            <span>-</span>
+                            <span>
+                                <%=element.tournament.name%>
+                            </span>
+                        </li>
+                        <%});%>
+                </ol>
+            </div>
+            <div class="records__container records__container-wins">
+                <span class="title bold">Cantidad de victorias</span>
+                <ol class="list-group-numbered">
+                    <%orderedByMostWins.forEach(function(element, index) {%>
+                        <li>
+                            <span>
+                                <%=element.player%>
+                            </span>
+                            <span class="bold">
+                                <%=element.wins%>
+                            </span>
+                        </li>
+                        <%});%>
+                </ol>
+            </div>
+            <div class="records__container records__container-draws">
+                <span class="title bold">Cantidad de empates</span>
+                <ol class="list-group-numbered">
+                    <%orderedByMostDraws.forEach(function(element, index) {%>
+                        <li>
+                            <span>
+                                <%=element.player%>
+                            </span>
+                            <span class="bold">
+                                <%=element.draws%>
+                            </span>
+                        </li>
+                        <%});%>
+                </ol>
+            </div>
+            <div class="records__container records__container-loses">
+                <span class="title bold">Cantidad de derrotas</span>
+                <ol class="list-group-numbered">
+                    <%orderedByMostLoses.forEach(function(element, index) {%>
+                        <li>
+                            <span>
+                                <%=element.player%>
+                            </span>
+                            <span class="bold">
+                                <%=element.loses%>
+                            </span>
+                        </li>
+                        <%});%>
+                </ol>
+            </div>
+            <div class="records__container records__container-average-wins">
+                <span class="title bold">Victorias por partido</span>
+                <ol class="list-group-numbered">
+                    <%orderedByMostAverageWins.forEach(function(element, index) {%>
+                        <li>
+                            <span>
+                                <%=element.player%>
+                            </span>
+                            <span class="bold">
+                                <%=(element.averageWins).toFixed(2)%>
+                            </span>
+                        </li>
+                        <%});%>
+                </ol>
+            </div>
+            <div class="records__container records__container-average-draws">
+                <span class="title bold">Empates por partido</span>
+                <ol class="list-group-numbered">
+                    <%orderedByMostAverageDraws.forEach(function(element, index) {%>
+                        <li>
+                            <span>
+                                <%=element.player%>
+                            </span>
+                            <span class="bold">
+                                <%=(element.averageDraws).toFixed(2)%>
+                            </span>
+                        </li>
+                        <%});%>
+                </ol>
+            </div>
+            <div class="records__container records__container-average-loses">
+                <span class="title bold">Derrotas por partido</span>
+                <ol class="list-group-numbered">
+                    <%orderedByMostAverageLoses.forEach(function(element, index) {%>
+                        <li>
+                            <span>
+                                <%=element.player%>
+                            </span>
+                            <span class="bold">
+                                <%=(element.averageLoses).toFixed(2)%>
+                            </span>
+                        </li>
+                        <%});%>
+                </ol>
+            </div>
+            <div class="records__container records__container-average-points">
+                <span class="title bold">Puntos por partido</span>
+                <ol class="list-group-numbered">
+                    <%orderedByMostAveragePoints.forEach(function(element, index) {%>
+                        <li>
+                            <span>
+                                <%=element.player%>
+                            </span>
+                            <span class="bold">
+                                <%=(element.averagePoints).toFixed(3)%>
+                            </span>
+                        </li>
+                        <%});%>
+                </ol>
+            </div>
+        </div>
+
     </main>
+
+
+
+
+
+
+
 
     <%- include('./partials/footer')-%>

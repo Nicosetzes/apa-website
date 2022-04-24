@@ -799,29 +799,6 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
   font-size: 0.75rem;
 }
 
-table thead tr th {
-  text-align: center;
-}
-table tbody tr td {
-  text-align: center;
-}
-
-.container_matches {
-  background-color: bisque;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  margin: 2rem auto;
-  width: 90%;
-}
-.container_matches .match {
-  margin: 0.5rem;
-}
-
 #confirm-countries {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -1051,6 +1028,103 @@ table tbody tr td {
 #uploadGamesForm .form__container .form__container-row select,
 #uploadGamesForm .form__container .form__container-row input {
   text-align: center;
+}
+
+table thead tr th {
+  text-align: center;
+}
+table tbody tr td {
+  text-align: center;
+}
+
+.container_matches {
+  background-color: bisque;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: 2rem auto;
+  width: 90%;
+}
+.container_matches .match {
+  margin: 0.5rem;
+}
+
+.records {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin: 1rem auto;
+}
+.records .records__container {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: #004a79 2px solid;
+  border-radius: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin: 0.25rem auto;
+  padding: 0.75rem 0.5rem;
+  width: 75%;
+}
+.records .records__container:nth-child(1) {
+  background-color: azure;
+}
+.records .records__container:nth-child(2) {
+  background-color: aliceblue;
+}
+.records .records__container:nth-child(3) {
+  background-color: gainsboro;
+}
+.records .records__container:nth-child(4) {
+  background-color: honeydew;
+}
+.records .records__container:nth-child(5) {
+  background-color: antiquewhite;
+}
+.records .records__container:nth-child(6) {
+  background-color: beige;
+}
+.records .records__container:nth-child(7) {
+  background-color: burlywood;
+}
+.records .records__container:nth-child(8) {
+  background-color: ivory;
+}
+.records .records__container .title {
+  margin: 0.5rem 0;
+}
+.records .records__container ol {
+  margin: 0;
+  padding: 0;
+}
+.records .records__container .bold {
+  font-weight: 800;
+}
+.records .records__container span {
+  font-weight: 400;
 }
 
 body {
