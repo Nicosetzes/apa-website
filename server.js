@@ -372,85 +372,137 @@ app.get("/records", async (req, res) => {
 
   try {
 
-    const matchesByLeo = await matchesModel.countDocuments({ $or: [{ playerP1: "Leo" }, { playerP2: "Leo" }] });
+    const matchesByLeo = await matchesModel.find({ $or: [{ playerP1: "Leo" }, { playerP2: "Leo" }] }, "playerP1 teamP1 scoreP1 playerP2 teamP2 scoreP2 outcome");
+
+    const amoutOfMatchesByLeo = matchesByLeo.length;
+
+    const winsByTeamByLeo = await matchesModel.find({ "outcome.playerThatWon": "Leo" }, "outcome.teamThatWon")
+
+    const teamsThatWonByLeo = winsByTeamByLeo.map((element) => element.outcome.teamThatWon).reduce((acc, curr) => {
+      return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
+    }, {});
+
+    const sortableByLeo = Object.entries(teamsThatWonByLeo)
+      .sort(([, b], [, a]) => a - b)
+      .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
 
     const winsByLeo = await matchesModel.countDocuments({ "outcome.playerThatWon": "Leo" })
 
     const losesByLeo = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Leo" }, { playerP2: "Leo" }] }, { $nor: [{ "outcome.playerThatWon": "Leo" }, { "outcome.playerThatWon": "none" }] }] });
 
-    const drawsByLeo = matchesByLeo - winsByLeo - losesByLeo;
+    const drawsByLeo = amoutOfMatchesByLeo - winsByLeo - losesByLeo;
 
-    const averageWinsByLeo = winsByLeo / matchesByLeo; // Promedio de victorias por partido
+    const averageWinsByLeo = winsByLeo / amoutOfMatchesByLeo; // Promedio de victorias por partido
 
-    const averageLosesByLeo = losesByLeo / matchesByLeo; // Promedio de derrotas por partido
+    const averageLosesByLeo = losesByLeo / amoutOfMatchesByLeo; // Promedio de derrotas por partido
 
     const averageDrawsByLeo = 1 - averageWinsByLeo - averageLosesByLeo // Promedio de empates por partido
 
-    const averagePointsByLeo = (winsByLeo * 3) / matchesByLeo; // Promedio de puntos por partido
+    const averagePointsByLeo = (winsByLeo * 3) / amoutOfMatchesByLeo; // Promedio de puntos por partido
 
-    const matchesByMax = await matchesModel.countDocuments({ $or: [{ playerP1: "Max" }, { playerP2: "Max" }] });
+    const amountOfMatchesByMax = await matchesModel.countDocuments({ $or: [{ playerP1: "Max" }, { playerP2: "Max" }] });
+
+    const winsByTeamByMax = await matchesModel.find({ "outcome.playerThatWon": "Max" }, "outcome.teamThatWon")
+
+    const teamsThatWonByMax = winsByTeamByMax.map((element) => element.outcome.teamThatWon).reduce((acc, curr) => {
+      return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
+    }, {});
+
+    const sortableByMax = Object.entries(teamsThatWonByMax)
+      .sort(([, b], [, a]) => a - b)
+      .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
 
     const winsByMax = await matchesModel.countDocuments({ "outcome.playerThatWon": "Max" })
 
     const losesByMax = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Max" }, { playerP2: "Max" }] }, { $nor: [{ "outcome.playerThatWon": "Max" }, { "outcome.playerThatWon": "none" }] }] });
 
-    const drawsByMax = matchesByMax - winsByMax - losesByMax;
+    const drawsByMax = amountOfMatchesByMax - winsByMax - losesByMax;
 
-    const averageWinsByMax = winsByMax / matchesByMax; // Promedio de victorias por partido
+    const averageWinsByMax = winsByMax / amountOfMatchesByMax; // Promedio de victorias por partido
 
-    const averageLosesByMax = losesByMax / matchesByMax; // Promedio de derrotas por partido
+    const averageLosesByMax = losesByMax / amountOfMatchesByMax; // Promedio de derrotas por partido
 
     const averageDrawsByMax = 1 - averageWinsByMax - averageLosesByMax // Promedio de empates por partido
 
-    const averagePointsByMax = (winsByMax * 3) / matchesByMax; // Promedio de puntos por partido
+    const averagePointsByMax = (winsByMax * 3) / amountOfMatchesByMax; // Promedio de puntos por partido
 
-    const matchesByNico = await matchesModel.countDocuments({ $or: [{ playerP1: "Max" }, { playerP2: "Max" }] });
+    const amountOfMatchesByNico = await matchesModel.countDocuments({ $or: [{ playerP1: "Nico" }, { playerP2: "Nico" }] });
+
+    const winsByTeamByNico = await matchesModel.find({ "outcome.playerThatWon": "Nico" }, "outcome.teamThatWon")
+
+    const teamsThatWonByNico = winsByTeamByNico.map((element) => element.outcome.teamThatWon).reduce((acc, curr) => {
+      return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
+    }, {});
+
+    const sortableByNico = Object.entries(teamsThatWonByNico)
+      .sort(([, b], [, a]) => a - b)
+      .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
 
     const winsByNico = await matchesModel.countDocuments({ "outcome.playerThatWon": "Nico" })
 
     const losesByNico = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Nico" }, { playerP2: "Nico" }] }, { $nor: [{ "outcome.playerThatWon": "Nico" }, { "outcome.playerThatWon": "none" }] }] });
 
-    const drawsByNico = matchesByNico - winsByNico - losesByNico;
+    const drawsByNico = amountOfMatchesByNico - winsByNico - losesByNico;
 
-    const averageWinsByNico = winsByNico / matchesByNico; // Promedio de victorias por partido
+    const averageWinsByNico = winsByNico / amountOfMatchesByNico; // Promedio de victorias por partido
 
-    const averageLosesByNico = losesByNico / matchesByNico; // Promedio de derrotas por partido
+    const averageLosesByNico = losesByNico / amountOfMatchesByNico; // Promedio de derrotas por partido
 
     const averageDrawsByNico = 1 - averageWinsByNico - averageLosesByNico // Promedio de empates por partido
 
-    const averagePointsByNico = (winsByNico * 3) / matchesByNico; // Promedio de puntos por partido
+    const averagePointsByNico = (winsByNico * 3) / amountOfMatchesByNico; // Promedio de puntos por partido
 
-    const matchesBySanti = await matchesModel.countDocuments({ $or: [{ playerP1: "Santi" }, { playerP2: "Santi" }] });
+    const amountOfMatchesBySanti = await matchesModel.countDocuments({ $or: [{ playerP1: "Santi" }, { playerP2: "Santi" }] });
+
+    const winsByTeamBySanti = await matchesModel.find({ "outcome.playerThatWon": "Santi" }, "outcome.teamThatWon")
+
+    const teamsThatWonBySanti = winsByTeamBySanti.map((element) => element.outcome.teamThatWon).reduce((acc, curr) => {
+      return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
+    }, {});
+
+    const sortableBySanti = Object.entries(teamsThatWonBySanti)
+      .sort(([, b], [, a]) => a - b)
+      .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
 
     const winsBySanti = await matchesModel.countDocuments({ "outcome.playerThatWon": "Santi" })
 
     const losesBySanti = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Santi" }, { playerP2: "Santi" }] }, { $nor: [{ "outcome.playerThatWon": "Santi" }, { "outcome.playerThatWon": "none" }] }] });
 
-    const drawsBySanti = matchesBySanti - winsBySanti - losesBySanti;
+    const drawsBySanti = amountOfMatchesBySanti - winsBySanti - losesBySanti;
 
-    const averageWinsBySanti = winsBySanti / matchesBySanti; // Promedio de victorias por partido
+    const averageWinsBySanti = winsBySanti / amountOfMatchesBySanti; // Promedio de victorias por partido
 
-    const averageLosesBySanti = losesBySanti / matchesBySanti; // Promedio de derrotas por partido
+    const averageLosesBySanti = losesBySanti / amountOfMatchesBySanti; // Promedio de derrotas por partido
 
     const averageDrawsBySanti = 1 - averageWinsBySanti - averageLosesBySanti // Promedio de empates por partido
 
-    const averagePointsBySanti = (winsBySanti * 3) / matchesBySanti; // Promedio de puntos por partido
+    const averagePointsBySanti = (winsBySanti * 3) / amountOfMatchesBySanti; // Promedio de puntos por partido
 
-    const matchesByLucho = await matchesModel.countDocuments({ $or: [{ playerP1: "Lucho" }, { playerP2: "Lucho" }] });
+    const amountOfMatchesByLucho = await matchesModel.countDocuments({ $or: [{ playerP1: "Lucho" }, { playerP2: "Lucho" }] });
+
+    const winsByTeamByLucho = await matchesModel.find({ "outcome.playerThatWon": "Lucho" }, "outcome.teamThatWon")
+
+    const teamsThatWonByLucho = winsByTeamByLucho.map((element) => element.outcome.teamThatWon).reduce((acc, curr) => {
+      return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
+    }, {});
+
+    const sortableByLucho = Object.entries(teamsThatWonByLucho)
+      .sort(([, b], [, a]) => a - b)
+      .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
 
     const winsByLucho = await matchesModel.countDocuments({ "outcome.playerThatWon": "Lucho" })
 
     const losesByLucho = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Lucho" }, { playerP2: "Lucho" }] }, { $nor: [{ "outcome.playerThatWon": "Lucho" }, { "outcome.playerThatWon": "none" }] }] });
 
-    const drawsByLucho = matchesByLucho - winsByLucho - losesByLucho;
+    const drawsByLucho = amountOfMatchesByLucho - winsByLucho - losesByLucho;
 
-    const averageWinsByLucho = winsByLucho / matchesByLucho; // Promedio de victorias por partido
+    const averageWinsByLucho = winsByLucho / amountOfMatchesByLucho; // Promedio de victorias por partido
 
-    const averageLosesByLucho = losesByLucho / matchesByLucho; // Promedio de derrotas por partido
+    const averageLosesByLucho = losesByLucho / amountOfMatchesByLucho; // Promedio de derrotas por partido
 
     const averageDrawsByLucho = 1 - averageWinsByLucho - averageLosesByLucho // Promedio de empates por partido
 
-    const averagePointsByLucho = (winsByLucho * 3) / matchesByLucho; // Promedio de puntos por partido
+    const averagePointsByLucho = (winsByLucho * 3) / amountOfMatchesByLucho; // Promedio de puntos por partido
 
     const orderedByScoringDif = await matchesModel.find({}, "playerP1 scoreP1 teamP1 playerP2 scoreP2 teamP2 tournament")
       .sort({ "outcome.scoringDifference": -1 })
@@ -477,7 +529,15 @@ app.get("/records", async (req, res) => {
     const orderedByMostAveragePoints = sortByAveragePoints([{ player: "Leo", averagePoints: averagePointsByLeo }, { player: "Max", averagePoints: averagePointsByMax }, { player: "Nico", averagePoints: averagePointsByNico }, { player: "Santi", averagePoints: averagePointsBySanti },
     { player: "Lucho", averagePoints: averagePointsByLucho }]);
 
-    res.render("records", { orderedByScoringDif, orderedByMostWins, orderedByMostDraws, orderedByMostAverageWins, orderedByMostAverageDraws, orderedByMostLoses, orderedByMostAverageLoses, orderedByMostAveragePoints })
+    const teamThatWonTheMostByPlayer = [
+      { player: "Leo", team: Object.keys(sortableByLeo)[0], victories: Object.values(sortableByLeo)[0] },
+      { player: "Max", team: Object.keys(sortableByMax)[0], victories: Object.values(sortableByMax)[0] },
+      { player: "Nico", team: Object.keys(sortableByNico)[0], victories: Object.values(sortableByNico)[0] },
+      { player: "Santi", team: Object.keys(sortableBySanti)[0], victories: Object.values(sortableBySanti)[0] },
+      { player: "Lucho", team: Object.keys(sortableByLucho)[0], victories: Object.values(sortableByLucho)[0] }
+    ]
+
+    res.render("records", { orderedByScoringDif, orderedByMostWins, orderedByMostDraws, orderedByMostLoses, orderedByMostAverageWins, orderedByMostAverageDraws, orderedByMostAverageLoses, orderedByMostAveragePoints, teamThatWonTheMostByPlayer })
 
   }
   catch (err) {

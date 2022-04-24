@@ -147,6 +147,24 @@
                         <%});%>
                 </ol>
             </div>
+            <div class="records__container records__container-wins-byTeam">
+                <span class="title bold">Cantidad de victorias por jugador y equipo</span>
+                <ol class="list-group-numbered">
+                    <%teamThatWonTheMostByPlayer.forEach(function(element, index) {%>
+                        <li>
+                            <span>
+                                <%=element.player%>
+                            </span>
+                            <span>
+                                <%=element.team%>
+                            </span>
+                            <span class="bold">
+                                <%=element.victories%>
+                            </span>
+                        </li>
+                        <%});%>
+                </ol>
+            </div>
         </div>
 
     </main>
