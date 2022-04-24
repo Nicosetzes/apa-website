@@ -249,6 +249,73 @@ app.post("/logout", (req, res) => {
 
 // })
 
+// const sortByScoreDif = (array) => {
+
+//   array.sort(function (a, b) {
+
+//     let scoreDifferenceA = Math.abs(a.scoreByP1 - a.scoreByP2);
+//     let scoreDifferenceB = Math.abs(b.scoreByP1 - b.scoreByP2);
+
+//     if (scoreDifferenceA < scoreDifferenceB) {
+//       return -1;
+//     }
+//     if (scoreDifferenceA > scoreDifferenceB) {
+//       return 1;
+//     }
+//     else {
+//       return 0;
+//     }
+
+//   })
+
+//   return array;
+// }
+
+app.get("/records", async (req, res) => {
+  try {
+    console.log("hola")
+    const allMatches = await matchesModel.find({});
+
+    console.log(allMatches.length)
+
+    allMatches.forEach(async (element, index) => {
+
+      let scoreDifference = Math.abs(element.scoreP1 - element.scoreP2);
+
+      element.outcome.scoringDifference = scoreDifference;
+
+      console.log(element.outcome);
+
+      // await matchesModel.findByIdAndUpdate(element.id, { outcome: element.outcome });
+
+    });
+
+    res.send("Ok")
+
+    // const matchesRecord = await matchesModel.find({})
+    //   .limit(5)
+    //   .exec(function (err, instances) {
+
+    //     console.log(instances.length)
+
+    //     const sorted = sortByScoreDif(instances);
+    //     // Boilerplate output that has nothing to do with the sorting.
+    //     let response = {};
+
+    //     if (err) {
+    //       response = handleError(err);
+    //     } else {
+    //       res.send(sorted)
+    //     }
+    //     console.log(matchesRecord)
+
+  }
+  // res.render("records", {})
+  catch (err) {
+    return res.status(500).send("Something went wrong!" + err);
+  }
+})
+
 app.get("/tournaments", async (req, res) => {
   try {
     const allTournaments = await tournamentsModel.find({}, "name");

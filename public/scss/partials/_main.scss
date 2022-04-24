@@ -60,6 +60,7 @@ main {
       width: 100%;
 
       .carousel-control-prev {
+        margin-left: 1.25rem;
         justify-content: flex-start; // Position of arrows inside de carousel
 
         .carousel-control-prev-icon {
@@ -70,6 +71,7 @@ main {
       }
 
       .carousel-control-next {
+        margin-right: 1.25rem;
         justify-content: flex-end; // Position of arrows inside de carousel
 
         .carousel-control-next-icon {
@@ -87,6 +89,7 @@ main {
 
       .carousel-inner {
         height: 100%;
+
         .carousel-item {
           height: 100%;
           position: relative;
@@ -110,7 +113,7 @@ main {
             position: absolute;
             right: 1rem;
             top: 2rem;
-            width: 90px;
+            width: 75px;
             z-index: 500; // Z-index for the nav is 5000.
           }
 
@@ -123,113 +126,114 @@ main {
             position: relative;
             width: 92.5%;
 
-              .img-gallartie {
-                width: 100%;
-              }
+            .img-gallartie {
+              width: 100%;
+            }
 
-              .container__tournament-content {
-                align-items: center;
-                border: #000 1.13px solid;
-                cursor: pointer;
+            .container__tournament-content {
+              align-items: center;
+              border: #000 1.13px solid;
+              cursor: pointer;
+              display: flex;
+              flex-direction: column;
+              height: 100%;
+              justify-content: space-evenly;
+              position: relative;
+              text-transform: uppercase;
+
+              .container__tournament-content-plaque {
                 display: flex;
-                flex-direction: column;
-                height: 100%;
-                justify-content: space-evenly;
+                flex-direction: row;
+                margin: 0 auto;
+                padding: 0.75rem 0.25rem;
                 position: relative;
-                text-transform: uppercase;
+                width: 75%;
 
-                .container__tournament-content-plaque {
+                .img-team {
+                  height: 75px;
+                  margin: auto;
+                  width: 60px;
+                }
+
+                .img-country {
+                  height: 60px;
+                  margin: auto 0;
+                  width: 85px;
+                }
+
+                .container__tournament-content-details {
                   display: flex;
-                  flex-direction: row;
-                  margin: 0 auto;
-                  padding: 0.75rem 0.25rem;
-                  position: relative;
-                  width: 75%;
+                  flex-direction: column;
+                  margin: auto;
+                  text-align: center;
 
-                  .img-team {
-                    height: 75px;
-                    margin: auto;
-                    width: 60px;
+                  .span-title {
+                    color: #000;
+                    font-size: 0.95rem;
                   }
-                  
-                  .img-country {
-                    height: 60px;
-                    margin: auto 0;
-                    width: 85px;
-                  }
-                  
-                  .container__tournament-content-details {
-                    display: flex;
-                    flex-direction: column;
-                    margin: auto;
-                    text-align: center;
-                  
-                    .span-title {
-                      color: #000;
-                      font-size: 0.95rem;
-                    }
-                  
-                    .span-name {
-                      color: $mainBlue;
-                      font-size: 3rem;
-                      line-height: 2.5rem;
-                    }
-                  
-                    .span-team {
-                      color: #000;
-                      font-size: 1.125rem;
-                    }
-                  }
-                }
 
-                .plaque-champion {
-                  background-color: $mainGold;
-                  border: $secondaryGold 3.5px solid;
-                  margin-top: auto;
-                  margin-bottom: 1rem;
-                }
-                
-                .plaque-finalist {
-                  background-color: $mainGray;
-                  border: $secondaryGray 3.5px solid;
-                  margin-top: 1rem;
-                  margin-bottom: 3rem;
-                }
-                .circle {
-                  border-radius: 50%;
-                  height: 6px;
-                  position: absolute;
-                  width: 6px;
-                }
-                
-                .circle-champion {
-                  background-color: $secondaryGold;
-                }
-                
-                .circle-finalist {
-                  background-color: $secondaryGray;
-                }
-                
-                .circle-top-left {
-                  left: 0.25rem;
-                  top: 0.25rem;
-                }
-                
-                .circle-top-right {
-                  right: 0.25rem;
-                  top: 0.25rem;
-                }
-                
-                .circle-bottom-left {
-                  left: 0.25rem;
-                  bottom: 0.25rem;
-                }
-                
-                .circle-bottom-right {
-                  right: 0.25rem;
-                  bottom: 0.25rem;
+                  .span-name {
+                    color: $mainBlue;
+                    font-size: 3rem;
+                    line-height: 2.5rem;
+                  }
+
+                  .span-team {
+                    color: #000;
+                    font-size: 1.125rem;
+                  }
                 }
               }
+
+              .plaque-champion {
+                background-color: $mainGold;
+                border: $secondaryGold 3.5px solid;
+                margin-top: auto;
+                margin-bottom: 1rem;
+              }
+
+              .plaque-finalist {
+                background-color: $mainGray;
+                border: $secondaryGray 3.5px solid;
+                margin-top: 1rem;
+                margin-bottom: 3rem;
+              }
+
+              .circle {
+                border-radius: 50%;
+                height: 6px;
+                position: absolute;
+                width: 6px;
+              }
+
+              .circle-champion {
+                background-color: $secondaryGold;
+              }
+
+              .circle-finalist {
+                background-color: $secondaryGray;
+              }
+
+              .circle-top-left {
+                left: 0.25rem;
+                top: 0.25rem;
+              }
+
+              .circle-top-right {
+                right: 0.25rem;
+                top: 0.25rem;
+              }
+
+              .circle-bottom-left {
+                left: 0.25rem;
+                bottom: 0.25rem;
+              }
+
+              .circle-bottom-right {
+                right: 0.25rem;
+                bottom: 0.25rem;
+              }
+            }
           }
         }
       }
@@ -260,6 +264,7 @@ main {
           }
 
           .world-cup-img {
+            margin-bottom: 0.75rem;
             width: 45px;
           }
 
@@ -292,20 +297,24 @@ main {
           }
         }
       }
+
       .container__stats {
         align-items: center;
         display: flex;
         height: 75px;
         justify-content: center;
         width: 100%;
+
         button {
           background-color: $mainBlue;
+          border: 0;
           color: #fff;
           padding: 0.25rem 0.75rem;
           text-transform: uppercase;
         }
       }
     }
+
     .stack-rosario-central {
       // margin-top: $spaceBetweenStacks * 2;
 
