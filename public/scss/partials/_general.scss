@@ -9,14 +9,19 @@
     list-style: none;
 }
 
-// .swal-overlay--show-modal.swal-modal {
-//     .swal-modal {
-//         .swal-text {
-//             text-align: center !important;
-//         }
-//     }
-// }
+.preload * {
+    transition: none !important;
+}
+
+.resize-animation-stopper * {
+    animation: none !important;
+    transition: none !important;
+}
 
 .italic {
     font-style: italic;
+}
+
+.no-index {
+    display: none;
 }
