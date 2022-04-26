@@ -53,6 +53,26 @@ header img {
   margin-left: 2rem;
   width: 145px;
 }
+header form {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin: 0 auto 0 2rem;
+}
+header form .btn {
+  background-color: #F5D77F;
+  border: #DAA813 2px solid;
+  color: #004a79;
+  font-size: 0.875rem;
+  font-weight: 800;
+  padding: 0.25rem 0.75rem;
+}
 header .nav {
   background-color: #F5D77F;
   -webkit-box-pack: center;
@@ -332,7 +352,7 @@ main .container__tournament .carousel.slide .carousel-inner .carousel-item .cont
 main .container__tournament .carousel.slide .carousel-inner .carousel-item .img-trophy {
   height: 90px;
   position: absolute;
-  right: 1rem;
+  right: 1.5rem;
   top: 2rem;
   width: 75px;
   z-index: 500;
@@ -462,6 +482,9 @@ main .container__tournament .carousel.slide .carousel-inner .carousel-item .cont
   bottom: 0.25rem;
 }
 main .container__tournament .records {
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
   background-color: #E5E5E5;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -484,7 +507,8 @@ main .container__tournament .records .records-content-container {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  padding: 1rem 0 0 0;
+  padding-top: 1rem;
+  width: 100%;
 }
 main .container__tournament .records .records-content-container .records-content {
   -webkit-box-align: center;
@@ -496,7 +520,8 @@ main .container__tournament .records .records-content-container .records-content
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
-  margin: 0.5rem;
+  margin: 0.5rem 0;
+  padding-left: 0.25rem;
   width: 100%;
 }
 main .container__tournament .records .records-content-container .records-content .gold-star {
@@ -797,6 +822,7 @@ main .container__tournament .container__trajectory .trajectory-trophies span {
 }
 main .container__tournament .container__trajectory .trajectory-trophies .small-description {
   font-size: 0.75rem;
+  text-align: center;
 }
 
 #confirm-countries {
@@ -1112,6 +1138,12 @@ table tbody tr td {
 }
 .records .records__container:nth-child(8) {
   background-color: ivory;
+}
+.records .records__container:nth-child(9) {
+  background-color: silver;
+}
+.records .records__container:nth-child(10) {
+  background-color: tan;
 }
 .records .records__container .title {
   margin: 0.5rem 0;

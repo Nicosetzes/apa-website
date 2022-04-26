@@ -42,6 +42,21 @@
                         <%});%>
                 </ol>
             </div>
+            <div class="records__container records__container-matches">
+                <span class="title bold">Cantidad de partidos</span>
+                <ol class="list-group-numbered">
+                    <%totalMatchesForEachPlayer.forEach(function(element, index) {%>
+                        <li>
+                            <span>
+                                <%=element.player%>
+                            </span>
+                            <span class="bold">
+                                <%=element.matches%>
+                            </span>
+                        </li>
+                        <%});%>
+                </ol>
+            </div>
             <div class="records__container records__container-wins">
                 <span class="title bold">Cantidad de victorias</span>
                 <ol class="list-group-numbered">
@@ -148,12 +163,12 @@
                 </ol>
             </div>
             <div class="records__container records__container-wins-byTeam">
-                <span class="title bold">Cantidad de victorias por jugador y equipo</span>
-                <ol class="list-group-numbered">
+                <span class="title bold">Equipo más ganador de cada jugador</span>
+                <ul>
                     <%teamThatWonTheMostByPlayer.forEach(function(element, index) {%>
                         <li>
                             <span>
-                                <%=element.player%>
+                                <%=element.player%>:
                             </span>
                             <span>
                                 <%=element.team%>
@@ -163,7 +178,7 @@
                             </span>
                         </li>
                         <%});%>
-                </ol>
+                </ul>
             </div>
         </div>
 

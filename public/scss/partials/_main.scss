@@ -111,7 +111,7 @@ main {
           .img-trophy {
             height: 90px;
             position: absolute;
-            right: 1rem;
+            right: 1.5rem;
             top: 2rem;
             width: 75px;
             z-index: 500; // Z-index for the nav is 5000.
@@ -240,6 +240,7 @@ main {
     }
 
     .records {
+      align-items: flex-start;
       background-color: $thirdGray;
       display: flex;
       flex-direction: column;
@@ -250,13 +251,15 @@ main {
         align-items: flex-start;
         display: flex;
         flex-direction: column;
-        padding: 1rem 0 0 0;
+        padding-top: 1rem;
+        width: 100%;
 
         .records-content {
           align-items: center;
           display: flex;
           justify-content: flex-start;
-          margin: 0.5rem;
+          margin: 0.5rem 0;
+          padding-left: 0.25rem;
           width: 100%;
 
           .gold-star {
@@ -450,6 +453,7 @@ main {
 
         .small-description {
           font-size: 0.75rem;
+          text-align: center;
         }
       }
     }

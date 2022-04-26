@@ -68,7 +68,7 @@ app.use(
     resave: false,
     saveUninitialized: false, // Dejarlo en false es útil para login, dado que la session no se guarda hasta que no se modifica.
     cookie: {
-      maxAge: 600000, // 10 MINUTOS
+      maxAge: 28800000, // 8 HORAS
     },
   })
 );
@@ -87,6 +87,42 @@ app.use(passport.session()); // Se invoca en todas las req. Busca un serialised 
 const LocalStrategy = require("passport-local").Strategy;
 
 const bCrypt = require("bcrypt");
+
+// const createHash = (password) => {
+//   return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+// };
+
+// passport.use(
+//   "register",
+//   new LocalStrategy((username, password, done) => {
+//     usersModel
+//       .findOne({ username: username })
+//       .then((user) => {
+//         if (!user) {
+//           const newUser = new usersModel({
+//             username: username,
+//             password: createHash(password),
+//           });
+//           console.log(newUser);
+//           usersModel
+//             .create(newUser)
+//             .then((user) => {
+//               return done(null, user);
+//             })
+//             .catch((err) => {
+//               return done(null, false, { message: err });
+//             });
+//         } else {
+//           return done(null, false, {
+//             message: "This user has already been registered",
+//           });
+//         }
+//       })
+//       .catch((err) => {
+//         return done(null, false, { message: err });
+//       });
+//   })
+// );
 
 passport.use(
   "login",
@@ -196,9 +232,87 @@ app.post("/logout", (req, res) => {
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
 });
 
+// PARA REGISTER:
+
+// app.get("/register", (req, res) => {
+//   res.render("register", {});
+//   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
+// });
+
+// app.post(
+//   "/register",
+//   passport.authenticate("register", {
+//     failureRedirect: "/register-error",
+//     successRedirect: "/",
+//   })
+// );
+
+// app.get("/register-error", (req, res) => {
+//   res.render("register-error", {});
+//   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
+// });
+
 // OTHER ROUTES
 
-// app.get("/api", isAuth, (req, res) => {
+// app.get("/api", async (req, res) => {
+
+// const allMatches = await matchesModel.find({}, "playerP1 teamP1 scoreP1 playerP2 teamP2 scoreP2 outcome");
+
+// console.log(allMatches.length)
+
+// const allOutcomes = allMatches.map((element) => {
+//   if (element.outcome.playerThatWon === element.playerP1) {
+//     return {
+//       id: element.id,
+//       outcome: {
+//         playerThatWon: element.outcome.playerThatWon,
+//         teamThatWon: element.outcome.teamThatWon,
+//         scoreFromTeamThatWon: element.scoreP1,
+//         playerThatLost: element.playerP2,
+//         teamThatLost: element.teamP2,
+//         scoreFromTeamThatLost: element.scoreP2,
+//         draw: element.outcome.draw,
+//         scoringDifference: element.outcome.scoringDifference
+//       }
+//     }
+//   }
+//   else if (element.outcome.playerThatWon === element.playerP2) {
+//     return {
+//       id: element.id,
+//       outcome: {
+//         playerThatWon: element.outcome.playerThatWon,
+//         teamThatWon: element.outcome.teamThatWon,
+//         scoreFromTeamThatWon: element.scoreP2,
+//         playerThatLost: element.playerP1,
+//         teamThatLost: element.teamP1,
+//         scoreFromTeamThatLost: element.scoreP1,
+//         draw: element.outcome.draw,
+//         scoringDifference: element.outcome.scoringDifference
+//       }
+//     }
+//   }
+//   else {
+//     return {
+//       id: element.id,
+//       outcome: {
+//         playerThatWon: element.outcome.playerThatWon,
+//         teamThatWon: element.outcome.teamThatWon,
+//         scoreFromTeamThatWon: "none",
+//         playerThatLost: "none",
+//         teamThatLost: "none",
+//         scoreFromTeamThatLost: "none",
+//         draw: element.outcome.draw,
+//         scoringDifference: element.outcome.scoringDifference
+//       }
+//     }
+//   }
+// })
+
+// console.log(allOutcomes)
+
+// allOutcomes.forEach(async (element) => {
+//   await matchesModel.findByIdAndUpdate(element.id, { outcome: element.outcome })
+// })
 
 //   const teams = [];
 
@@ -372,9 +486,7 @@ app.get("/records", async (req, res) => {
 
   try {
 
-    const matchesByLeo = await matchesModel.find({ $or: [{ playerP1: "Leo" }, { playerP2: "Leo" }] }, "playerP1 teamP1 scoreP1 playerP2 teamP2 scoreP2 outcome");
-
-    const amoutOfMatchesByLeo = matchesByLeo.length;
+    const amountOfMatchesByLeo = await matchesModel.countDocuments({ $or: [{ playerP1: "Max" }, { playerP2: "Max" }] });
 
     const winsByTeamByLeo = await matchesModel.find({ "outcome.playerThatWon": "Leo" }, "outcome.teamThatWon")
 
@@ -390,15 +502,15 @@ app.get("/records", async (req, res) => {
 
     const losesByLeo = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Leo" }, { playerP2: "Leo" }] }, { $nor: [{ "outcome.playerThatWon": "Leo" }, { "outcome.playerThatWon": "none" }] }] });
 
-    const drawsByLeo = amoutOfMatchesByLeo - winsByLeo - losesByLeo;
+    const drawsByLeo = amountOfMatchesByLeo - winsByLeo - losesByLeo;
 
-    const averageWinsByLeo = winsByLeo / amoutOfMatchesByLeo; // Promedio de victorias por partido
+    const averageWinsByLeo = winsByLeo / amountOfMatchesByLeo; // Promedio de victorias por partido
 
-    const averageLosesByLeo = losesByLeo / amoutOfMatchesByLeo; // Promedio de derrotas por partido
+    const averageLosesByLeo = losesByLeo / amountOfMatchesByLeo; // Promedio de derrotas por partido
 
     const averageDrawsByLeo = 1 - averageWinsByLeo - averageLosesByLeo // Promedio de empates por partido
 
-    const averagePointsByLeo = (winsByLeo * 3) / amoutOfMatchesByLeo; // Promedio de puntos por partido
+    const averagePointsByLeo = (winsByLeo * 3) / amountOfMatchesByLeo; // Promedio de puntos por partido
 
     const amountOfMatchesByMax = await matchesModel.countDocuments({ $or: [{ playerP1: "Max" }, { playerP2: "Max" }] });
 
@@ -508,6 +620,14 @@ app.get("/records", async (req, res) => {
       .sort({ "outcome.scoringDifference": -1 })
       .limit(5);
 
+    const totalMatchesForEachPlayer = [
+      { player: "Leo", matches: amountOfMatchesByLeo },
+      { player: "Max", matches: amountOfMatchesByMax },
+      { player: "Nico", matches: amountOfMatchesByNico },
+      { player: "Santi", matches: amountOfMatchesBySanti },
+      { player: "Lucho", matches: amountOfMatchesByLucho }
+    ]
+
     const orderedByMostWins = sortByMostWins([{ player: "Leo", wins: winsByLeo }, { player: "Max", wins: winsByMax }, { player: "Nico", wins: winsByNico }, { player: "Santi", wins: winsBySanti },
     { player: "Lucho", wins: winsByLucho }]);
 
@@ -537,7 +657,7 @@ app.get("/records", async (req, res) => {
       { player: "Lucho", team: Object.keys(sortableByLucho)[0], victories: Object.values(sortableByLucho)[0] }
     ]
 
-    res.render("records", { orderedByScoringDif, orderedByMostWins, orderedByMostDraws, orderedByMostLoses, orderedByMostAverageWins, orderedByMostAverageDraws, orderedByMostAverageLoses, orderedByMostAveragePoints, teamThatWonTheMostByPlayer })
+    res.render("records", { orderedByScoringDif, totalMatchesForEachPlayer, orderedByMostWins, orderedByMostDraws, orderedByMostLoses, orderedByMostAverageWins, orderedByMostAverageDraws, orderedByMostAverageLoses, orderedByMostAveragePoints, teamThatWonTheMostByPlayer })
 
   }
   catch (err) {
@@ -574,7 +694,7 @@ app.get("/tournaments/:id", async (req, res) => {
   }
 });
 
-app.get("/create-tournament", (req, res) => {
+app.get("/create-tournament", isAuth, (req, res) => {
   res.render("create-tournament", {});
 });
 
@@ -825,7 +945,7 @@ app.get("/face-to-face", async (req, res) => {
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
 });
 
-app.get("/upload-games", async (req, res) => {
+app.get("/upload-games", isAuth, async (req, res) => {
   const idProvided = false;
   try {
     const tournamentsFromBD = await tournamentsModel.find({}, "name id");
@@ -845,7 +965,7 @@ app.post("/upload-games", (req, res) => {
   res.redirect(`/upload-games/${selectedTournamentId}`);
 });
 
-app.get("/upload-games/:id", async (req, res) => {
+app.get("/upload-games/:id", isAuth, async (req, res) => {
   const idProvided = req.params.id;
 
   // Chequeo mediante RegEx si, en potencia, el ID proporcionado es válido (en formato) //
@@ -888,19 +1008,36 @@ app.post("/upload-games-from-tournament", async (req, res) => {
         ? (outcome = {
           playerThatWon: playerP1,
           teamThatWon: teamP1,
+          scoreFromTeamThatWon: scoreP1,
+          playerThatLost: playerP2,
+          teamThatLost: teamP2,
+          scoreFromTeamThatLost: scoreP2,
           draw: false,
           scoringDifference: Math.abs(scoreP1 - scoreP2) // Es indistinto el orden, pues calculo valor absoluto.
         })
         : (outcome = {
           playerThatWon: playerP2,
           teamThatWon: teamP2,
+          scoreFromTeamThatWon: scoreP2,
+          playerThatLost: playerP1,
+          teamThatLost: teamP1,
+          scoreFromTeamThatLost: scoreP1,
           draw: false,
           scoringDifference: Math.abs(scoreP1 - scoreP2) // Es indistinto el orden, pues calculo valor absoluto.
         });
     }
 
     else { // En caso de empate
-      outcome = { playerThatWon: "none", teamThatWon: "none", draw: true, scoringDifference: 0 };
+      outcome = {
+        playerThatWon: "none",
+        teamThatWon: "none",
+        scoreFromTeamThatWon: "none",
+        playerThatLost: "none",
+        teamThatLost: "none",
+        scoreFromTeamThatLost: "none",
+        draw: true,
+        scoringDifference: 0
+      };
     }
 
     const match = {
