@@ -1,0 +1,31 @@
+.individual-records {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0.5rem auto;
+
+    .individual-records__container {
+        align-items: center;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 1rem 0;
+        width: 80%;
+
+        ul,
+        ol {
+            margin: 0;
+        }
+
+        &:nth-child(1) {
+            background-color: antiquewhite
+        }
+
+        &:nth-child(2) {
+            background-color: lemonchiffon
+        }
+    }
+
+}

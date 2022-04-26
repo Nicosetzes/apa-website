@@ -1113,7 +1113,7 @@ table tbody tr td {
           justify-content: center;
   margin: 0.25rem auto;
   padding: 0.75rem 0.5rem;
-  width: 75%;
+  width: 85%;
 }
 .records .records__container:nth-child(1) {
   background-color: azure;
@@ -1157,6 +1157,51 @@ table tbody tr td {
 }
 .records .records__container span {
   font-weight: 400;
+}
+
+.individual-records {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin: 0.5rem auto;
+}
+.individual-records .individual-records__container {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 1rem 0;
+  width: 80%;
+}
+.individual-records .individual-records__container ul,
+.individual-records .individual-records__container ol {
+  margin: 0;
+}
+.individual-records .individual-records__container:nth-child(1) {
+  background-color: antiquewhite;
+}
+.individual-records .individual-records__container:nth-child(2) {
+  background-color: lemonchiffon;
 }
 
 body {

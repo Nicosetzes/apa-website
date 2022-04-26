@@ -1,7 +1,37 @@
 <%- include('./partials/header')-%>
 
     <main>
-        <div>Esta será la página de récords por jugador</div>
+        <div class="individual-records">
+            <div class="individual-records__container">
+                <div>Victorias por equipo de <span class="bold">
+                        <%=playerQuery%>
+                    </span></div>
+                <div>
+                    <ol class="list-group-numbered">
+                        <%orderedArrayOfTeamsWithWins.forEach(function(element, index) {%>
+                            <li>
+                                <%=element.team%>: <%=element.victories%>
+                            </li>
+                            <%});%>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="individual-records__container">
+                <div>Cantidad de victorias por torneo</div>
+                <div>
+                    <ul>
+                        <%orderedArrayOfWinsByTournament.forEach(function(element, index) {%>
+                            <li>
+                                <%=element.tournament%>: <%=element.victories%>
+                            </li>
+                            <%});%>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div>Volver a <a href="/records">records</a></div>
+        <div>Volver al <a href="/">home</a></div>
     </main>
 
     <%- include('./partials/footer')-%>
