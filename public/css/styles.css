@@ -1187,21 +1187,35 @@ table tbody tr td {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  font-weight: 400;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
   padding: 1rem 0;
   width: 80%;
 }
+.individual-records .individual-records__container .title {
+  font-weight: 800;
+  margin: 0.75rem 0;
+}
 .individual-records .individual-records__container ul,
 .individual-records .individual-records__container ol {
   margin: 0;
 }
+.individual-records .individual-records__container ul {
+  padding: 0;
+}
 .individual-records .individual-records__container:nth-child(1) {
-  background-color: antiquewhite;
+  background-color: lightskyblue;
 }
 .individual-records .individual-records__container:nth-child(2) {
   background-color: lemonchiffon;
+}
+.individual-records .individual-records__container:nth-child(3) {
+  background-color: lavender;
+}
+.individual-records .individual-records__container:nth-child(4) {
+  background-color: lightcyan;
 }
 
 body {

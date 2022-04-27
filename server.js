@@ -23,6 +23,8 @@ const matchesModel = require("./models/matches.js"); // Modelo mongoose para la 
 
 const usersModel = require("./models/users.js"); // Modelo mongoose para la carga de usuarios!
 
+// const playersModel = require("./models/players.js"); // Modelo mongoose para la carga de información de jugadores humanos!
+
 /* -------------------- SERVER -------------------- */
 
 const express = require("express");
@@ -492,25 +494,35 @@ app.get("/records", async (req, res) => {
 
       const matchesWonByPlayer = await matchesModel.find({ "outcome.playerThatWon": playerQuery }, "outcome");
 
-      const arrayOfTeamsWithWins = [];
+      const arrayOfTeams = [];
 
       matchesWonByPlayer.forEach((element, index) => {
 
         if (index === 0) { // Primer caso
-          arrayOfTeamsWithWins.push({
+          arrayOfTeams.push({
             team: element.outcome.teamThatWon,
             victories: 1
           });
         }
 
         else {
-          let indexOfElement = arrayOfTeamsWithWins.findIndex(object => object.team === element.outcome.teamThatWon);
-          indexOfElement === -1 ? arrayOfTeamsWithWins.push({ team: element.outcome.teamThatWon, victories: 1 }) : arrayOfTeamsWithWins[indexOfElement].victories++
+          let indexOfElement = arrayOfTeams.findIndex(object => object.team === element.outcome.teamThatWon);
+          indexOfElement === -1 ? arrayOfTeams.push({ team: element.outcome.teamThatWon, victories: 1 }) : arrayOfTeams[indexOfElement].victories++
         }
 
       });
 
-      const orderedArrayOfTeamsWithWins = arrayOfTeamsWithWins.sort((a, b) => (a.victories < b.victories) ? 1 : -1);
+      const arrayOfTeamsWithWins = [];
+
+      arrayOfTeams.forEach(async (element) => {
+        let amountOfMatches = await matchesModel.countDocuments({ $or: [{ teamP1: element.team }, { teamP2: element.team }] });
+        arrayOfTeamsWithWins.push({
+          team: element.team,
+          matches: amountOfMatches,
+          victories: element.victories,
+          winRate: (element.victories / amountOfMatches) * 100,
+        })
+      }); // Lo dejo ejecutandose de manera asíncrona y sigo con lo otro! CHEQUEAR
 
       const allTournaments = await tournamentsModel.find({}, "name");
 
@@ -525,8 +537,9 @@ app.get("/records", async (req, res) => {
         })
         itemsProcessed++
         if (itemsProcessed === allTournaments.length) {
-          const orderedArrayOfWinsByTournament = arrayOfWinsByTournament.sort((a, b) => (a.victories < b.victories) ? 1 : -1);
-          res.render("records-id", { playerQuery, orderedArrayOfTeamsWithWins, orderedArrayOfWinsByTournament });
+          // const orderedArrayOfTeamsWithWins = definitiveArrayOfTeamsWithWins.sort((a, b) => (a.victories < b.victories) ? 1 : -1); // Retomo el evento de más arriba y lo ordeno
+          // const orderedArrayOfWinsByTournament = arrayOfWinsByTournament.sort((a, b) => (a.victories < b.victories) ? 1 : -1); // Ordeno el evento actual
+          res.render("records-id", { playerQuery, arrayOfTeamsWithWins, arrayOfWinsByTournament });
         }
       })
     }
@@ -749,7 +762,7 @@ app.get("/tournaments/:id", async (req, res) => {
   }
 });
 
-app.get("/create-tournament", (req, res) => {
+app.get("/create-tournament", isAuth, (req, res) => {
   res.render("create-tournament", {});
 });
 
@@ -1000,7 +1013,7 @@ app.get("/face-to-face", async (req, res) => {
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
 });
 
-app.get("/upload-games", async (req, res) => {
+app.get("/upload-games", isAuth, async (req, res) => {
   const idProvided = false;
   try {
     const tournamentsFromBD = await tournamentsModel.find({ ongoing: true }); // Solo traigo los torneos que se encuentren en curso.
@@ -1113,9 +1126,31 @@ app.post("/upload-games-from-tournament", async (req, res) => {
       },
     };
 
+    // if (!match.outcome.draw) { // Para actualizar las rachas
+
+    //   let winner = await playersModel.find({ name: match.outcome.playerThatWon })
+    //   let loser = await playersModel.find({ name: match.outcome.playerThatLost })
+
+    //   winner[0].losingStreak = 0;
+    //   winner[0].winningStreak++
+    //   if (winner[0].lastFiveMatches.length < 5) {
+    //     winner[0].lastFiveMatches.push({ outcome: outcome, tournament: match.tournament })
+    //     console.log("Menor o igual a 5")
+    //     console.log(winner[0].lastFiveMatches)
+    //   }
+    //   else {
+    //     winner[0].lastFiveMatches.splice(0, 1);
+    //     winner[0].push({ outcome: outcome, tournament: match.tournament })
+    //     console.log("Igual a 5")
+    //     console.log(winner[0].lastFiveMatches)
+    //   }
+    // }
+
+
     await matchesModel.create(match);
 
     res.redirect("/upload-games");
+
   } catch (err) {
     if (err.name === "ValidationError") {
       const errors = {};

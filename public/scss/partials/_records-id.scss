@@ -10,21 +10,39 @@
         border-radius: 10px;
         display: flex;
         flex-direction: column;
+        font-weight: 400;
         justify-content: center;
         padding: 1rem 0;
         width: 80%;
+
+        .title {
+            font-weight: 800;
+            margin: 0.75rem 0;
+        }
 
         ul,
         ol {
             margin: 0;
         }
 
+        ul {
+            padding: 0;
+        }
+
         &:nth-child(1) {
-            background-color: antiquewhite
+            background-color: lightskyblue
         }
 
         &:nth-child(2) {
             background-color: lemonchiffon
+        }
+
+        &:nth-child(3) {
+            background-color: lavender
+        }
+
+        &:nth-child(4) {
+            background-color: lightcyan
         }
     }
 
