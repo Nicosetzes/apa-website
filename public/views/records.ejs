@@ -1,21 +1,23 @@
 <%- include('./partials/header')-%>
 
     <main>
-        <div>¿Desea ver records individuales?</div>
-        <div>
-            <a href="/records/?player=Leo">Leo</a>
-        </div>
-        <div>
-            <a href="/records/?player=Max">Max</a>
-        </div>
-        <div>
-            <a href="/records/?player=Nico">Nico</a>
-        </div>
-        <div>
-            <a href="/records/?player=Santi">Santi</a>
-        </div>
-        <div>
-            <a href="/records/?player=Lucho">Lucho</a>
+        <div class="records">
+            <div>¿Desea ver records individuales?</div>
+            <div>
+                <a href="/records/?player=Leo">Leo</a>
+            </div>
+            <div>
+                <a href="/records/?player=Max">Max</a>
+            </div>
+            <div>
+                <a href="/records/?player=Nico">Nico</a>
+            </div>
+            <div>
+                <a href="/records/?player=Santi">Santi</a>
+            </div>
+            <div>
+                <a href="/records/?player=Lucho">Lucho</a>
+            </div>
         </div>
         <div class="records">
             <div class="records__container records__container-score">
@@ -61,7 +63,8 @@
             <div class="records__container records__container-matches">
                 <span class="title bold">Cantidad de partidos</span>
                 <ol class="list-group-numbered">
-                    <%totalMatchesForEachPlayer.forEach(function(element, index) {%>
+                    <%totalMatchesForEachPlayer.sort(function(a,b) { if(a.matches < b.matches) { return 1 } else {
+                        return-1 }}).forEach(function(element, index) {%>
                         <li>
                             <span>
                                 <%=element.player%>
@@ -181,7 +184,8 @@
             <div class="records__container records__container-wins-byTeam">
                 <span class="title bold">Equipo más ganador de cada jugador</span>
                 <ul>
-                    <%teamThatWonTheMostByPlayer.forEach(function(element, index) {%>
+                    <%teamThatWonTheMostByPlayer.sort(function(a,b) { if(a.victories < b.victories) { return 1 } else {
+                        return-1 }}).forEach(function(element, index) {%>
                         <li>
                             <span>
                                 <%=element.player%>:
@@ -199,12 +203,5 @@
         </div>
 
     </main>
-
-
-
-
-
-
-
 
     <%- include('./partials/footer')-%>

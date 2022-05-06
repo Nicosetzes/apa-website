@@ -1,7 +1,67 @@
 <%- include('./partials/header')-%>
-
     <main>
         <div class="individual-records">
+            <div class="individual-records__container">
+                <div class="title">Racha actual de <span class="bold">
+                        <%=playerQuery%>
+                    </span>
+                </div>
+                <% if(playerProfile.winningStreak){ %>
+                    <div>Victorias: <%=playerProfile.winningStreak%>
+                    </div>
+                    <% } else if(playerProfile.drawStreak){ %>
+                        <div>Empates: <%=playerProfile.drawStreak%>
+                        </div>
+                        <% } else if (playerProfile.losingStreak){ %>
+                            <div>Derrotas: <%=playerProfile.losingStreak%>
+                            </div>
+                            <% } else { %>
+                                <div>Aún no hay racha para mostrar
+                                </div>
+                                <% } %>
+                                    <div class="title">Rachas más largas de <span class="bold">
+                                            <%=playerQuery%>
+                                        </span>
+                                    </div>
+                                    <div>
+                                        Victorias:
+                                        <%=playerProfile.longestWinningStreak%> (<%=rankingForPlayerInWins%>°)
+                                    </div>
+                                    <div>
+                                        Empates:
+                                        <%=playerProfile.longestDrawStreak%> (<%=rankingForPlayerInDraws%>°)
+                                    </div>
+                                    <div>
+                                        Derrotas:
+                                        <%=playerProfile.longestLosingStreak%> (<%=rankingForPlayerInLoses%>°)
+                                    </div>
+            </div>
+
+            <div class="individual-records__container">
+                <div class="title">Últimos <%=recentMatchesFromPlayer.length%> partidos de <span class="bold">
+                            <%=playerQuery%>
+                        </span>
+                </div>
+                <div class="player-streak">
+                    <% if(recentMatchesFromPlayer.length){ recentMatchesFromPlayer.reverse().forEach(function(element){
+                        if(element.outcome.draw) {%>
+                        <div class="streak-box draw">
+                            <span>E</span>
+                        </div>
+                        <%} else if (element.outcome.playerThatWon===playerQuery) { %>
+                            <div class="streak-box win">
+                                <span>V</span>
+                            </div>
+                            <% } else { %>
+                                <div class="streak-box lose">
+                                    <span>D</span>
+                                </div>
+                                <% } })} else { %>
+                                    <div>No hay partidossss</div>
+                                    <% }%>
+                </div>
+            </div>
+
             <div class="individual-records__container">
                 <div class="title">Partidos por equipo de <span class="bold">
                         <%=playerQuery%>
@@ -49,7 +109,8 @@
                 <div class="title">Cantidad de victorias por torneo</div>
                 <div>
                     <ul>
-                        <%arrayOfWinsByTournament.forEach(function(element, index) {%>
+                        <%arrayOfWinsByTournament.sort(function(a,b) { if (a.victories < b.victories) { return 1 } else
+                            {return-1 }}).forEach(function(element, index) {%>
                             <li>
                                 <%=element.tournament%>: <%=element.victories%>
                             </li>

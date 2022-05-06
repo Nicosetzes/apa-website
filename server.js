@@ -23,7 +23,7 @@ const matchesModel = require("./models/matches.js"); // Modelo mongoose para la 
 
 const usersModel = require("./models/users.js"); // Modelo mongoose para la carga de usuarios!
 
-// const playersModel = require("./models/players.js"); // Modelo mongoose para la carga de información de jugadores humanos!
+const playersModel = require("./models/players.js"); // Modelo mongoose para la carga de información de jugadores humanos!
 
 /* -------------------- SERVER -------------------- */
 
@@ -492,6 +492,19 @@ app.get("/records", async (req, res) => {
 
     try {
 
+      const allPlayerLongestWinningStreak = await playersModel.find({}, "name longestWinningStreak").sort({ longestWinningStreak: -1, longestDrawStreak: -1, longestLosingStreak: 1 })
+      const allPlayerLongestDrawStreak = await playersModel.find({}, "name longestDrawStreak").sort({ longestDrawStreak: -1 })
+      const allPlayerLongestLosingStreak = await playersModel.find({}, "name longestLosingStreak").sort({ longestLosingStreak: -1, longestWinningStreak: -1, longestDrawStreak: -1 })
+      // const allPlayerTitles = await playersModel.find({}, "name championships"); / TODO: Records de títulos;
+
+      const rankingForPlayerInWins = allPlayerLongestWinningStreak.findIndex(element => element.name === playerQuery) + 1
+      const rankingForPlayerInDraws = allPlayerLongestDrawStreak.findIndex(element => element.name === playerQuery) + 1
+      const rankingForPlayerInLoses = allPlayerLongestLosingStreak.findIndex(element => element.name === playerQuery) + 1
+
+      const playerProfile = await playersModel.findOne({ name: playerQuery })
+
+      const recentMatchesFromPlayer = await matchesModel.find({ $or: [{ playerP1: playerQuery }, { playerP2: playerQuery }] }).limit(10).sort({ _id: -1 })
+
       const matchesWonByPlayer = await matchesModel.find({ "outcome.playerThatWon": playerQuery }, "outcome");
 
       const arrayOfTeams = [];
@@ -539,7 +552,7 @@ app.get("/records", async (req, res) => {
         if (itemsProcessed === allTournaments.length) {
           // const orderedArrayOfTeamsWithWins = definitiveArrayOfTeamsWithWins.sort((a, b) => (a.victories < b.victories) ? 1 : -1); // Retomo el evento de más arriba y lo ordeno
           // const orderedArrayOfWinsByTournament = arrayOfWinsByTournament.sort((a, b) => (a.victories < b.victories) ? 1 : -1); // Ordeno el evento actual
-          res.render("records-id", { playerQuery, arrayOfTeamsWithWins, arrayOfWinsByTournament });
+          res.render("records-id", { playerProfile, rankingForPlayerInWins, rankingForPlayerInDraws, rankingForPlayerInLoses, recentMatchesFromPlayer, playerQuery, arrayOfTeamsWithWins, arrayOfWinsByTournament });
         }
       })
     }
@@ -1126,26 +1139,57 @@ app.post("/upload-games-from-tournament", async (req, res) => {
       },
     };
 
-    // if (!match.outcome.draw) { // Para actualizar las rachas
+    if (!match.outcome.draw) { // Para actualizar las rachas, SI NO EMPATAN
 
-    //   let winner = await playersModel.find({ name: match.outcome.playerThatWon })
-    //   let loser = await playersModel.find({ name: match.outcome.playerThatLost })
+      let winner = await playersModel.findOne({ name: match.outcome.playerThatWon })
+      let loser = await playersModel.findOne({ name: match.outcome.playerThatLost })
 
-    //   winner[0].losingStreak = 0;
-    //   winner[0].winningStreak++
-    //   if (winner[0].lastFiveMatches.length < 5) {
-    //     winner[0].lastFiveMatches.push({ outcome: outcome, tournament: match.tournament })
-    //     console.log("Menor o igual a 5")
-    //     console.log(winner[0].lastFiveMatches)
-    //   }
-    //   else {
-    //     winner[0].lastFiveMatches.splice(0, 1);
-    //     winner[0].push({ outcome: outcome, tournament: match.tournament })
-    //     console.log("Igual a 5")
-    //     console.log(winner[0].lastFiveMatches)
-    //   }
-    // }
+      winner.losingStreak = 0;
+      winner.drawStreak = 0;
+      winner.winningStreak++
 
+      if (winner.winningStreak > winner.longestWinningStreak) {
+        winner.longestWinningStreak++;
+      }
+
+      loser.winningStreak = 0
+      loser.drawStreak = 0;
+      loser.losingStreak++;
+
+      if (loser.losingStreak > loser.longestLosingStreak) {
+        loser.longestLosingStreak++;
+      }
+
+      await winner.save();
+      await loser.save();
+
+    }
+    // Para actualizar las rachas, SI EMPATAN
+    else {
+
+      let playerOne = await playersModel.findOne({ name: playerP1 });
+      let playerTwo = await playersModel.findOne({ name: playerP2 });
+
+      playerOne.winningStreak = 0;
+      playerOne.losingStreak = 0;
+      playerOne.drawStreak++;
+
+      playerTwo.winningStreak = 0;
+      playerTwo.losingStreak = 0;
+      playerTwo.drawStreak++;
+
+      if (playerOne.drawStreak > playerOne.longestDrawStreak) {
+        playerOne.longestDrawStreak++;
+      }
+
+      if (playerTwo.drawStreak > playerTwo.longestDrawStreak) {
+        playerTwo.longestDrawStreak++;
+      }
+
+      await playerOne.save();
+      await playerTwo.save();
+
+    }
 
     await matchesModel.create(match);
 

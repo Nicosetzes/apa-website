@@ -1095,6 +1095,9 @@ table tbody tr td {
           justify-content: center;
   margin: 1rem auto;
 }
+.records:first-child {
+  padding-top: 0.5rem;
+}
 .records .records__container {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -1148,7 +1151,8 @@ table tbody tr td {
 .records .records__container .title {
   margin: 0.5rem 0;
 }
-.records .records__container ol {
+.records .records__container ol,
+.records .records__container ul {
   margin: 0;
   padding: 0;
 }
@@ -1198,11 +1202,31 @@ table tbody tr td {
   font-weight: 800;
   margin: 0.75rem 0;
 }
+.individual-records .individual-records__container .player-streak {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+.individual-records .individual-records__container .player-streak .streak-box {
+  background-color: #fff;
+  border: black 2px solid;
+  margin: 0.25rem;
+  padding: 0.75rem 0.75rem;
+}
+.individual-records .individual-records__container .player-streak .streak-box:nth-child(5) {
+  margin-right: auto;
+}
+.individual-records .individual-records__container .player-streak .streak-box.win span {
+  color: green;
+}
+.individual-records .individual-records__container .player-streak .streak-box.draw span {
+  color: gold;
+}
+.individual-records .individual-records__container .player-streak .streak-box.lose span {
+  color: red;
+}
 .individual-records .individual-records__container ul,
 .individual-records .individual-records__container ol {
   margin: 0;
-}
-.individual-records .individual-records__container ul {
   padding: 0;
 }
 .individual-records .individual-records__container:nth-child(1) {
@@ -1216,6 +1240,12 @@ table tbody tr td {
 }
 .individual-records .individual-records__container:nth-child(4) {
   background-color: lightcyan;
+}
+.individual-records .individual-records__container:nth-child(5) {
+  background-color: antiquewhite;
+}
+.individual-records .individual-records__container:nth-child(6) {
+  background-color: khaki;
 }
 
 body {

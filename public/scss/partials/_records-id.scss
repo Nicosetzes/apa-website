@@ -20,12 +20,43 @@
             margin: 0.75rem 0;
         }
 
+        .player-streak {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+
+            .streak-box {
+                background-color: #fff;
+                border: black 2px solid;
+                margin: 0.25rem;
+                padding: 0.75rem 0.75rem;
+
+                &:nth-child(5) {
+                    margin-right: auto;
+                }
+
+                &.win {
+                    span {
+                        color: green;
+                    }
+                }
+
+                &.draw {
+                    span {
+                        color: gold;
+                    }
+                }
+
+                &.lose {
+                    span {
+                        color: red;
+                    }
+                }
+            }
+        }
+
         ul,
         ol {
             margin: 0;
-        }
-
-        ul {
             padding: 0;
         }
 
@@ -43,6 +74,14 @@
 
         &:nth-child(4) {
             background-color: lightcyan
+        }
+
+        &:nth-child(5) {
+            background-color: antiquewhite
+        }
+
+        &:nth-child(6) {
+            background-color: khaki
         }
     }
 

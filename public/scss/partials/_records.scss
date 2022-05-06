@@ -5,6 +5,10 @@
     justify-content: center;
     margin: 1rem auto;
 
+    &:first-child {
+        padding-top: 0.5rem;
+    }
+
     .records__container {
         align-items: center;
         border: $mainBlue 2px solid;
@@ -60,7 +64,8 @@
             margin: 0.5rem 0;
         }
 
-        ol {
+        ol,
+        ul {
             margin: 0;
             padding: 0;
         }
