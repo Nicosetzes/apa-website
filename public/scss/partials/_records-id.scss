@@ -81,7 +81,13 @@
         }
 
         &:nth-child(6) {
-            background-color: khaki
+            background-color: khaki;
+            margin-bottom: 0;
+            width: 95%;
+
+            table {
+                margin-bottom: 0;
+            }
         }
     }
 

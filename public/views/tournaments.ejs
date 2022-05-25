@@ -10,9 +10,11 @@
             <div>
                 <div>
                     Torneos: <%allTournaments.forEach(function(element, index) {%>
-                        <a href="/tournaments/<%=element.id%>">
-                            <%=element.name%>
-                        </a>
+                        <div>
+                            <a href="/tournaments/<%=element.id%>">
+                                <%=element.name%>
+                            </a>
+                        </div>
                         <%});%>
                 </div>
                 <a href="/">Volver al home</a>

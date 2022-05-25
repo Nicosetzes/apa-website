@@ -100,23 +100,39 @@
                             {return-1 }}).forEach(function(element, index) {%>
                             <li>
                                 <%=element.team%>: <%=(element.winRate).toFixed(2)%>%
+                                        (<%=element.victories%>/<%=element.matches%>)
                             </li>
                             <%});%>
                     </ol>
                 </div>
             </div>
-            <div class="individual-records__container">
-                <div class="title">Cantidad de victorias por torneo</div>
-                <div>
-                    <ul>
-                        <%arrayOfWinsByTournament.sort(function(a,b) { if (a.victories < b.victories) { return 1 } else
-                            {return-1 }}).forEach(function(element, index) {%>
-                            <li>
-                                <%=element.tournament%>: <%=element.victories%>
-                            </li>
+            <div class="individual-records__container table-container">
+                <div class="title">Partidos por torneo</div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Torneo</th>
+                            <th scope="col">PJ</th>
+                            <th scope="col">PG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%arrayOfMatchesByTournament.sort(function(a,b) { if (a.victories < b.victories) { return 1 }
+                            else {return-1 }}).forEach(function(element, index) {%>
+                            <tr>
+                                <td>
+                                    <%=element.tournament%>
+                                </td>
+                                <td>
+                                    <%=element.amount%>
+                                </td>
+                                <td>
+                                    <%=element.victories%>
+                                </td>
+                            </tr>
                             <%});%>
-                    </ul>
-                </div>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div>Volver a <a href="/records">records</a></div>

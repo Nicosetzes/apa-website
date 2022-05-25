@@ -70,7 +70,7 @@ app.use(
     resave: false,
     saveUninitialized: false, // Dejarlo en false es útil para login, dado que la session no se guarda hasta que no se modifica.
     cookie: {
-      maxAge: 28800000, // 8 HORAS
+      maxAge: 3600000, // 2 HORAS
     },
   })
 );
@@ -365,125 +365,6 @@ app.post("/logout", (req, res) => {
 
 // })
 
-const sortByMostWins = (array) => {
-  array.sort(function (a, b) {
-    let valueA = a.wins;
-    let valueB = b.wins;
-    if (valueA < valueB) {
-      return 1;
-    }
-    if (valueA > valueB) {
-      return -1;
-    }
-    else {
-      return 0;
-    }
-  })
-  return array;
-}
-
-const sortByMostDraws = (array) => {
-  array.sort(function (a, b) {
-    let valueA = a.draws;
-    let valueB = b.draws;
-    if (valueA < valueB) {
-      return 1;
-    }
-    if (valueA > valueB) {
-      return -1;
-    }
-    else {
-      return 0;
-    }
-  })
-  return array;
-}
-
-const sortByMostLoses = (array) => {
-  array.sort(function (a, b) {
-    let valueA = a.loses;
-    let valueB = b.loses;
-    if (valueA < valueB) {
-      return 1;
-    }
-    if (valueA > valueB) {
-      return -1;
-    }
-    else {
-      return 0;
-    }
-  })
-  return array;
-}
-
-const sortByAverageWins = (array) => {
-  array.sort(function (a, b) {
-    let valueA = a.averageWins;
-    let valueB = b.averageWins;
-    if (valueA < valueB) {
-      return 1;
-    }
-    if (valueA > valueB) {
-      return -1;
-    }
-    else {
-      return 0;
-    }
-  })
-  return array;
-}
-
-const sortByAverageDraws = (array) => { // Averiguar si no puedo introducir una prop como parámetro, y así me ahorraría redundancia en estas funciones //
-  array.sort(function (a, b) {
-    let valueA = a.averageDraws;
-    let valueB = b.averageDraws;
-    if (valueA < valueB) {
-      return 1;
-    }
-    if (valueA > valueB) {
-      return -1;
-    }
-    else {
-      return 0;
-    }
-  })
-  return array;
-}
-
-const sortByAverageLoses = (array) => { // Averiguar si no puedo introducir una prop como parámetro, y así me ahorraría redundancia en estas funciones //
-  array.sort(function (a, b) {
-    let valueA = a.averageLoses;
-    let valueB = b.averageLoses;
-    if (valueA < valueB) {
-      return 1;
-    }
-    if (valueA > valueB) {
-      return -1;
-    }
-    else {
-      return 0;
-    }
-  })
-  return array;
-}
-
-const sortByAveragePoints = (array) => {
-  array.sort(function (a, b) {
-    let valueA = a.averagePoints;
-    let valueB = b.averagePoints;
-    if (valueA < valueB) {
-      return 1;
-    }
-    if (valueA > valueB) {
-      return -1;
-    }
-    else {
-      return 0;
-    }
-  })
-  return array;
-}
-
 app.get("/records", async (req, res) => {
 
   const playerQuery = req.query.player;
@@ -495,7 +376,6 @@ app.get("/records", async (req, res) => {
       const allPlayerLongestWinningStreak = await playersModel.find({}, "name longestWinningStreak").sort({ longestWinningStreak: -1, longestDrawStreak: -1, longestLosingStreak: 1 })
       const allPlayerLongestDrawStreak = await playersModel.find({}, "name longestDrawStreak").sort({ longestDrawStreak: -1 })
       const allPlayerLongestLosingStreak = await playersModel.find({}, "name longestLosingStreak").sort({ longestLosingStreak: -1, longestWinningStreak: -1, longestDrawStreak: -1 })
-      // const allPlayerTitles = await playersModel.find({}, "name championships"); / TODO: Records de títulos;
 
       const rankingForPlayerInWins = allPlayerLongestWinningStreak.findIndex(element => element.name === playerQuery) + 1
       const rankingForPlayerInDraws = allPlayerLongestDrawStreak.findIndex(element => element.name === playerQuery) + 1
@@ -505,7 +385,7 @@ app.get("/records", async (req, res) => {
 
       const recentMatchesFromPlayer = await matchesModel.find({ $or: [{ playerP1: playerQuery }, { playerP2: playerQuery }] }).limit(10).sort({ _id: -1 })
 
-      const matchesWonByPlayer = await matchesModel.find({ "outcome.playerThatWon": playerQuery }, "outcome");
+      const matchesWonByPlayer = await matchesModel.find({ "outcome.playerThatWon": playerQuery, "outcome.draw": false }, "outcome");
 
       const arrayOfTeams = [];
 
@@ -539,36 +419,43 @@ app.get("/records", async (req, res) => {
 
       const allTournaments = await tournamentsModel.find({}, "name");
 
-      const arrayOfWinsByTournament = [];
+      const arrayOfMatchesByTournament = [];
 
       let itemsProcessed = 0;
 
       allTournaments.forEach(async (element, index) => {
-        arrayOfWinsByTournament.push({
+        arrayOfMatchesByTournament.push({
           tournament: element.name,
-          victories: await matchesModel.countDocuments({ "tournament.id": element.id, "outcome.playerThatWon": playerQuery })
+          amount: await matchesModel.countDocuments({ "tournament.id": element.id, $or: [{ playerP1: playerQuery }, { playerP2: playerQuery }] }),
+          victories: await matchesModel.countDocuments({ "tournament.id": element.id, "outcome.playerThatWon": playerQuery, "outcome.draw": false })
         })
         itemsProcessed++
         if (itemsProcessed === allTournaments.length) {
-          // const orderedArrayOfTeamsWithWins = definitiveArrayOfTeamsWithWins.sort((a, b) => (a.victories < b.victories) ? 1 : -1); // Retomo el evento de más arriba y lo ordeno
-          // const orderedArrayOfWinsByTournament = arrayOfWinsByTournament.sort((a, b) => (a.victories < b.victories) ? 1 : -1); // Ordeno el evento actual
-          res.render("records-id", { playerProfile, rankingForPlayerInWins, rankingForPlayerInDraws, rankingForPlayerInLoses, recentMatchesFromPlayer, playerQuery, arrayOfTeamsWithWins, arrayOfWinsByTournament });
+          res.render("records-id", {
+            playerProfile,
+            rankingForPlayerInWins,
+            rankingForPlayerInDraws,
+            rankingForPlayerInLoses,
+            recentMatchesFromPlayer,
+            playerQuery,
+            arrayOfTeamsWithWins,
+            arrayOfMatchesByTournament
+          });
         }
       })
     }
     catch (err) {
       return res.status(500).send("Something went wrong!" + err);
     }
-
   }
 
   else {
 
     try {
 
-      const amountOfMatchesByLeo = await matchesModel.countDocuments({ $or: [{ playerP1: "Max" }, { playerP2: "Max" }] });
+      const amountOfMatchesByLeo = await matchesModel.countDocuments({ $or: [{ playerP1: "Leo" }, { playerP2: "Leo" }] });
 
-      const winsByTeamByLeo = await matchesModel.find({ "outcome.playerThatWon": "Leo" }, "outcome.teamThatWon")
+      const winsByTeamByLeo = await matchesModel.find({ "outcome.playerThatWon": "Leo", "outcome.draw": false }, "outcome.teamThatWon")
 
       const teamsThatWonByLeo = winsByTeamByLeo.map((element) => element.outcome.teamThatWon).reduce((acc, curr) => {
         return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
@@ -578,9 +465,9 @@ app.get("/records", async (req, res) => {
         .sort(([, b], [, a]) => a - b)
         .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
 
-      const winsByLeo = await matchesModel.countDocuments({ "outcome.playerThatWon": "Leo" })
+      const winsByLeo = await matchesModel.countDocuments({ "outcome.playerThatWon": "Leo", "outcome.draw": false })
 
-      const losesByLeo = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Leo" }, { playerP2: "Leo" }] }, { $nor: [{ "outcome.playerThatWon": "Leo" }, { "outcome.playerThatWon": "none" }] }] });
+      const losesByLeo = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Leo" }, { playerP2: "Leo" }] }, { $nor: [{ "outcome.playerThatWon": "Leo" }, { "outcome.draw": true }] }] });
 
       const drawsByLeo = amountOfMatchesByLeo - winsByLeo - losesByLeo;
 
@@ -594,7 +481,7 @@ app.get("/records", async (req, res) => {
 
       const amountOfMatchesByMax = await matchesModel.countDocuments({ $or: [{ playerP1: "Max" }, { playerP2: "Max" }] });
 
-      const winsByTeamByMax = await matchesModel.find({ "outcome.playerThatWon": "Max" }, "outcome.teamThatWon")
+      const winsByTeamByMax = await matchesModel.find({ "outcome.playerThatWon": "Max", "outcome.draw": false }, "outcome.teamThatWon")
 
       const teamsThatWonByMax = winsByTeamByMax.map((element) => element.outcome.teamThatWon).reduce((acc, curr) => {
         return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
@@ -604,9 +491,9 @@ app.get("/records", async (req, res) => {
         .sort(([, b], [, a]) => a - b)
         .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
 
-      const winsByMax = await matchesModel.countDocuments({ "outcome.playerThatWon": "Max" })
+      const winsByMax = await matchesModel.countDocuments({ "outcome.playerThatWon": "Max", "outcome.draw": false })
 
-      const losesByMax = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Max" }, { playerP2: "Max" }] }, { $nor: [{ "outcome.playerThatWon": "Max" }, { "outcome.playerThatWon": "none" }] }] });
+      const losesByMax = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Max" }, { playerP2: "Max" }] }, { $nor: [{ "outcome.playerThatWon": "Max" }, { "outcome.draw": true }] }] });
 
       const drawsByMax = amountOfMatchesByMax - winsByMax - losesByMax;
 
@@ -620,7 +507,7 @@ app.get("/records", async (req, res) => {
 
       const amountOfMatchesByNico = await matchesModel.countDocuments({ $or: [{ playerP1: "Nico" }, { playerP2: "Nico" }] });
 
-      const winsByTeamByNico = await matchesModel.find({ "outcome.playerThatWon": "Nico" }, "outcome.teamThatWon")
+      const winsByTeamByNico = await matchesModel.find({ "outcome.playerThatWon": "Nico", "outcome.draw": false }, "outcome.teamThatWon")
 
       const teamsThatWonByNico = winsByTeamByNico.map((element) => element.outcome.teamThatWon).reduce((acc, curr) => {
         return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
@@ -630,9 +517,9 @@ app.get("/records", async (req, res) => {
         .sort(([, b], [, a]) => a - b)
         .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
 
-      const winsByNico = await matchesModel.countDocuments({ "outcome.playerThatWon": "Nico" })
+      const winsByNico = await matchesModel.countDocuments({ "outcome.playerThatWon": "Nico", "outcome.draw": false })
 
-      const losesByNico = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Nico" }, { playerP2: "Nico" }] }, { $nor: [{ "outcome.playerThatWon": "Nico" }, { "outcome.playerThatWon": "none" }] }] });
+      const losesByNico = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Nico" }, { playerP2: "Nico" }] }, { $nor: [{ "outcome.playerThatWon": "Nico" }, { "outcome.draw": true }] }] });
 
       const drawsByNico = amountOfMatchesByNico - winsByNico - losesByNico;
 
@@ -646,7 +533,7 @@ app.get("/records", async (req, res) => {
 
       const amountOfMatchesBySanti = await matchesModel.countDocuments({ $or: [{ playerP1: "Santi" }, { playerP2: "Santi" }] });
 
-      const winsByTeamBySanti = await matchesModel.find({ "outcome.playerThatWon": "Santi" }, "outcome.teamThatWon")
+      const winsByTeamBySanti = await matchesModel.find({ "outcome.playerThatWon": "Santi", "outcome.draw": false }, "outcome.teamThatWon")
 
       const teamsThatWonBySanti = winsByTeamBySanti.map((element) => element.outcome.teamThatWon).reduce((acc, curr) => {
         return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
@@ -656,9 +543,9 @@ app.get("/records", async (req, res) => {
         .sort(([, b], [, a]) => a - b)
         .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
 
-      const winsBySanti = await matchesModel.countDocuments({ "outcome.playerThatWon": "Santi" })
+      const winsBySanti = await matchesModel.countDocuments({ "outcome.playerThatWon": "Santi", "outcome.draw": false })
 
-      const losesBySanti = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Santi" }, { playerP2: "Santi" }] }, { $nor: [{ "outcome.playerThatWon": "Santi" }, { "outcome.playerThatWon": "none" }] }] });
+      const losesBySanti = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Santi" }, { playerP2: "Santi" }] }, { $nor: [{ "outcome.playerThatWon": "Santi" }, { "outcome.draw": true }] }] });
 
       const drawsBySanti = amountOfMatchesBySanti - winsBySanti - losesBySanti;
 
@@ -672,7 +559,7 @@ app.get("/records", async (req, res) => {
 
       const amountOfMatchesByLucho = await matchesModel.countDocuments({ $or: [{ playerP1: "Lucho" }, { playerP2: "Lucho" }] });
 
-      const winsByTeamByLucho = await matchesModel.find({ "outcome.playerThatWon": "Lucho" }, "outcome.teamThatWon")
+      const winsByTeamByLucho = await matchesModel.find({ "outcome.playerThatWon": "Lucho", "outcome.draw": false }, "outcome.teamThatWon")
 
       const teamsThatWonByLucho = winsByTeamByLucho.map((element) => element.outcome.teamThatWon).reduce((acc, curr) => {
         return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
@@ -682,9 +569,9 @@ app.get("/records", async (req, res) => {
         .sort(([, b], [, a]) => a - b)
         .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
 
-      const winsByLucho = await matchesModel.countDocuments({ "outcome.playerThatWon": "Lucho" })
+      const winsByLucho = await matchesModel.countDocuments({ "outcome.playerThatWon": "Lucho", "outcome.draw": false })
 
-      const losesByLucho = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Lucho" }, { playerP2: "Lucho" }] }, { $nor: [{ "outcome.playerThatWon": "Lucho" }, { "outcome.playerThatWon": "none" }] }] });
+      const losesByLucho = await matchesModel.countDocuments({ $and: [{ $or: [{ playerP1: "Lucho" }, { playerP2: "Lucho" }] }, { $nor: [{ "outcome.playerThatWon": "Lucho" }, { "outcome.draw": true }] }] });
 
       const drawsByLucho = amountOfMatchesByLucho - winsByLucho - losesByLucho;
 
@@ -696,7 +583,7 @@ app.get("/records", async (req, res) => {
 
       const averagePointsByLucho = (winsByLucho * 3) / amountOfMatchesByLucho; // Promedio de puntos por partido
 
-      const orderedByScoringDif = await matchesModel.find({}, "playerP1 scoreP1 teamP1 playerP2 scoreP2 teamP2 tournament")
+      const orderedByScoringDif = await matchesModel.find({ "outcome.draw": false }, "playerP1 scoreP1 teamP1 playerP2 scoreP2 teamP2 tournament")
         .sort({ "outcome.scoringDifference": -1, "outcome.scoreFromTeamThatWon": -1 })
         .limit(5);
 
@@ -708,26 +595,26 @@ app.get("/records", async (req, res) => {
         { player: "Lucho", matches: amountOfMatchesByLucho }
       ]
 
-      const orderedByMostWins = sortByMostWins([{ player: "Leo", wins: winsByLeo }, { player: "Max", wins: winsByMax }, { player: "Nico", wins: winsByNico }, { player: "Santi", wins: winsBySanti },
-      { player: "Lucho", wins: winsByLucho }]);
+      const orderedByMostWins = [{ player: "Leo", wins: winsByLeo }, { player: "Max", wins: winsByMax }, { player: "Nico", wins: winsByNico }, { player: "Santi", wins: winsBySanti },
+      { player: "Lucho", wins: winsByLucho }].sort((a, b) => a.wins > b.wins ? -1 : 1)
 
-      const orderedByMostDraws = sortByMostDraws([{ player: "Leo", draws: drawsByLeo }, { player: "Max", draws: drawsByMax }, { player: "Nico", draws: drawsByNico }, { player: "Santi", draws: drawsBySanti },
-      { player: "Lucho", draws: drawsByLucho }]);
+      const orderedByMostDraws = [{ player: "Leo", draws: drawsByLeo }, { player: "Max", draws: drawsByMax }, { player: "Nico", draws: drawsByNico }, { player: "Santi", draws: drawsBySanti },
+      { player: "Lucho", draws: drawsByLucho }].sort((a, b) => a.draws > b.draws ? -1 : 1)
 
-      const orderedByMostLoses = sortByMostLoses([{ player: "Leo", loses: losesByLeo }, { player: "Max", loses: losesByMax }, { player: "Nico", loses: losesByNico }, { player: "Santi", loses: losesBySanti },
-      { player: "Lucho", loses: losesByLucho }]);
+      const orderedByMostLoses = [{ player: "Leo", loses: losesByLeo }, { player: "Max", loses: losesByMax }, { player: "Nico", loses: losesByNico }, { player: "Santi", loses: losesBySanti },
+      { player: "Lucho", loses: losesByLucho }].sort((a, b) => a.loses > b.loses ? -1 : 1);
 
-      const orderedByMostAverageWins = sortByAverageWins([{ player: "Leo", averageWins: averageWinsByLeo }, { player: "Max", averageWins: averageWinsByMax }, { player: "Nico", averageWins: averageWinsByNico }, { player: "Santi", averageWins: averageWinsBySanti },
-      { player: "Lucho", averageWins: averageWinsByLucho }]);
+      const orderedByMostAverageWins = [{ player: "Leo", averageWins: averageWinsByLeo }, { player: "Max", averageWins: averageWinsByMax }, { player: "Nico", averageWins: averageWinsByNico }, { player: "Santi", averageWins: averageWinsBySanti },
+      { player: "Lucho", averageWins: averageWinsByLucho }].sort((a, b) => a.averageWins > b.averageWins ? -1 : 1);
 
-      const orderedByMostAverageDraws = sortByAverageDraws([{ player: "Leo", averageDraws: averageDrawsByLeo }, { player: "Max", averageDraws: averageDrawsByMax }, { player: "Nico", averageDraws: averageDrawsByNico }, { player: "Santi", averageDraws: averageDrawsBySanti },
-      { player: "Lucho", averageDraws: averageDrawsByLucho }]);
+      const orderedByMostAverageDraws = [{ player: "Leo", averageDraws: averageDrawsByLeo }, { player: "Max", averageDraws: averageDrawsByMax }, { player: "Nico", averageDraws: averageDrawsByNico }, { player: "Santi", averageDraws: averageDrawsBySanti },
+      { player: "Lucho", averageDraws: averageDrawsByLucho }].sort((a, b) => a.averageDraws > b.averageDraws ? -1 : 1);
 
-      const orderedByMostAverageLoses = sortByAverageLoses([{ player: "Leo", averageLoses: averageLosesByLeo }, { player: "Max", averageLoses: averageLosesByMax }, { player: "Nico", averageLoses: averageLosesByNico }, { player: "Santi", averageLoses: averageLosesBySanti },
-      { player: "Lucho", averageLoses: averageLosesByLucho }]);
+      const orderedByMostAverageLoses = [{ player: "Leo", averageLoses: averageLosesByLeo }, { player: "Max", averageLoses: averageLosesByMax }, { player: "Nico", averageLoses: averageLosesByNico }, { player: "Santi", averageLoses: averageLosesBySanti },
+      { player: "Lucho", averageLoses: averageLosesByLucho }].sort((a, b) => a.averageLoses > b.averageLoses ? -1 : 1);
 
-      const orderedByMostAveragePoints = sortByAveragePoints([{ player: "Leo", averagePoints: averagePointsByLeo }, { player: "Max", averagePoints: averagePointsByMax }, { player: "Nico", averagePoints: averagePointsByNico }, { player: "Santi", averagePoints: averagePointsBySanti },
-      { player: "Lucho", averagePoints: averagePointsByLucho }]);
+      const orderedByMostAveragePoints = [{ player: "Leo", averagePoints: averagePointsByLeo }, { player: "Max", averagePoints: averagePointsByMax }, { player: "Nico", averagePoints: averagePointsByNico }, { player: "Santi", averagePoints: averagePointsBySanti },
+      { player: "Lucho", averagePoints: averagePointsByLucho }].sort((a, b) => a.averagePoints > b.averagePoints ? -1 : 1);
 
       const teamThatWonTheMostByPlayer = [
         { player: "Leo", team: Object.keys(sortableByLeo)[0], victories: Object.values(sortableByLeo)[0] },
@@ -738,13 +625,12 @@ app.get("/records", async (req, res) => {
       ]
 
       res.render("records", { orderedByScoringDif, totalMatchesForEachPlayer, orderedByMostWins, orderedByMostDraws, orderedByMostLoses, orderedByMostAverageWins, orderedByMostAverageDraws, orderedByMostAverageLoses, orderedByMostAveragePoints, teamThatWonTheMostByPlayer })
-
     }
     catch (err) {
       return res.status(500).send("Something went wrong!" + err);
     }
   }
-})
+});
 
 app.get("/tournaments", async (req, res) => {
   try {
@@ -781,7 +667,6 @@ app.get("/create-tournament", isAuth, (req, res) => {
 
 app.post("/create-tournament", async (req, res) => {
   try {
-    // console.log(req.body);
 
     const { tournamentName, format, origin } = req.body;
 
@@ -820,7 +705,7 @@ app.post("/create-tournament", async (req, res) => {
 
     await tournamentsModel.create(tournament);
     res.redirect("/");
-    // Si falla la validación, se ejecuta el catch //
+
   } catch (err) {
     if (err.name === "ValidationError") {
       const errors = {};
@@ -845,14 +730,11 @@ app.get("/face-to-face", async (req, res) => {
     let finalMatchups = [];
 
     if (tournamentId) {
-      // console.log("Entré por el lado de Tournament ID")
 
       const allMatches = await matchesModel.find(
         { "tournament.id": tournamentId },
         "playerP1 teamP1 scoreP1 playerP2 teamP2 scoreP2"
       );
-
-      // console.log(allMatches);
 
       if (allMatches.length === 0)
         res.render("./errors/face-to-face-error", { tournamentId });
@@ -868,8 +750,6 @@ app.get("/face-to-face", async (req, res) => {
       );
 
       let itemsProcessed = 0;
-
-      // console.log(allMatchups);
 
       allMatchups.forEach(async (element, index) => {
         array.push(
@@ -933,7 +813,6 @@ app.get("/face-to-face", async (req, res) => {
         }
       });
     } else {
-      // console.log("Entré por el lado de GLOBAL")
 
       const allMatches = await matchesModel.find(
         {},
@@ -947,8 +826,6 @@ app.get("/face-to-face", async (req, res) => {
           allTournaments,
         });
       }
-
-      // console.log(allMatches);
 
       const allPlayers1 = allMatches.map((match) => match.playerP1);
       const allPlayers2 = allMatches.map((match) => match.playerP2);
@@ -1071,9 +948,11 @@ app.post("/upload-games-from-tournament", async (req, res) => {
       playerP1,
       teamP1,
       scoreP1,
+      penaltyScoreP1,
       playerP2,
       teamP2,
       scoreP2,
+      penaltyScoreP2,
       tournamentName,
       tournamentId,
       format,
@@ -1094,6 +973,7 @@ app.post("/upload-games-from-tournament", async (req, res) => {
           teamThatLost: teamP2,
           scoreFromTeamThatLost: scoreP2,
           draw: false,
+          penalties: false,
           scoringDifference: Math.abs(scoreP1 - scoreP2) // Es indistinto el orden, pues calculo valor absoluto.
         })
         : (outcome = {
@@ -1104,11 +984,36 @@ app.post("/upload-games-from-tournament", async (req, res) => {
           teamThatLost: teamP1,
           scoreFromTeamThatLost: scoreP1,
           draw: false,
+          penalties: false,
           scoringDifference: Math.abs(scoreP1 - scoreP2) // Es indistinto el orden, pues calculo valor absoluto.
         });
     }
 
-    else { // En caso de empate
+    else if (scoreP1 - scoreP2 === 0 && (penaltyScoreP1 && penaltyScoreP2)) { // Empate, y hubo penales
+      penaltyScoreP1 > penaltyScoreP2 ? outcome = {
+        playerThatWon: playerP1,
+        teamThatWon: teamP1,
+        scoreFromTeamThatWon: penaltyScoreP1,
+        playerThatLost: playerP2,
+        teamThatLost: teamP2,
+        scoreFromTeamThatLost: penaltyScoreP2,
+        draw: true,
+        penalties: true,
+        scoringDifference: 0
+      } : outcome = {
+        playerThatWon: playerP2,
+        teamThatWon: teamP2,
+        scoreFromTeamThatWon: penaltyScoreP2,
+        playerThatLost: playerP1,
+        teamThatLost: teamP1,
+        scoreFromTeamThatLost: penaltyScoreP1,
+        draw: true,
+        penalties: true,
+        scoringDifference: 0
+      }
+    }
+
+    else { // Empate, pero no hubo penales!
       outcome = {
         playerThatWon: "none",
         teamThatWon: "none",
@@ -1117,8 +1022,9 @@ app.post("/upload-games-from-tournament", async (req, res) => {
         teamThatLost: "none",
         scoreFromTeamThatLost: "none",
         draw: true,
+        penalties: false,
         scoringDifference: 0
-      };
+      }
     }
 
     const match = {

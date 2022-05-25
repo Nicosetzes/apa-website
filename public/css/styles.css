@@ -1055,6 +1055,9 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
 #uploadGamesForm .form__container .form__container-row input {
   text-align: center;
 }
+#uploadGamesForm .form__container.penalties {
+  display: none;
+}
 
 table thead tr th {
   text-align: center;
@@ -1246,6 +1249,11 @@ table tbody tr td {
 }
 .individual-records .individual-records__container:nth-child(6) {
   background-color: khaki;
+  margin-bottom: 0;
+  width: 95%;
+}
+.individual-records .individual-records__container:nth-child(6) table {
+  margin-bottom: 0;
 }
 
 body {
