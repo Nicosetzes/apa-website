@@ -969,6 +969,209 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
   margin: 1rem auto 0 auto;
 }
 
+.form-identity {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.form-identity .form-identity__container {
+  background-color: cornsilk;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.form-identity .form-identity__container .container__players-identity {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: 1rem auto;
+  padding: 0 0.5rem;
+  width: 90%;
+}
+.form-identity .form-identity__container .container__players-identity span {
+  text-align: center;
+  width: 75%;
+}
+.form-identity .form-identity__container .container__players-identity select {
+  margin: 0.25rem 0;
+}
+.form-identity .form-identity__container .container__teams-identity {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin: 0 auto 1rem auto;
+}
+.form-identity .form-identity__container .container__teams-identity span {
+  text-align: center;
+  width: 100%;
+}
+.form-identity .form-identity__container .container__teams-identity select {
+  margin: 0.25rem 0;
+}
+.form-identity .form-identity__container .container__submit-identity {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin: 0 auto;
+}
+.form-identity .form-identity__container .container__results-identity {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+}
+.form-identity .form-identity__container .container__results-identity .results-identity {
+  background-color: antiquewhite;
+  margin: 0.25rem 0;
+}
+
+.form-selection {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: honeydew;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.form-selection .form-selection-title {
+  margin-top: 1rem;
+  text-decoration: underline;
+}
+.form-selection .form-selection__container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin: 1rem;
+  padding: 0 0.5rem;
+  width: 100%;
+}
+.form-selection .form-selection__container .container__players-selection,
+.form-selection .form-selection__container .container__teams-selection {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.form-selection .form-selection__container .container__players-selection select,
+.form-selection .form-selection__container .container__teams-selection select {
+  margin: 0.25rem 0;
+}
+.form-selection .form-selection__container .container__submit-selection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin: 1rem auto;
+  width: 100%;
+}
+
+.container__fixture {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.container__fixture input {
+  margin: 0 0.25rem;
+  padding: 0.25rem 0;
+  width: 30px;
+}
+.container__fixture form .fixture-match {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: beige;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-weight: 400;
+  height: 50px;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin: 0.25rem 0;
+}
+.container__fixture form .fixture-match .match-info {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.container__fixture form .fixture-match .match-info span {
+  font-weight: 400;
+}
+.container__fixture form .fixture-match .fixture-submit {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
 #uploadGamesForm {
   display: -webkit-box;
   display: -ms-flexbox;

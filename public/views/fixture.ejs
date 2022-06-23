@@ -1,0 +1,15 @@
+<%- include('./partials/header')-%>
+    <main>
+        <div>FIXTURES</div>
+        <div>Elija el torneo</div>
+        <div>
+            <%tournaments.forEach(function(element, index) {%>
+                <div>
+                    <a href="/fixture/<%-element.id-%>">
+                        <%-element.name-%>
+                    </a>
+                </div>
+                <%});%>
+        </div>
+    </main>
+    <%- include('./partials/footer')-%>

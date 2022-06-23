@@ -14,11 +14,58 @@
                         <%=element%>
                             <%});%>
                 </div>
-                <div>
-                    Equipos: <%tournamentById.teams.forEach(function(element, index) {%>
-                        <%=element%>
-                            <%});%>
-                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Pos.</th>
+                            <th scope="col">Equipo</th>
+                            <th scope="col">PJ</th>
+                            <th scope="col">PG</th>
+                            <th scope="col">PE</th>
+                            <th scope="col">PP</th>
+                            <th scope="col">GF</th>
+                            <th scope="col">GC</th>
+                            <th scope="col">DIF</th>
+                            <th scope="col">Pts.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (i=0; i < standings.length ; i++) { %>
+                            <tr>
+                                <td>
+                                    <%=i+1%>
+                                </td>
+                                <td>
+                                    <%=standings[i].team%>
+                                </td>
+                                <td>
+                                    <%=standings[i].played%>
+                                </td>
+                                <td>
+                                    <%=standings[i].wins%>
+                                </td>
+                                <td>
+                                    <%=standings[i].draws%>
+                                </td>
+                                <td>
+                                    <%=standings[i].losses%>
+                                </td>
+                                <td>
+                                    <%=standings[i].goalsFor%>
+                                </td>
+                                <td>
+                                    <%=standings[i].goalsAgainst%>
+                                </td>
+                                <td>
+                                    <%=standings[i].scoringDifference%>
+                                </td>
+                                <td>
+                                    <%= standings[i].points%>
+                                </td>
+                            </tr>
+                            <%};%>
+                    </tbody>
+                </table>
                 <div>
                     <div>Volver a <a href="/tournaments">torneos</a></div>
                     <div>Volver al <a href="/">home</a></div>

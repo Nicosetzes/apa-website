@@ -1,0 +1,36 @@
+.container__fixture {
+    display: flex;
+    flex-direction: column;
+
+    input {
+        margin: 0 0.25rem;
+        padding: 0.25rem 0;
+        width: 30px;
+    }
+
+    form {
+        .fixture-match {
+            align-items: center;
+            background-color: beige;
+            display: flex;
+            font-weight: 400;
+            height: 50px;
+            justify-content: space-around;
+            margin: 0.25rem 0;
+
+            .match-info {
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+
+                span {
+                    font-weight: 400;
+                }
+            }
+
+            .fixture-submit {
+                width: fit-content;
+            }
+        }
+    }
+}

@@ -1,0 +1,84 @@
+<%- include('./partials/header')-%>
+    <main>
+        <div>Esta es la página lottery</div>
+        <div>Sorteo para el torneo
+            <%-tournamentById.name-%>
+        </div>
+        <form id="form-lottery" class="form-identity">
+            <div class="form-identity__container">
+                <div class="container__players-identity">
+                    <span>¿Qué jugadores humanos se incluyen en este sorteo?</span>
+                    <% for (i=0; i < players ; i++) { %>
+                        <select class="player">
+                            <option selected disabled value="">Jugador</option>
+                            <%tournamentById.players.sort(function(a,b) { if(a> b) { return 1 } else {
+                                return-1}}).forEach(function(element, index) {%>
+                                <option id="<%=element%>" value="<%=element%>">
+                                    <%=element%>
+                                </option>
+                                <%});%>
+                        </select>
+                        <%};%>
+                </div>
+                <div class="container__teams-identity">
+                    <span>¿Cuáles son los equipos a incluir en el sorteo?</span>
+                    <% for (i=0; i < players*teams ; i++) { %>
+                        <select class="team">
+                            <option selected disabled value="">Equipo</option>
+                            <%tournamentById.teams.sort(function(a,b) { if(a.team> b.team) { return 1 } else {
+                                return-1}}).forEach(function(element, index) {%>
+                                <option id="<%=element.team%>" value="<%=element.team%>">
+                                    <%=element.team%>
+                                </option>
+                                <%});%>
+                        </select>
+                        <%};%>
+                </div>
+                <div class="container__submit-identity">
+                    <input type="submit">
+                </div>
+                <div id="lotteryResults" class="container__results-identity"></div>
+            </div>
+        </form>
+        <form class="form-selection" action="/lottery-assignment/<%-tournamentById.id-%>" method="post"
+            autocomplete="off">
+            <span class="form-selection-title">Asignación de equipos</span>
+            <div class="form-selection__container">
+                <div class="container__players-selection">
+                    <span>Jugador</span>
+                    <% for (i=0; i < tournamentById.teams.length ; i++) { %>
+                        <select name="players">
+                            <option selected disabled value="">Jugador</option>
+                            <%tournamentById.players.sort(function(a,b) { if(a> b) { return 1 } else {
+                                return-1}}).forEach(function(element, index) {%>
+                                <option id="<%=element%>" value="<%=element%>">
+                                    <%=element%>
+                                </option>
+                                <%});%>
+                        </select>
+                        <%};%>
+                </div>
+                <div class="container__teams-selection">
+                    <span>Equipo</span>
+                    <% for (i=0; i < tournamentById.teams.length ; i++) { %>
+                        <select name="teams">
+                            <option selected disabled value="">Equipo</option>
+                            <%tournamentById.teams.sort(function(a,b) { if(a.team> b.team) { return 1 } else {
+                                return-1}}).forEach(function(element, index) {%>
+                                <option id="<%=element.team%>" value="<%=element.team%>">
+                                    <%=element.team%>
+                                </option>
+                                <%});%>
+                        </select>
+                        <%};%>
+                </div>
+                <div class="container__submit-selection">
+                    <input type="submit">
+                </div>
+            </div>
+        </form>
+        <div id="matches"></div>
+    </main>
+    <script src="./../js/lottery.js"></script>
+
+    <%- include('./partials/footer')-%>

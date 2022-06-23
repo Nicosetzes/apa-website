@@ -1,0 +1,47 @@
+<%- include('./partials/header')-%>
+    <main>
+        <div>Esta es la página lottery-tournament-selection</div>
+        <form class="form" action="/lottery-tournament-selection" method="post" autocomplete="off">
+            <div class="form__container">
+                <label>
+                    Seleccione el torneo:
+                </label>
+                <select name="tournament" required>
+                    <option selected disabled value="">Seleccione</option>
+                    <%tournamentsFromBD.forEach(function(element, index) {%>
+                        <option id="<%=element.name%>" value="<%=element.id%>">
+                            <%=element.name%>
+                        </option>
+                        <%});%>
+                </select>
+                <div class="invalid-feedback">
+                    Por favor, elija un torneo.
+                </div>
+            </div>
+            <div class="container__players">
+                <span>¿Cuántos jugadores humanos se incluyen en este sorteo?</span>
+                <select name="players">
+                    <option value="1">1 (un) jugador</option>
+                    <option value="2">2 (dos) jugadores</option>
+                    <option value="3">3 (tres) jugadores</option>
+                    <option value="4">4 (cuatro) jugadores</option>
+                    <option value="5">5 (cinco) jugadores</option>
+                </select>
+            </div>
+            <div class="container__teams">
+                <span>¿Cuál es la cantidad de equipos por jugador?</span>
+                <select name="teams">
+                    <option value="1">1 (un) equipo</option>
+                    <option value="2">2 (dos) equipos</option>
+                    <option value="3">3 (tres) equipos</option>
+                    <option value="4">4 (cuatro) equipos</option>
+                    <option value="5">5 (cinco) equipos</option>
+                    <option value="6">6 (seis) equipo</option>
+                </select>
+            </div>
+            <div class="form__container">
+                <input type="submit">
+            </div>
+        </form>
+    </main>
+    <%- include('./partials/footer')-%>

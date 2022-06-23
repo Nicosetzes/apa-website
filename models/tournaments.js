@@ -9,6 +9,7 @@ const tournamentsSchema = new mongoose.Schema(
     format: { type: String, require: true, max: 100 },
     origin: { type: String, require: true, max: 100 },
     teams: { type: Array, require: true, max: 100 },
+    fixture: { type: Array, require: true, max: 100 },
     ongoing: { type: Boolean, require: true },
   },
   { collection: "tournaments" }

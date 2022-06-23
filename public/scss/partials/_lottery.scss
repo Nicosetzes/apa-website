@@ -1,0 +1,106 @@
+.form-identity {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+
+    .form-identity__container {
+        background-color: cornsilk;
+        display: flex;
+        flex-direction: column;
+
+        .container__players-identity {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            margin: 1rem auto;
+            padding: 0 0.5rem;
+            width: 90%;
+
+            span {
+                text-align: center;
+                width: 75%;
+            }
+
+            select {
+                margin: 0.25rem 0;
+            }
+        }
+
+        .container__teams-identity {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin: 0 auto 1rem auto;
+
+            span {
+                text-align: center;
+                width: 100%;
+            }
+
+            select {
+                margin: 0.25rem 0;
+            }
+        }
+
+        .container__submit-identity {
+            display: flex;
+            justify-content: space-around;
+            margin: 0 auto;
+        }
+
+        .container__results-identity {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding: 0 1rem;
+
+            .results-identity {
+                background-color: antiquewhite;
+                margin: 0.25rem 0;
+            }
+        }
+    }
+}
+
+.form-selection {
+    align-items: center;
+    background-color: honeydew;
+    display: flex;
+    flex-direction: column;
+
+    .form-selection-title {
+        margin-top: 1rem;
+        text-decoration: underline;
+    }
+
+    .form-selection__container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin: 1rem;
+        padding: 0 0.5rem;
+        width: 100%;
+
+        .container__players-selection,
+        .container__teams-selection {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+
+            select {
+                margin: 0.25rem 0;
+            }
+        }
+
+        .container__submit-selection {
+            display: flex;
+            justify-content: space-around;
+            margin: 1rem auto;
+            width: 100%;
+        }
+    }
+}
