@@ -83,14 +83,13 @@
                     </label>
                     <select id="teamP1" name="teamP1" required>
                         <option selected disabled value="">Equipo J1</option>
-                        <%tournamentById.teams.sort(function(a,b) { if(a.team> b.team) { return 1 } else {
-                            return-1}}).forEach(function(element, index) {%>
+                        <%tournamentById.teams.sort(function(a,b) { if(a.team> b.team) { return 1 } else { return-1
+                            }}).forEach(function(element, index) {%>
                             <option id="<%=element.team%>" value="<%=element.team%>">
                                 <%=element.team%>
                             </option>
                             <%});%>
                     </select>
-                    <span class="customizedArrow"></span>
                 </div>
                 <div class="form__container-row">
                     <label>Seleccione el score:</label>
@@ -118,8 +117,8 @@
                     </label>
                     <select id="teamP2" name="teamP2" required>
                         <option selected disabled value="">Equipo J2</option>
-                        <%tournamentById.teams.sort(function(a,b) { if(a.team> b.team) { return 1 } else {
-                            return-1}}).forEach(function(element, index) {%>
+                        <%tournamentById.teams.sort(function(a,b) { if(a.team> b.team) { return 1 } else { return-1
+                            }}).forEach(function(element, index) {%>
                             <option id="<%=element.team%>" value="<%=element.team%>">
                                 <%=element.team%>
                             </option>

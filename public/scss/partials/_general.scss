@@ -18,10 +18,22 @@
     transition: none !important;
 }
 
+body {
+    background-color: rgba(255, 254, 254, 0.918);
+}
+
 .italic {
     font-style: italic;
 }
 
 .no-index {
     display: none;
+}
+
+.return {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 5rem 0;
 }

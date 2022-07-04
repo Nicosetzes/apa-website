@@ -1,0 +1,31 @@
+<%- include('./partials/header')-%>
+
+    <main>
+
+        <% if(standings.length> 0){ %>
+
+            <div>
+                <div class="tournament__container">
+                    <%standings.forEach(function(element, index) {%>
+                        <div class="tournament">
+                            <div class="container__tournament-name">
+                                <a class="tournament-name" href="/standings/<%=element.id%>">
+                                    <%=element.name%>
+                                </a>
+                            </div>
+                        </div>
+                        <%});%>
+                </div>
+                <div class="return">
+                    <a href="/">Volver al home</a>
+                </div>
+
+            </div>
+            <% } else{ %>
+                <div>Hola, NO hay torneos cargados en la base de datos</div>
+                <div>¿Desea <a href="/create-tournament">crear un torneo</a>?</div>
+                <% } %>
+
+    </main>
+
+    <%- include('./partials/footer')-%>

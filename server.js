@@ -257,6 +257,38 @@ app.post("/logout", (req, res) => {
 // OTHER ROUTES
 
 // app.get("/api", async (req, res) => {
+//   const teams = [];
+
+//   const axios = require('axios');
+//   const config = {
+//     method: 'get',
+//     url: 'https://v3.football.api-sports.io/teams?league=40&season=2022',
+//     headers: {
+//       'x-rapidapi-key': 'c6fc4afceaf077867ce47212440002cf',
+//       'x-rapidapi-host': 'v3.football.api-sports.io'
+//     }
+//   };
+
+//   axios(config)
+//     .then(function (response) {
+//       // console.log("JSON STRINGIFY RESPONSE.DATA")
+//       // console.log(JSON.stringify(response.data));
+//       teams.push(response.data);
+//       const { response: apiResponse } = teams[0];
+//       // console.log("teams")
+//       // console.log(teams)
+//       // console.log("apiResponse")
+//       // console.log(apiResponse)
+//       // console.log(apiResponse);
+//       res.send(apiResponse)
+//       // res.render("api", { apiResponse });
+//     })
+//     .catch(function (error) {
+//       console.log(error);
+//     });
+// });
+
+// app.get("/api", async (req, res) => {
 
 // const allMatches = await matchesModel.find({}, "playerP1 teamP1 scoreP1 playerP2 teamP2 scoreP2 outcome");
 
@@ -632,16 +664,16 @@ app.get("/records", async (req, res) => {
   }
 });
 
-app.get("/tournaments", async (req, res) => {
+app.get("/standings", async (req, res) => {
   try {
-    const allTournaments = await tournamentsModel.find({}, "name");
-    res.render("tournaments", { allTournaments });
+    const standings = await tournamentsModel.find({ ongoing: true }, "name");
+    res.render("standings", { standings });
   } catch (err) {
     return res.status(500).send("Something went wrong!" + err);
   }
 });
 
-app.get("/tournaments/:id", async (req, res) => {
+app.get("/standings/:id", async (req, res) => {
 
   const idProvided = req.params.id;
   // Chequeo mediante RegEx si, en potencia, el ID proporcionado es válido (en formato) //
@@ -668,7 +700,7 @@ app.get("/tournaments/:id", async (req, res) => {
 
       });
 
-      res.render("tournaments-id", { tournamentById, standings });
+      res.render("standings-id", { tournamentById, standings });
     }
     else {
       res.render("./errors/tournaments-id-error", { idProvided });
@@ -679,11 +711,11 @@ app.get("/tournaments/:id", async (req, res) => {
   }
 });
 
-app.get("/create-tournament", (req, res) => {
+app.get("/create-tournament", isAuth, (req, res) => {
   res.render("create-tournament", {});
 });
 
-app.post("/create-tournament", async (req, res) => {
+app.post("/create-tournament", isAuth, async (req, res) => {
   try {
 
     const { tournamentName, format, origin } = req.body;
@@ -932,7 +964,7 @@ app.get("/face-to-face", async (req, res) => {
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
 });
 
-app.get("/upload-games", async (req, res) => {
+app.get("/upload-games", isAuth, async (req, res) => {
   const idProvided = false;
   try {
     const tournamentsFromBD = await tournamentsModel.find({ ongoing: true }); // Solo traigo los torneos que se encuentren en curso.
@@ -971,7 +1003,7 @@ app.get("/upload-games/:id", async (req, res) => {
   }
 });
 
-app.post("/upload-games-from-tournament", async (req, res) => {
+app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
   try {
     let {
       playerP1,
@@ -1126,57 +1158,60 @@ app.post("/upload-games-from-tournament", async (req, res) => {
 
       // ACTUALIZO EL FIXTURE //
 
-      const fixture = tournament.fixture;
+      if (tournament.fixture.length) {
 
-      let index = fixture.findIndex((element) => {
-        return element.teamP1 === match.outcome.teamThatWon && element.teamP2 === match.outcome.teamThatLost;
-      });
+        const fixture = tournament.fixture;
 
-      if (index !== -1) {
-        await tournamentsModel.updateOne(
-          { _id: tournamentId, "fixture.teamP1": match.outcome.teamThatWon, "fixture.teamP2": match.outcome.teamThatLost },
-          {
-            $set: { "fixture.$.scoreP1": Number(match.outcome.scoreFromTeamThatWon), "fixture.$.scoreP2": Number(match.outcome.scoreFromTeamThatLost) },
-          });
-      }
-
-      if (index === -1) {
-        index = fixture.findIndex((element) => {
-          return element.teamP1 === match.outcome.teamThatLost && element.teamP2 === match.outcome.teamThatWon;
+        let index = fixture.findIndex((element) => {
+          return element.teamP1 === match.outcome.teamThatWon && element.teamP2 === match.outcome.teamThatLost;
         });
-        await tournamentsModel.updateOne(
-          { _id: tournamentId, "fixture.teamP1": match.outcome.teamThatLost, "fixture.teamP2": match.outcome.teamThatWon },
-          {
-            $set: { "fixture.$.scoreP1": Number(match.outcome.scoreFromTeamThatLost), "fixture.$.scoreP2": Number(match.outcome.scoreFromTeamThatWon) },
+
+        if (index !== -1) {
+          await tournamentsModel.updateOne(
+            { _id: tournamentId, "fixture.teamP1": match.outcome.teamThatWon, "fixture.teamP2": match.outcome.teamThatLost },
+            {
+              $set: { "fixture.$.scoreP1": Number(match.outcome.scoreFromTeamThatWon), "fixture.$.scoreP2": Number(match.outcome.scoreFromTeamThatLost) },
+            });
+        }
+
+        if (index === -1) {
+          index = fixture.findIndex((element) => {
+            return element.teamP1 === match.outcome.teamThatLost && element.teamP2 === match.outcome.teamThatWon;
           });
+          await tournamentsModel.updateOne(
+            { _id: tournamentId, "fixture.teamP1": match.outcome.teamThatLost, "fixture.teamP2": match.outcome.teamThatWon },
+            {
+              $set: { "fixture.$.scoreP1": Number(match.outcome.scoreFromTeamThatLost), "fixture.$.scoreP2": Number(match.outcome.scoreFromTeamThatWon) },
+            });
+        }
       }
 
       // ACTUALIZO RACHAS //
 
-      //   let winner = await playersModel.findOne({ name: match.outcome.playerThatWon })
-      //   let loser = await playersModel.findOne({ name: match.outcome.playerThatLost })
+      let winner = await playersModel.findOne({ name: match.outcome.playerThatWon })
+      let loser = await playersModel.findOne({ name: match.outcome.playerThatLost })
 
-      //   winner.losingStreak = 0;
-      //   winner.drawStreak = 0;
-      //   winner.winningStreak++
+      winner.losingStreak = 0;
+      winner.drawStreak = 0;
+      winner.winningStreak++
 
-      //   if (winner.winningStreak > winner.longestWinningStreak) {
-      //     winner.longestWinningStreak++;
-      //   }
+      if (winner.winningStreak > winner.longestWinningStreak) {
+        winner.longestWinningStreak++;
+      }
 
-      //   loser.winningStreak = 0
-      //   loser.drawStreak = 0;
-      //   loser.losingStreak++;
+      loser.winningStreak = 0
+      loser.drawStreak = 0;
+      loser.losingStreak++;
 
-      //   if (loser.losingStreak > loser.longestLosingStreak) {
-      //     loser.longestLosingStreak++;
-      //   }
+      if (loser.losingStreak > loser.longestLosingStreak) {
+        loser.longestLosingStreak++;
+      }
 
-      //   await winner.save();
-      //   await loser.save();
+      await winner.save();
+      await loser.save();
 
     }
-    // // Para actualizar las rachas, SI EMPATAN
+    // SI EMPATAN //
     else {
 
       // TABLA DE POSICIONES //
@@ -1227,67 +1262,61 @@ app.post("/upload-games-from-tournament", async (req, res) => {
 
       // ACTUALIZO EL FIXTURE //
 
-      const fixture = tournament.fixture;
+      if (tournament.fixture.length) {
 
-      let index = fixture.findIndex((element) => {
-        return element.teamP1 === teamP1 && element.teamP2 === teamP2;
-      });
+        const fixture = tournament.fixture;
 
-      if (index !== -1) {
-        await tournamentsModel.updateOne(
-          { _id: tournamentId, "fixture.teamP1": teamP1, "fixture.teamP2": teamP2 },
-          {
-            $set: { "fixture.$.scoreP1": Number(scoreP1), "fixture.$.scoreP2": Number(scoreP2) },
-          });
-      }
-
-      if (index === -1) {
-        index = fixture.findIndex((element) => {
-          return element.teamP1 === teamP2 && element.teamP2 === teamP1;
+        let index = fixture.findIndex((element) => {
+          return element.teamP1 === teamP1 && element.teamP2 === teamP2;
         });
-        await tournamentsModel.updateOne(
-          { _id: tournamentId, "fixture.teamP1": teamP2, "fixture.teamP2": teamP1 },
-          {
-            $set: { "fixture.$.scoreP1": Number(scoreP2), "fixture.$.scoreP2": Number(scoreP1) },
+
+        if (index !== -1) {
+          await tournamentsModel.updateOne(
+            { _id: tournamentId, "fixture.teamP1": teamP1, "fixture.teamP2": teamP2 },
+            {
+              $set: { "fixture.$.scoreP1": Number(scoreP1), "fixture.$.scoreP2": Number(scoreP2) },
+            });
+        }
+
+        if (index === -1) {
+          index = fixture.findIndex((element) => {
+            return element.teamP1 === teamP2 && element.teamP2 === teamP1;
           });
+          await tournamentsModel.updateOne(
+            { _id: tournamentId, "fixture.teamP1": teamP2, "fixture.teamP2": teamP1 },
+            {
+              $set: { "fixture.$.scoreP1": Number(scoreP2), "fixture.$.scoreP2": Number(scoreP1) },
+            });
+        }
       }
 
       // ACTUALIZO RACHAS //
 
-      //   let playerOne = await playersModel.findOne({ name: playerP1 });
-      //   let playerTwo = await playersModel.findOne({ name: playerP2 });
+      let playerOne = await playersModel.findOne({ name: playerP1 });
+      let playerTwo = await playersModel.findOne({ name: playerP2 });
 
-      //   playerOne.winningStreak = 0;
-      //   playerOne.losingStreak = 0;
-      //   playerOne.drawStreak++;
+      playerOne.winningStreak = 0;
+      playerOne.losingStreak = 0;
+      playerOne.drawStreak++;
 
-      //   playerTwo.winningStreak = 0;
-      //   playerTwo.losingStreak = 0;
-      //   playerTwo.drawStreak++;
+      playerTwo.winningStreak = 0;
+      playerTwo.losingStreak = 0;
+      playerTwo.drawStreak++;
 
-      //   if (playerOne.drawStreak > playerOne.longestDrawStreak) {
-      //     playerOne.longestDrawStreak++;
-      //   }
+      if (playerOne.drawStreak > playerOne.longestDrawStreak) {
+        playerOne.longestDrawStreak++;
+      }
 
-      //   if (playerTwo.drawStreak > playerTwo.longestDrawStreak) {
-      //     playerTwo.longestDrawStreak++;
-      //   }
+      if (playerTwo.drawStreak > playerTwo.longestDrawStreak) {
+        playerTwo.longestDrawStreak++;
+      }
 
-      //   await playerOne.save();
-      //   await playerTwo.save();
+      await playerOne.save();
+      await playerTwo.save();
 
     }
 
-    // await matchesModel.create(match); //**********ACTIVAR LUEGO**********//
-
-    // tournament.save();
-
-    // console.log(tournament)
-    // console.log(teams);
-
-    // await tournamentsModel.findByIdAndUpdate(tournamentId, {"teams.team": match.outcome.teamThatWon}); 
-
-    // await tournamentsModel.findByIdAndUpdate(tournamentId, {"teams.team": match.outcome.teamThatLost});
+    await matchesModel.create(match);
 
     res.redirect("/upload-games");
 
@@ -1335,7 +1364,7 @@ app.post("/lottery-tournament-selection", async (req, res) => {
   }
 });
 
-app.get("/lottery/:id", async (req, res) => {
+app.get("/lottery/:id", isAuth, async (req, res) => {
   const idProvided = req.params.id;
   const { players, teams } = req.query;
   try {
@@ -1350,7 +1379,7 @@ app.get("/lottery/:id", async (req, res) => {
   }
 });
 
-app.post("/lottery-assignment/:id", async (req, res) => {
+app.post("/lottery-assignment/:id", isAuth, async (req, res) => {
   try {
     const { players, teams } = req.body;
     const tournamentId = req.params.id;
@@ -1364,9 +1393,21 @@ app.post("/lottery-assignment/:id", async (req, res) => {
       assignmentArray.push(assignment);
     })
 
-    const playerArray = await tournamentsModel.findById(tournamentId, "players")
+    // Actualizo "teams" dentro del torneo, para sumar la info de qué jugadores juegan con qué equipos. Es necesario para los standings //
 
-    console.log(playerArray)
+    assignmentArray.forEach(async (assignment) => {
+
+      let team = assignment.team;
+
+      await tournamentsModel.updateOne(
+        { _id: tournamentId, "teams.team": team },
+        {
+          $set: { "teams.$.player": assignment.player },
+        });
+
+    });
+
+    const playerArray = await tournamentsModel.findById(tournamentId, "players")
 
     const definitiveFixture = fixture(assignmentArray, playerArray.players); // GENERO EL FIXTURE
 
@@ -1564,7 +1605,7 @@ const fixture = (lotteryArray, playerArray) => {
 
 app.get("/fixture", async (req, res) => {
   try {
-    const tournaments = await tournamentsModel.find({});
+    const tournaments = await tournamentsModel.find({ ongoing: true });
     if (!tournaments) {
       res.render("./errors/tournaments-error", {});
       return;
