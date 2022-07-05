@@ -666,25 +666,14 @@ app.get("/records", async (req, res) => {
 
 app.get("/standings", async (req, res) => {
   try {
-    const standings = await tournamentsModel.find({ ongoing: true }, "name");
-    res.render("standings", { standings });
-  } catch (err) {
-    return res.status(500).send("Something went wrong!" + err);
-  }
-});
+    const tournaments = await tournamentsModel.find({ ongoing: true }, "name players teams");
 
-app.get("/standings/:id", async (req, res) => {
+    const standingsArray = [];
 
-  const idProvided = req.params.id;
-  // Chequeo mediante RegEx si, en potencia, el ID proporcionado es válido (en formato) //
-  try {
-    if (idProvided.match(/^[0-9a-fA-F]{24}$/)) { // Y si ingresan un id válido por formato pero NO coincide con uno de la BD? REVISAR - TESTEAR - Debería traer [] ?
+    let sortedStanding;
 
-      const tournamentById = await tournamentsModel.findById(idProvided, "name players teams");
-
-      const standingsToBeSorted = tournamentById.teams;
-
-      const standings = standingsToBeSorted.sort(function (a, b) {
+    tournaments.forEach((element) => {
+      sortedStanding = element.teams.sort(function (a, b) {
 
         if (a.points > b.points) return -1;
         if (a.points < b.points) return 1;
@@ -697,19 +686,65 @@ app.get("/standings/:id", async (req, res) => {
 
         if (a.goalsAgainst > b.goalsAgainst) return 1;
         if (a.goalsAgainst < b.goalsAgainst) return -1;
-
       });
 
-      res.render("standings-id", { tournamentById, standings });
-    }
-    else {
-      res.render("./errors/tournaments-id-error", { idProvided });
-      return;
-    }
-  } catch (err) {
-    return res.status(400).send("Something went wrong!" + err); // MANEJO DE ERRORES: UTILIZAR UN IF DONDE, SI COINCIDE CON UN ERROR PREVISTO, RENDERIZO UNA VISTA ADECUADA //
+      standingsArray.push({ name: element.name, tournamentId: element.id, sortedStanding });
+
+    });
+
+    res.render("standings-id", { standingsArray });
+  }
+  catch (err) {
+    return res.status(500).send("Something went wrong!" + err);
   }
 });
+
+// app.get("/standings", async (req, res) => {
+//   try {
+//     const standings = await tournamentsModel.find({ ongoing: true }, "name");
+//     res.render("standings", { standings });
+//   } catch (err) {
+//     return res.status(500).send("Something went wrong!" + err);
+//   }
+// });
+
+// app.get("/standings/:id", async (req, res) => {
+
+//   const idProvided = req.params.id;
+//   // Chequeo mediante RegEx si, en potencia, el ID proporcionado es válido (en formato) //
+//   try {
+//     if (idProvided.match(/^[0-9a-fA-F]{24}$/)) { // Y si ingresan un id válido por formato pero NO coincide con uno de la BD? REVISAR - TESTEAR - Debería traer [] ?
+
+//       const tournamentById = await tournamentsModel.findById(idProvided, "name players teams");
+
+//       const standingsToBeSorted = tournamentById.teams;
+
+//       const standings = standingsToBeSorted.sort(function (a, b) {
+
+//         if (a.points > b.points) return -1;
+//         if (a.points < b.points) return 1;
+
+//         if (a.scoringDifference > b.scoringDifference) return -1;
+//         if (a.scoringDifference < b.scoringDifference) return 1;
+
+//         if (a.goalsFor > b.goalsFor) return -1;
+//         if (a.goalsFor < b.goalsFor) return 1;
+
+//         if (a.goalsAgainst > b.goalsAgainst) return 1;
+//         if (a.goalsAgainst < b.goalsAgainst) return -1;
+
+//       });
+
+//       res.render("standings-id", { tournamentById, standings });
+//     }
+//     else {
+//       res.render("./errors/tournaments-id-error", { idProvided });
+//       return;
+//     }
+//   } catch (err) {
+//     return res.status(400).send("Something went wrong!" + err); // MANEJO DE ERRORES: UTILIZAR UN IF DONDE, SI COINCIDE CON UN ERROR PREVISTO, RENDERIZO UNA VISTA ADECUADA //
+//   }
+// });
 
 app.get("/create-tournament", isAuth, (req, res) => {
   res.render("create-tournament", {});
@@ -978,13 +1013,13 @@ app.get("/upload-games", isAuth, async (req, res) => {
   }
 });
 
-app.post("/upload-games", (req, res) => {
+app.post("/upload-games", isAuth, (req, res) => {
   // POST O GET?
   const selectedTournamentId = req.body.selection; // I must use the select "name" property;
   res.redirect(`/upload-games/${selectedTournamentId}`);
 });
 
-app.get("/upload-games/:id", async (req, res) => {
+app.get("/upload-games/:id", isAuth, async (req, res) => {
   const idProvided = req.params.id;
 
   // Chequeo mediante RegEx si, en potencia, el ID proporcionado es válido (en formato) //
@@ -1158,32 +1193,29 @@ app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
 
       // ACTUALIZO EL FIXTURE //
 
-      if (tournament.fixture.length) {
+      const fixture = tournament.fixture;
 
-        const fixture = tournament.fixture;
+      let index = fixture.findIndex((element) => {
+        return element.teamP1 === match.outcome.teamThatWon && element.teamP2 === match.outcome.teamThatLost;
+      });
 
-        let index = fixture.findIndex((element) => {
-          return element.teamP1 === match.outcome.teamThatWon && element.teamP2 === match.outcome.teamThatLost;
-        });
+      console.log(index);
 
-        if (index !== -1) {
-          await tournamentsModel.updateOne(
-            { _id: tournamentId, "fixture.teamP1": match.outcome.teamThatWon, "fixture.teamP2": match.outcome.teamThatLost },
-            {
-              $set: { "fixture.$.scoreP1": Number(match.outcome.scoreFromTeamThatWon), "fixture.$.scoreP2": Number(match.outcome.scoreFromTeamThatLost) },
-            });
-        }
-
-        if (index === -1) {
-          index = fixture.findIndex((element) => {
-            return element.teamP1 === match.outcome.teamThatLost && element.teamP2 === match.outcome.teamThatWon;
+      if (index !== -1) {
+        await tournamentsModel.updateOne(
+          { _id: tournamentId, "fixture": { "$elemMatch": { "teamP1": match.outcome.teamThatWon, "teamP2": match.outcome.teamThatLost } } },
+          {
+            $set: { "fixture.$.scoreP1": Number(match.outcome.scoreFromTeamThatWon), "fixture.$.scoreP2": Number(match.outcome.scoreFromTeamThatLost) },
           });
-          await tournamentsModel.updateOne(
-            { _id: tournamentId, "fixture.teamP1": match.outcome.teamThatLost, "fixture.teamP2": match.outcome.teamThatWon },
-            {
-              $set: { "fixture.$.scoreP1": Number(match.outcome.scoreFromTeamThatLost), "fixture.$.scoreP2": Number(match.outcome.scoreFromTeamThatWon) },
-            });
-        }
+      }
+
+      if (index === -1) {
+        await tournamentsModel.updateOne(
+          { _id: tournamentId, "fixture": { "$elemMatch": { "teamP1": match.outcome.teamThatLost, "teamP2": match.outcome.teamThatWon } } },
+          {
+            $set: { "fixture.$.scoreP1": Number(match.outcome.scoreFromTeamThatLost), "fixture.$.scoreP2": Number(match.outcome.scoreFromTeamThatWon) },
+          });
+
       }
 
       // ACTUALIZO RACHAS //
@@ -1262,32 +1294,26 @@ app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
 
       // ACTUALIZO EL FIXTURE //
 
-      if (tournament.fixture.length) {
+      const fixture = tournament.fixture;
 
-        const fixture = tournament.fixture;
+      let index = fixture.findIndex((element) => {
+        return element.teamP1 === teamP1 && element.teamP2 === teamP2;
+      });
 
-        let index = fixture.findIndex((element) => {
-          return element.teamP1 === teamP1 && element.teamP2 === teamP2;
-        });
-
-        if (index !== -1) {
-          await tournamentsModel.updateOne(
-            { _id: tournamentId, "fixture.teamP1": teamP1, "fixture.teamP2": teamP2 },
-            {
-              $set: { "fixture.$.scoreP1": Number(scoreP1), "fixture.$.scoreP2": Number(scoreP2) },
-            });
-        }
-
-        if (index === -1) {
-          index = fixture.findIndex((element) => {
-            return element.teamP1 === teamP2 && element.teamP2 === teamP1;
+      if (index !== -1) {
+        await tournamentsModel.updateOne(
+          { _id: tournamentId, "fixture": { "$elemMatch": { "teamP1": teamP1, "teamP2": teamP2 } } },
+          {
+            $set: { "fixture.$.scoreP1": Number(scoreP1), "fixture.$.scoreP2": Number(scoreP2) },
           });
-          await tournamentsModel.updateOne(
-            { _id: tournamentId, "fixture.teamP1": teamP2, "fixture.teamP2": teamP1 },
-            {
-              $set: { "fixture.$.scoreP1": Number(scoreP2), "fixture.$.scoreP2": Number(scoreP1) },
-            });
-        }
+      }
+
+      if (index === -1) {
+        await tournamentsModel.updateOne(
+          { _id: tournamentId, "fixture": { "$elemMatch": { "teamP1": teamP2, "teamP2": teamP1 } } },
+          {
+            $set: { "fixture.$.scoreP1": Number(scoreP2), "fixture.$.scoreP2": Number(scoreP1) },
+          });
       }
 
       // ACTUALIZO RACHAS //
@@ -1383,12 +1409,12 @@ app.post("/lottery-assignment/:id", isAuth, async (req, res) => {
   try {
     const { players, teams } = req.body;
     const tournamentId = req.params.id;
-    // console.log(players, teams, tournamentId)
     const assignmentArray = [];
     teams.forEach((team, index) => {
       let assignment = {
         player: players[index],
-        team
+        team,
+        teamId: index
       }
       assignmentArray.push(assignment);
     })
@@ -1402,9 +1428,11 @@ app.post("/lottery-assignment/:id", isAuth, async (req, res) => {
       await tournamentsModel.updateOne(
         { _id: tournamentId, "teams.team": team },
         {
-          $set: { "teams.$.player": assignment.player },
+          $set: {
+            "teams.$.player": assignment.player,
+            "teams.$.teamId": assignment.teamId
+          },
         });
-
     });
 
     const playerArray = await tournamentsModel.findById(tournamentId, "players")
@@ -1487,6 +1515,8 @@ const fixture = (lotteryArray, playerArray) => {
         playerP2: randomTeamTwo.player,
         teamP1: randomTeamOne.team,
         teamP2: randomTeamTwo.team,
+        teamIdP1: randomTeamOne.teamId,
+        teamIdP2: randomTeamTwo.teamId
       };
       temporaryWeek.push(modifiedGame);
       // ÚLTIMO PARTIDO DE CADA FECHA //
@@ -1628,8 +1658,98 @@ app.get("/fixture/:id", async (req, res) => {
   } catch (err) {
     res.status(500).send("Something went wrong" + err);
   }
-
 })
+
+app.get("/fixture/:tournamentId/:teamId", async (req, res) => {
+  const { tournamentId, teamId } = req.params;
+  try {
+    // { _id: tournamentId, "fixture": { "$elemMatch": { "teamP1": teamP1, "teamP2": teamP2 } } },
+    const tournament = await tournamentsModel.findById(tournamentId, "name fixture");
+    if (!tournament) {
+      res.render("./errors/tournaments-id-error", { tournamentId });
+      return;
+    }
+
+    const tournamentName = tournament.name;
+
+    const filteredFixtureFromTournament = tournament.fixture.filter((element) => {
+      return element.teamIdP1 == teamId || element.teamIdP2 == teamId;
+    });
+
+    let teamName;
+
+    if (filteredFixtureFromTournament[0].teamIdP1 == teamId) {
+      teamName = filteredFixtureFromTournament[0].teamP1;
+    }
+    else {
+      teamName = filteredFixtureFromTournament[0].teamP2;
+    }
+
+    res.render("fixture-id-team", { tournamentName, teamName, tournamentId, filteredFixtureFromTournament })
+  } catch (err) {
+    res.status(500).send("Something went wrong" + err);
+  }
+})
+
+// app.get("/update", async (req, res) => {
+//   const tournament = await tournamentsModel.findById("62c20e041a7df52274d0975b");
+
+//   const fixtureFromTournament = tournament.fixture;
+
+//   fixtureFromTournament.forEach(async (element) => {
+//     if (element.teamP2 === "Fulham") {
+//       element.teamIdP2 = 1;
+//     }
+//     if (element.teamP2 === "Southampton") {
+//       element.teamIdP2 = 2;
+//     }
+//     if (element.teamP2 === "Arsenal") {
+//       element.teamIdP2 = 3;
+//     }
+//     if (element.teamP2 === "Everton") {
+//       element.teamIdP2 = 4;
+//     }
+//     if (element.teamP2 === "Leicester") {
+//       element.teamIdP2 = 5;
+//     }
+//     if (element.teamP2 === "West Ham") {
+//       element.teamIdP2 = 6;
+//     }
+//     if (element.teamP2 === "Brighton") {
+//       element.teamIdP2 = 7;
+//     }
+//     if (element.teamP2 === "Brentford") {
+//       element.teamIdP2 = 8;
+//     }
+//     if (element.teamP2 === "Aston Villa") {
+//       element.teamIdP2 = 9;
+//     }
+//     if (element.teamP2 === "Watford") {
+//       element.teamIdP2 = 10;
+//     }
+//     if (element.teamP2 === "Reading") {
+//       element.teamIdP2 = 11;
+//     }
+//     if (element.teamP2 === "Preston") {
+//       element.teamIdP2 = 12;
+//     }
+//     if (element.teamP2 === "West Brom") {
+//       element.teamIdP2 = 13;
+//     }
+//     if (element.teamP2 === "QPR") {
+//       element.teamIdP2 = 14;
+//     }
+//     if (element.teamP2 === "Coventry") {
+//       element.teamIdP2 = 15;
+//     }
+
+//   });
+
+//   await tournament.update({ fixture: fixtureFromTournament });
+
+//   res.send({ fixtureFromTournament })
+
+// });
 
 /* -------------------- PORT -------------------- */
 

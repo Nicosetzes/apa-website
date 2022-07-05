@@ -776,6 +776,23 @@ main .container__tournament .stack-real-madrid::before {
   background-repeat: no-repeat;
   background-size: cover;
 }
+main .container__tournament .stack-liverpool {
+  margin-bottom: 1.5rem;
+}
+main .container__tournament .stack-liverpool::before {
+  content: "";
+  display: block;
+  height: 100%;
+  left: 0;
+  opacity: 0.45;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background-image: url("./../img/liverpool-equipo.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 main .container__tournament:last-child {
   background-color: #004a79;
 }
@@ -1191,12 +1208,9 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
   transition: all 0.2s ease-in-out;
 }
 .tournament__container .tournament:nth-child(1) {
-  display: none;
-}
-.tournament__container .tournament:nth-child(2) {
   background-image: url("./../../img/premier-league-background-1.jpg");
 }
-.tournament__container .tournament:nth-child(2)::before {
+.tournament__container .tournament:nth-child(1)::before {
   content: "";
   position: absolute;
   top: 0px;
@@ -1205,10 +1219,10 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
   left: 0px;
   background-color: rgba(25, 20, 28, 0.6);
 }
-.tournament__container .tournament:nth-child(3) {
+.tournament__container .tournament:nth-child(2) {
   background-image: url("./../../img/premier-league-background-2.jpg");
 }
-.tournament__container .tournament:nth-child(3)::before {
+.tournament__container .tournament:nth-child(2)::before {
   content: "";
   position: absolute;
   top: 0px;
@@ -1256,6 +1270,29 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
 
 .table-standings {
   font-size: 0.9rem;
+}
+.table-standings tbody tr {
+  --bs-table-hover-bg: #3f4041;
+}
+.table-standings tbody tr:nth-child(1), .table-standings tbody tr:nth-child(2), .table-standings tbody tr:nth-child(3), .table-standings tbody tr:nth-child(4), .table-standings tbody tr:nth-child(5), .table-standings tbody tr:nth-child(6) {
+  --bs-table-bg: #007058;
+  --bs-table-hover-bg: #237c69;
+}
+.table-standings tbody tr:nth-child(7), .table-standings tbody tr:nth-child(8) {
+  --bs-table-bg: #a1920a;
+  --bs-table-hover-bg: #b8ae58;
+}
+.table-standings tbody tr:nth-child(9), .table-standings tbody tr:nth-child(10) {
+  --bs-table-bg: #75330c;
+  --bs-table-hover-bg: #8f5e42;
+}
+.table-standings tbody tr td a {
+  color: #fff;
+  text-decoration: none;
+}
+.table-standings tbody tr td img {
+  margin: 0 0.25rem;
+  width: 25px;
 }
 
 .container__fixture {

@@ -2,79 +2,88 @@
 
     <main>
 
-        <% if(tournamentById){ %>
+        <% if(standingsArray){ %>
 
-            <div>
-                <div class="title">
-                    <%=tournamentById.name%>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-dark table-hover table-standings">
-                        <thead>
-                            <tr>
-                                <th scope="col">Pos.</th>
-                                <th scope="col">Equipo</th>
-                                <th scope="col">Jugador</th>
-                                <th scope="col">PJ</th>
-                                <th scope="col">PG</th>
-                                <th scope="col">PE</th>
-                                <th scope="col">PP</th>
-                                <th scope="col">GF</th>
-                                <th scope="col">GC</th>
-                                <th scope="col">DIF</th>
-                                <th scope="col">Pts.</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% for (i=0; i < standings.length ; i++) { %>
+            <% standingsArray.forEach(function(tournament, index) {%>
+
+                <div>
+                    <div class="title">
+                        <%=tournament.name%>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover table-standings">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        <%=i+1%>
-                                    </td>
-                                    <td>
-                                        <%=standings[i].team%>
-                                    </td>
-                                    <td>
-                                        <%=standings[i].player[0]+standings[i].player[1].toUpperCase()%>
-                                    </td>
-                                    <td>
-                                        <%=standings[i].played%>
-                                    </td>
-                                    <td>
-                                        <%=standings[i].wins%>
-                                    </td>
-                                    <td>
-                                        <%=standings[i].draws%>
-                                    </td>
-                                    <td>
-                                        <%=standings[i].losses%>
-                                    </td>
-                                    <td>
-                                        <%=standings[i].goalsFor%>
-                                    </td>
-                                    <td>
-                                        <%=standings[i].goalsAgainst%>
-                                    </td>
-                                    <td>
-                                        <%=standings[i].scoringDifference%>
-                                    </td>
-                                    <td>
-                                        <%= standings[i].points%>
-                                    </td>
+                                    <th scope="col">Pos.</th>
+                                    <th scope="col">Equipo</th>
+                                    <th scope="col">Jugador</th>
+                                    <th scope="col">PJ</th>
+                                    <th scope="col">PG</th>
+                                    <th scope="col">PE</th>
+                                    <th scope="col">PP</th>
+                                    <th scope="col">GF</th>
+                                    <th scope="col">GC</th>
+                                    <th scope="col">DIF</th>
+                                    <th scope="col">Pts.</th>
                                 </tr>
-                                <%};%>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <% for (i=0; i < tournament.sortedStanding.length ; i++) { %>
+                                    <tr>
+                                        <td>
+                                            <%=i+1%>
+                                        </td>
+                                        <td>
+                                            <a
+                                                href="/fixture/<%=tournament.tournamentId%>/<%=tournament.sortedStanding[i].teamId%>">
+                                                <%=tournament.sortedStanding[i].team%>
+                                            </a>
+                                            <img src="<%=tournament.sortedStanding[i].logo%>"
+                                                alt="<%=tournament.sortedStanding[i].team%>">
+
+                                        </td>
+                                        <td>
+                                            <%=tournament.sortedStanding[i].player[0] +
+                                                tournament.sortedStanding[i].player[1].toUpperCase()%>
+                                        </td>
+                                        <td>
+                                            <%=tournament.sortedStanding[i].played%>
+                                        </td>
+                                        <td>
+                                            <%=tournament.sortedStanding[i].wins%>
+                                        </td>
+                                        <td>
+                                            <%=tournament.sortedStanding[i].draws%>
+                                        </td>
+                                        <td>
+                                            <%=tournament.sortedStanding[i].losses%>
+                                        </td>
+                                        <td>
+                                            <%=tournament.sortedStanding[i].goalsFor%>
+                                        </td>
+                                        <td>
+                                            <%=tournament.sortedStanding[i].goalsAgainst%>
+                                        </td>
+                                        <td>
+                                            <%=tournament.sortedStanding[i].scoringDifference%>
+                                        </td>
+                                        <td>
+                                            <%=tournament.sortedStanding[i].points%>
+                                        </td>
+                                    </tr>
+                                    <%};%>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="return">
-                    <div>Volver a <a href="/standings">torneos</a></div>
-                    <div>Volver al <a href="/">home</a></div>
-                </div>
-            </div>
-            <% } else{ %>
-                <div>Hola, NO hay torneos cargados en la base de datos</div>
-                <div>¿Desea <a href="/create-tournament">crear un torneo</a>?</div>
-                <% } %>
+                <%});%>
+                    <div class="return">
+                        <div>Volver al <a href="/">home</a></div>
+                    </div>
+                    <% } else{ %>
+                        <div>Hola, NO hay torneos cargados en la base de datos</div>
+                        <div>¿Desea <a href="/create-tournament">crear un torneo</a>?</div>
+                        <% } %>
 
     </main>
 

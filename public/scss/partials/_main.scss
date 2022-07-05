@@ -398,6 +398,14 @@ main {
       }
     }
 
+    .stack-liverpool {
+      margin-bottom: $spaceBetweenStacks * 2;
+
+      &::before {
+        @include estadio(url("./../img/liverpool-equipo.png"));
+      }
+    }
+
     &:last-child {
       background-color: $mainBlue;
     }

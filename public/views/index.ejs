@@ -606,6 +606,8 @@
                         aria-current="true" aria-label="Slide 1"></button>
                     <button type="button" data-bs-target="#carousel-europe" data-bs-slide-to="1"
                         aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carousel-europe" data-bs-slide-to="2"
+                        aria-label="Slide 3"></button>
                 </div>
                 <div class="carousel-inner">
                     <div class="carousel-item active" data-bs-interval=" 5000">
@@ -725,6 +727,64 @@
                             </div>
                         </div>
                     </div>
+                    <div class="carousel-item" data-bs-interval=" 5000">
+                        <div class="container__tournament-title">
+                            <span>Superliga Europea 2022</span>
+                        </div>
+                        <img src="./../img/cup.webp" class="img-trophy">
+                        <div class="container__tournament-content-stack stack-liverpool">
+                            <div class="container__tournament-content">
+                                <div class="container__tournament-content-plaque plaque-champion">
+                                    <img src="./img/liverpool-escudo.webp" class="img-team" alt="" />
+                                    <div class="container__tournament-content-details">
+                                        <span class="span-title">Campeón</span>
+                                        <span class="span-name">Nico</span>
+                                        <span class="span-team">Liverpool</span>
+                                    </div>
+                                    <div class="circle circle-champion circle-top-left"></div>
+                                    <div class="circle circle-champion circle-top-right"></div>
+                                    <div class="circle circle-champion circle-bottom-left"></div>
+                                    <div class="circle circle-champion circle-bottom-right"></div>
+                                </div>
+                                <div class="container__tournament-content-plaque plaque-finalist">
+                                    <img src="./img/bayern-escudo.webp" class="img-team" alt="" />
+                                    <div class="container__tournament-content-details">
+                                        <span class="span-title">Subcampeón</span>
+                                        <span class="span-name">Nico</span>
+                                        <span class="span-team">Bayern</span>
+                                    </div>
+                                    <div class="circle circle-finalist circle-top-left"></div>
+                                    <div class="circle circle-finalist circle-top-right"></div>
+                                    <div class="circle circle-finalist circle-bottom-left"></div>
+                                    <div class="circle circle-finalist circle-bottom-right"></div>
+                                </div>
+                                <div class="modal modal-profile modal-profile-champion hidden visuallyHidden ">
+                                    <div class="modal-profile-container">
+                                        <div class="modal-profile-header">
+                                            <img src="./../img/nico.webp" alt="">
+                                            <span>Leo</span>
+                                        </div>
+                                        <div class="modal-profile-body">
+                                            <div></div>
+                                        </div>
+                                        <button class="button-modal-close">X</button>
+                                    </div>
+                                </div>
+                                <div class="modal modal-profile modal-profile-finalist hidden visuallyHidden">
+                                    <div class="modal-profile-container">
+                                        <div class="modal-profile-header">
+                                            <img src="./../img/nico.webp" alt="">
+                                            <span>Max</span>
+                                        </div>
+                                        <div class="modal-profile-body">
+                                            <div></div>
+                                        </div>
+                                        <button class="button-modal-close">X</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carousel-europe"
                     data-bs-slide="prev">
@@ -750,6 +810,13 @@
                         <div class="records-content-left">
                             <img src="./img/real-madrid-escudo.webp" class="records-content-img-escudo" alt="">
                             <span>Real Madrid</span>
+                        </div>
+                        <img src="./img/gold-star.webp" alt="" class="gold-star">
+                    </div>
+                    <div class="records-content">
+                        <div class="records-content-left">
+                            <img src="./img/liverpool-escudo.webp" class="records-content-img-escudo" alt="">
+                            <span>Liverpool</span>
                         </div>
                         <img src="./img/gold-star.webp" alt="" class="gold-star">
                     </div>
@@ -906,22 +973,22 @@
             </div>
             <div class="container__trajectory">
                 <div class="trajectory-manager">
+                    <span class="trajectory-manager-name">Nico</span>
+                    <span class="trajectory-manager-amount">1</span>
+                    <span class="trajectory-manager-titles">título</span>
+                </div>
+                <div class="trajectory-trophies">
+                    <span>Superliga Europea 2022</span>
+                </div>
+            </div>
+            <div class="container__trajectory">
+                <div class="trajectory-manager">
                     <span class="trajectory-manager-name">Lucho</span>
                     <span class="trajectory-manager-amount">0</span>
                     <span class="trajectory-manager-titles">títulos</span>
                 </div>
                 <div class="trajectory-trophies">
                     <span class="small-description">Premio Sperdutti a la trayectoria.</span>
-                </div>
-            </div>
-            <div class="container__trajectory">
-                <div class="trajectory-manager">
-                    <span class="trajectory-manager-name">Nico</span>
-                    <span class="trajectory-manager-amount">0</span>
-                    <span class="trajectory-manager-titles">títulos</span>
-                </div>
-                <div class="trajectory-trophies">
-                    <span class="small-description">Pero cheto torneo con Sarmiento (!!!) metió el pibe.</span>
                 </div>
             </div>
         </div>
