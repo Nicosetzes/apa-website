@@ -43,16 +43,19 @@ confirmCountriesForm.addEventListener("submit", e => {
                 return response.json()
             })
             .then(data => {
-                infoFromJSON.push(data.response);
+                infoFromJSON.push({
+                    data: data.response,
+                    code: element.name
+                });
             });
 
         itemsProcessed++;
 
         if (itemsProcessed === confirmedCountries.length) {
             console.log(infoFromJSON);
-            infoFromJSON.forEach((league, index) => {
-                league.forEach((squad) => {
-                    inyectHTML(squad.team);
+            infoFromJSON.forEach((object) => {
+                object.data.forEach((squad) => {
+                    inyectHTML(squad.team, object.code);
                 })
             })
         };
@@ -71,13 +74,13 @@ confirmCountriesForm.addEventListener("submit", e => {
     confirmationButton.append(button);
 })
 
-const inyectHTML = (param) => {
+const inyectHTML = (param, countryCode) => {
 
     let div = document.createElement("div");
     div.classList.add("form-check");
     let htmlNode;
 
-    htmlNode = `<input name="ID${param.id}" class="form-check-input form-check-input-teams" type="checkbox" value="${param.name}" id="ID${param.id}">
+    htmlNode = `<input name="ID${param.id}" class="form-check-input form-check-input-teams" type="checkbox" value="${param.name}|${param.code}|${countryCode}" id="ID${param.id}">
                 <label class="form-check-label" for="ID${param.id}">
                 ${param.name}
                 </label>

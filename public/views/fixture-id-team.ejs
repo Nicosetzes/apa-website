@@ -5,56 +5,55 @@
         </div>
         <div>Partidos de <%-teamName-%>
         </div>
-        <div class="container__fixture">
+        <div class="container__fixture-id">
             <%filteredFixtureFromTournament.forEach(function(element, index) {%>
-                <form>
-                    <div class="fixture-match">
-                        <div class="match-info">
-                            <span>
-                                <%=element.teamP1%>
-                            </span>
-                            <span>
-                                <%=element.playerP1%>
-                            </span>
-                        </div>
+                <div class="fixture-match">
+                    <a class="match-info" href="/fixture/<%=tournamentId%>/<%=element.teamIdP1%>">
+                        <span class="match-info__team">
+                            <%=element.teamP1%>
+                        </span>
+                        <img src="<%=element.logoTeamP1%>" alt="<%=element.logoTeamP1%>">
+                        <span>
+                            <%=element.playerP1%>
+                        </span>
+                    </a>
+                    <div class="match-score">
                         <%if(element.scoreP1 !==undefined){%>
-                            <div class="match-score">
-                                <span>
-                                    <%=element.scoreP1%>
-                                </span>
-                            </div>
+                            <span class="match-score__goals">
+                                <%=element.scoreP1%>
+                            </span>
+                            <span class="match-score__versus">-</span>
                             <%} else {%>
-                                <div class="match-score">
-                                    <span>-</span>
-                                </div>
+                                <span class="match-score__goals">-</span>
+                                <span class="match-score__versus">vs</span>
                                 <%};%>
-                                    vs
                                     <%if(element.scoreP2 !==undefined){%>
-                                        <div class="match-score">
-                                            <span>
-                                                <%=element.scoreP2%>
-                                            </span>
-                                        </div>
+                                        <span class="match-score__goals">
+                                            <%=element.scoreP2%>
+                                        </span>
                                         <%} else {%>
-                                            <div class="match-score">
-                                                <span>-</span>
-                                            </div>
+                                            <span class="match-score__goals">-</span>
                                             <%};%>
-                                                <div class="match-info">
-                                                    <span>
-                                                        <%=element.teamP2%>
-                                                    </span>
-                                                    <span>
-                                                        <%=element.playerP2%>
-                                                    </span>
-                                                </div>
                                                 <input type="submit" value="Editar" class="fixture-submit">
                     </div>
-                </form>
+                    <a class="match-info" href="/fixture/<%=tournamentId%>/<%=element.teamIdP2%>">
+                        <span class="match-info__team">
+                            <%=element.teamP2%>
+                        </span>
+                        <img src="<%=element.logoTeamP2%>" alt="<%=element.logoTeamP2%>">
+                        <span>
+                            <%=element.playerP2%>
+                        </span>
+                    </a>
+                </div>
 
                 <%});%>
         </div>
         <div class="return">
+            <div>Volver a <a href="/fixture">
+                    Fixtures
+                </a>
+            </div>
             <div>Fixture <a href="/fixture/<%-tournamentId-%>">
                     <%-tournamentName-%>
                 </a>

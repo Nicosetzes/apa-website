@@ -697,7 +697,7 @@ app.get("/standings", async (req, res) => {
   catch (err) {
     return res.status(500).send("Something went wrong!" + err);
   }
-});
+})
 
 // app.get("/standings", async (req, res) => {
 //   try {
@@ -755,6 +755,8 @@ app.post("/create-tournament", isAuth, async (req, res) => {
 
     const { tournamentName, format, origin } = req.body;
 
+    console.log(req.body);
+
     const arrayFromValues = Object.values(req.body);
 
     const filteredArrayFromValues = arrayFromValues.filter(
@@ -777,7 +779,9 @@ app.post("/create-tournament", isAuth, async (req, res) => {
       }
       else {
         teams.push({
-          team: element,
+          team: element.split("|")[0],
+          teamCode: element.split("|")[1],
+          countryCode: element.split("|")[2],
           played: 0,
           wins: 0,
           draws: 0,
@@ -1635,15 +1639,21 @@ const fixture = (lotteryArray, playerArray) => {
 
 app.get("/fixture", async (req, res) => {
   try {
-    const tournaments = await tournamentsModel.find({ ongoing: true });
-    if (!tournaments) {
-      res.render("./errors/tournaments-error", {});
-      return;
-    }
-    res.render("fixture", { tournaments })
+    const tournaments = await tournamentsModel.find({ ongoing: true }, "name");
+    res.render("fixture", { tournaments });
   } catch (err) {
-    res.status(500).send("Something went wrong" + err);
+    return res.status(500).send("Something went wrong!" + err);
   }
+  // try {
+  //   const tournaments = await tournamentsModel.find({ ongoing: true });
+  //   if (!tournaments) {
+  //     res.render("./errors/tournaments-error", {});
+  //     return;
+  //   }
+  //   res.render("fixture", { tournaments })
+  // } catch (err) {
+  //   res.status(500).send("Something went wrong" + err);
+  // }
 })
 
 app.get("/fixture/:id", async (req, res) => {
@@ -1698,49 +1708,49 @@ app.get("/fixture/:tournamentId/:teamId", async (req, res) => {
 
 //   fixtureFromTournament.forEach(async (element) => {
 //     if (element.teamP2 === "Fulham") {
-//       element.teamIdP2 = 1;
+//       element.codeTeamP2 = "FUL";
 //     }
 //     if (element.teamP2 === "Southampton") {
-//       element.teamIdP2 = 2;
+//       element.codeTeamP2 = "SOU";
 //     }
 //     if (element.teamP2 === "Arsenal") {
-//       element.teamIdP2 = 3;
+//       element.codeTeamP2 = "ARS";
 //     }
 //     if (element.teamP2 === "Everton") {
-//       element.teamIdP2 = 4;
+//       element.codeTeamP2 = "EVE";
 //     }
 //     if (element.teamP2 === "Leicester") {
-//       element.teamIdP2 = 5;
+//       element.codeTeamP2 = "LEI";
 //     }
 //     if (element.teamP2 === "West Ham") {
-//       element.teamIdP2 = 6;
+//       element.codeTeamP2 = "WES";
 //     }
 //     if (element.teamP2 === "Brighton") {
-//       element.teamIdP2 = 7;
+//       element.codeTeamP2 = "BRI";
 //     }
 //     if (element.teamP2 === "Brentford") {
-//       element.teamIdP2 = 8;
+//       element.codeTeamP2 = "BRE";
 //     }
 //     if (element.teamP2 === "Aston Villa") {
-//       element.teamIdP2 = 9;
+//       element.codeTeamP2 = "AST";
 //     }
 //     if (element.teamP2 === "Watford") {
-//       element.teamIdP2 = 10;
+//       element.codeTeamP2 = "WAT";
 //     }
 //     if (element.teamP2 === "Reading") {
-//       element.teamIdP2 = 11;
+//       element.codeTeamP2 = "REA";
 //     }
 //     if (element.teamP2 === "Preston") {
-//       element.teamIdP2 = 12;
+//       element.codeTeamP2 = "PRE";
 //     }
 //     if (element.teamP2 === "West Brom") {
-//       element.teamIdP2 = 13;
+//       element.codeTeamP2 = "WES";
 //     }
 //     if (element.teamP2 === "QPR") {
-//       element.teamIdP2 = 14;
+//       element.codeTeamP2 = "QPR";
 //     }
 //     if (element.teamP2 === "Coventry") {
-//       element.teamIdP2 = 15;
+//       element.codeTeamP2 = "COV";
 //     }
 
 //   });
@@ -1748,6 +1758,66 @@ app.get("/fixture/:tournamentId/:teamId", async (req, res) => {
 //   await tournament.update({ fixture: fixtureFromTournament });
 
 //   res.send({ fixtureFromTournament })
+
+// });
+
+// app.get("/update", async (req, res) => {
+//   const tournament = await tournamentsModel.findById("62c20d1b1a7df52274d09758");
+
+//   const teamsFromTournament = tournament.teams;
+
+//   teamsFromTournament.forEach(async (element) => {
+//     if (element.team === "Manchester United") {
+//       element.code = "MUN";
+//     }
+//     if (element.team === "Newcastle") {
+//       element.code = "NEW";
+//     }
+//     if (element.team === "Bournemouth") {
+//       element.code = "BOU";
+//     }
+//     if (element.team === "Wolves") {
+//       element.code = "WOL";
+//     }
+//     if (element.team === "Liverpool") {
+//       element.code = "LIV";
+//     }
+//     if (element.team === "Tottenham") {
+//       element.code = "TOT";
+//     }
+//     if (element.team === "Chelsea") {
+//       element.code = "CHE";
+//     }
+//     if (element.team === "Manchester City") {
+//       element.code = "MAC";
+//     }
+//     if (element.team === "Crystal Palace") {
+//       element.code = "CRY";
+//     }
+//     if (element.team === "Leeds") {
+//       element.code = "LEE";
+//     }
+//     if (element.team === "Nottingham Forest") {
+//       element.code = "NOT";
+//     }
+//     if (element.team === "Burnley") {
+//       element.code = "BUR";
+//     }
+//     if (element.team === "Sheffield Utd") {
+//       element.code = "SHE";
+//     }
+//     if (element.team === "Blackburn") {
+//       element.code = "BLA";
+//     }
+//     if (element.team === "Norwich") {
+//       element.code = "NOR";
+//     }
+
+//   });
+
+//   await tournament.update({ teams: teamsFromTournament });
+
+//   res.send({ teamsFromTournament })
 
 // });
 

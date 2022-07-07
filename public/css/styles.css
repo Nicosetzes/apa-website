@@ -1161,97 +1161,6 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
   width: 100%;
 }
 
-.tournament__container {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  background-color: beige;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  margin: 0 auto;
-  width: 100%;
-}
-.tournament__container .tournament {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  background-size: cover;
-  background-position: center;
-  border: 4px solid #000;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  height: 400px;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  margin: 0.25rem;
-  padding: 1rem;
-  position: relative;
-  -webkit-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
-}
-.tournament__container .tournament:hover {
-  padding: 1rem;
-  border: 4px solid rgb(235, 54, 54);
-  -webkit-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
-}
-.tournament__container .tournament:nth-child(1) {
-  background-image: url("./../../img/premier-league-background-1.jpg");
-}
-.tournament__container .tournament:nth-child(1)::before {
-  content: "";
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-  background-color: rgba(25, 20, 28, 0.6);
-}
-.tournament__container .tournament:nth-child(2) {
-  background-image: url("./../../img/premier-league-background-2.jpg");
-}
-.tournament__container .tournament:nth-child(2)::before {
-  content: "";
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-  background-color: rgba(25, 20, 28, 0.6);
-}
-.tournament__container .tournament .container__tournament-name {
-  height: 100%;
-  position: relative;
-  width: 100%;
-}
-.tournament__container .tournament .container__tournament-name .tournament-name {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  color: #fff;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  font-size: 1.25rem;
-  height: 100%;
-  width: 100%;
-}
-
 .title {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -1288,13 +1197,36 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
 }
 .table-standings tbody tr td a {
   color: #fff;
+  margin-left: 0.25rem;
+  margin-right: auto;
+  text-align: justify;
   text-decoration: none;
 }
+.table-standings tbody tr td .team-name {
+  display: none;
+}
 .table-standings tbody tr td img {
-  margin: 0 0.25rem;
+  height: 25px;
+  margin-left: auto;
   width: 25px;
 }
+.table-standings tbody tr td:nth-child(2) {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
 
+@media only screen and (min-width: 576px) {
+  .table-standings tbody tr td .team-code {
+    display: none;
+  }
+  .table-standings tbody tr td .team-name {
+    display: block;
+  }
+}
 .container__fixture {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1342,6 +1274,182 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
+}
+
+.tournament__wrapper {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: beige;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.tournament__wrapper .tournament__container {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin: 0 auto;
+  width: 100%;
+}
+.tournament__wrapper .tournament__container .tournament {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-size: cover;
+  background-position: center;
+  border: 4px solid #000;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 400px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin: 0.25rem;
+  padding: 1rem;
+  position: relative;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.tournament__wrapper .tournament__container .tournament:hover {
+  padding: 1rem;
+  border: 4px solid rgb(235, 54, 54);
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.tournament__wrapper .tournament__container .tournament:nth-child(1) {
+  background-image: url("./../../img/premier-league-background-1.jpg");
+}
+.tournament__wrapper .tournament__container .tournament:nth-child(1)::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  background-color: rgba(25, 20, 28, 0.6);
+}
+.tournament__wrapper .tournament__container .tournament:nth-child(2) {
+  background-image: url("./../../img/premier-league-background-2.jpg");
+}
+.tournament__wrapper .tournament__container .tournament:nth-child(2)::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  background-color: rgba(25, 20, 28, 0.6);
+}
+.tournament__wrapper .tournament__container .tournament .container__tournament-name {
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+.tournament__wrapper .tournament__container .tournament .container__tournament-name .tournament-name {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: 1.25rem;
+  height: 100%;
+  width: 100%;
+}
+
+.container__fixture-id {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 1rem 0;
+}
+.container__fixture-id .fixture-match {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin: 0.5rem;
+  outline: #dc3545 2px solid;
+  padding: 0.5rem 0;
+  width: 400px;
+}
+.container__fixture-id .fixture-match .match-info {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: #000;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  text-decoration: none;
+  width: 120px;
+}
+.container__fixture-id .fixture-match .match-info .match-info__team {
+  text-align: center;
+}
+.container__fixture-id .fixture-match .match-info img {
+  max-width: 100px;
+}
+.container__fixture-id .fixture-match .match-score {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  width: 100px;
+}
+.container__fixture-id .fixture-match .match-score .match-score__goals {
+  font-size: 3rem;
+}
+.container__fixture-id .fixture-match .match-score .match-score__versus {
+  font-size: 1.5rem;
+}
+.container__fixture-id .fixture-match .match-score input {
+  font-size: 1rem;
 }
 
 #uploadGamesForm {

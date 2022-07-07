@@ -1,15 +1,30 @@
 <%- include('./partials/header')-%>
     <main>
-        <div>FIXTURES</div>
-        <div>Elija el torneo</div>
-        <div>
-            <%tournaments.forEach(function(element, index) {%>
-                <div>
-                    <a href="/fixture/<%-element.id-%>">
-                        <%-element.name-%>
-                    </a>
+
+        <% if(tournaments.length> 0){ %>
+
+            <div class="tournament__wrapper">
+                <span class="title">Fixtures</span>
+                <div class="tournament__container">
+                    <%tournaments.forEach(function(element, index) {%>
+                        <div class="tournament">
+                            <div class="container__tournament-name">
+                                <a class="tournament-name" href="/fixture/<%=element.id%>">
+                                    <%=element.name%>
+                                </a>
+                            </div>
+                        </div>
+                        <%});%>
                 </div>
-                <%});%>
-        </div>
+                <div class="return">
+                    <a href="/">Volver al home</a>
+                </div>
+
+            </div>
+            <% } else{ %>
+                <div>Hola, NO hay torneos cargados en la base de datos</div>
+                <div>¿Desea <a href="/create-tournament">crear un torneo</a>?</div>
+                <% } %>
+
     </main>
     <%- include('./partials/footer')-%>

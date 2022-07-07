@@ -42,12 +42,46 @@
 
                 a {
                     color: #fff;
+                    margin-left: 0.25rem;
+                    margin-right: auto;
+                    text-align: justify;
                     text-decoration: none;
                 }
 
+                .team-name {
+                    display: none;
+                }
+
                 img {
-                    margin: 0 0.25rem;
+                    height: 25px;
+                    margin-left: auto;
                     width: 25px;
+                }
+
+                &:nth-child(2) {
+                    align-items: center;
+                    display: flex;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 576px) {
+
+    .table-standings {
+
+        tbody {
+            tr {
+
+                td {
+                    .team-code {
+                        display: none;
+                    }
+
+                    .team-name {
+                        display: block;
+                    }
                 }
             }
         }
