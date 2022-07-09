@@ -4,7 +4,8 @@
 
         <% if(standingsArray){ %>
 
-            <% standingsArray.forEach(function(tournament, index) {%>
+            <% standingsArray.sort(function(a,b) { if(a.name> b.name) { return 1 } else { return-1
+                }}).forEach(function(tournament, index) {%>
 
                 <div>
                     <div class="title">

@@ -39,6 +39,10 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 
 /* -------------------- MIDDLEWARES -------------------- */
 
+// Method override allows for input requests to be modified! Useful for PUT and DELETE //
+
+const methodOverride = require('method-override')
+
 const app = express();
 
 // app.use(cookieParser()); // Since version 1.5.0, the cookie-parser middleware no longer needs to be used for this module to work.
@@ -466,9 +470,9 @@ app.get("/records", async (req, res) => {
           );
           indexOfElement === -1
             ? arrayOfTeams.push({
-                team: element.outcome.teamThatWon,
-                victories: 1,
-              })
+              team: element.outcome.teamThatWon,
+              victories: 1,
+            })
             : arrayOfTeams[indexOfElement].victories++;
         }
       });
@@ -878,84 +882,57 @@ app.get("/records", async (req, res) => {
 
 app.get("/standings", async (req, res) => {
   try {
-    const tournaments = await tournamentsModel.find(
-      { name: "Prueba" },
-      "name players teams"
-    );
+
+    const tournaments = await tournamentsModel.find({ ongoing: true }, "name teams");
 
     const standingsArray = [];
 
-    let sortedStanding;
+    let counter = 0;
 
-    let configForApiCall;
+    tournaments.forEach(async (tournament, index) => {
 
-    const fetch = require("node-fetch");
+      const standings = [];
 
-    tournaments.forEach((element, index) => {
-      const axios = require("axios");
+      let matches = await matchesModel.find({ "tournament.id": tournament.id }, "teamP1 scoreP1 teamP2 scoreP2 outcome");
 
-      let infoFromApi;
+      tournament.teams.forEach((team) => {
+        let played = matches.filter(element => element.teamP1 === team.team || element.teamP2 === team.team).length;
+        let wins = matches.filter(element => element.outcome.teamThatWon === team.team).length;
+        let draws = matches.filter(element => (element.teamP1 === team.team || element.teamP2 === team.team) && element.outcome.draw).length;
+        let losses = matches.filter(element => element.outcome.teamThatLost === team.team).length;
+        let goalsFor = matches.filter(element => element.teamP1 === team.team).reduce((acc, curr) => {
+          return acc + curr.scoreP1
+        }, 0) + matches.filter(element => element.teamP2 === team.team).reduce((acc, curr) => {
+          return acc + curr.scoreP2
+        }, 0);
+        let goalsAgainst = matches.filter(element => element.teamP1 === team.team).reduce((acc, curr) => {
+          return acc + curr.scoreP2
+        }, 0) + matches.filter(element => element.teamP2 === team.team).reduce((acc, curr) => {
+          return acc + curr.scoreP1
+        }, 0);
+        let scoringDifference = goalsFor - goalsAgainst;
+        let points = (wins * 3) + (draws);
 
-      // let counter = 0;
+        let { id, player, logo, teamCode } = team;
 
-      element.teams.forEach(async (team) => {
-        infoFromApi = require(`./public/teams/${team.code}-teams.json`);
-        console.log(infoFromApi.response);
-        // fetch("https://google.com")
-        //   .then((res) => res.text())
-        //   .then((text) => console.log(text));
-        // fetch(`./public/teams/${team.code}-teams.json`)
-        //   .then((res) => res.json())
-        //   .then((json) => {
-        //     console.log(json);
-        //   });
-        // axios
-        //   .get(`public/teams/${team.code}-teams.json`)
-        //   .then((res) => {
-        //     console.log(res.data);
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //   });
-        // configForApiCall = {
-        //   method: "get",
-        //   url: `https://v3.football.api-sports.io/teams/?id=${team.id}`,
-        //   headers: {
-        //     "x-rapidapi-key": "c6fc4afceaf077867ce47212440002cf",
-        //     "x-rapidapi-host": "v3.football.api-sports.io",
-        //   },
-        // };
-
-        // await axios(configForApiCall)
-        //   .then(function (response) {
-        //     console.log(response.data);
-        //     let { name, code, logo } = response.data.response;
-        //     team.name = name;
-        //     team.code = code;
-        //     team.logo = logo;
-        //     console.log(team);
-        //     // counter++;
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error);
-        //   });
-
-        // if (counter === sortedStanding.length) {
-        //   const teams = teamsFromApi.map((element) => {
-        //     let { id, name, code, logo } = element[0].team;
-        //     return {
-        //       id,
-        //       name,
-        //       code,
-        //       logo,
-        //     };
-        //   });
-        //   console.log(teams);
-        //   res.send(teams);
-        // }
+        standings.push({
+          id,
+          team: team.team,
+          player,
+          logo,
+          teamCode,
+          played,
+          wins,
+          draws,
+          losses,
+          goalsFor,
+          goalsAgainst,
+          scoringDifference,
+          points
+        });
       });
 
-      sortedStanding = element.teams.sort(function (a, b) {
+      let sortedStanding = standings.sort(function (a, b) {
         if (a.points > b.points) return -1;
         if (a.points < b.points) return 1;
 
@@ -970,28 +947,22 @@ app.get("/standings", async (req, res) => {
       });
 
       standingsArray.push({
-        name: element.name,
-        tournamentId: element.id,
+        name: tournament.name,
+        tournamentId: tournament.id,
         sortedStanding,
       });
+
+      counter++;
+
+      if (counter === tournaments.length) {
+        res.render("standings-id", { standingsArray });
+      }
     });
 
-    res.send("algo");
-
-    // res.render("standings-id", { standingsArray });
   } catch (err) {
     return res.status(500).send("Something went wrong!" + err);
   }
 });
-
-// app.get("/standings", async (req, res) => {
-//   try {
-//     const standings = await tournamentsModel.find({ ongoing: true }, "name");
-//     res.render("standings", { standings });
-//   } catch (err) {
-//     return res.status(500).send("Something went wrong!" + err);
-//   }
-// });
 
 // app.get("/standings/:id", async (req, res) => {
 
@@ -1068,9 +1039,8 @@ app.post("/create-tournament", async (req, res) => {
         console.log(counter);
       } else {
         console.log("response");
-        infoFromApi = await require(`./public/teams/${
-          element.split("|")[1]
-        }-teams.json`);
+        infoFromApi = await require(`./public/teams/${element.split("|")[1]
+          }-teams.json`);
 
         // console.log(infoFromApi.response);
 
@@ -1113,6 +1083,7 @@ app.post("/create-tournament", async (req, res) => {
           format,
           origin,
           teams,
+          fixtureStatus: false,
           ongoing: true, // TO DO: I may use a PUT request to inform that a tournament has finished. //
         };
 
@@ -1339,7 +1310,7 @@ app.get("/face-to-face", async (req, res) => {
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
 });
 
-app.get("/upload-games", isAuth, async (req, res) => {
+app.get("/upload-games", async (req, res) => {
   const idProvided = false;
   try {
     const tournamentsFromBD = await tournamentsModel.find({ ongoing: true }); // Solo traigo los torneos que se encuentren en curso.
@@ -1353,13 +1324,13 @@ app.get("/upload-games", isAuth, async (req, res) => {
   }
 });
 
-app.post("/upload-games", isAuth, (req, res) => {
+app.post("/upload-games", (req, res) => {
   // POST O GET?
   const selectedTournamentId = req.body.selection; // I must use the select "name" property;
   res.redirect(`/upload-games/${selectedTournamentId}`);
 });
 
-app.get("/upload-games/:id", isAuth, async (req, res) => {
+app.get("/upload-games/:id", async (req, res) => {
   const idProvided = req.params.id;
 
   // Chequeo mediante RegEx si, en potencia, el ID proporcionado es válido (en formato) //
@@ -1377,8 +1348,13 @@ app.get("/upload-games/:id", isAuth, async (req, res) => {
   }
 });
 
-app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
+app.post("/upload-games/:id", async (req, res) => {
   try {
+
+    const tournamentId = req.params.id;
+
+    const { id, name, format, origin, teams, fixture } = await tournamentsModel.findById(tournamentId, "name format origin teams fixture")
+
     let {
       playerP1,
       teamP1,
@@ -1388,10 +1364,6 @@ app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
       teamP2,
       scoreP2,
       penaltyScoreP2,
-      tournamentName,
-      tournamentId,
-      format,
-      origin,
     } = req.body;
 
     let rivalOfP1 = playerP2;
@@ -1401,52 +1373,52 @@ app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
     if (scoreP1 - scoreP2 !== 0) {
       scoreP1 > scoreP2
         ? (outcome = {
-            playerThatWon: playerP1,
-            teamThatWon: teamP1,
-            scoreFromTeamThatWon: scoreP1,
-            playerThatLost: playerP2,
-            teamThatLost: teamP2,
-            scoreFromTeamThatLost: scoreP2,
-            draw: false,
-            penalties: false,
-            scoringDifference: Math.abs(scoreP1 - scoreP2), // Es indistinto el orden, pues calculo valor absoluto.
-          })
+          playerThatWon: playerP1,
+          teamThatWon: teamP1,
+          scoreFromTeamThatWon: scoreP1,
+          playerThatLost: playerP2,
+          teamThatLost: teamP2,
+          scoreFromTeamThatLost: scoreP2,
+          draw: false,
+          penalties: false,
+          scoringDifference: Math.abs(scoreP1 - scoreP2), // Es indistinto el orden, pues calculo valor absoluto.
+        })
         : (outcome = {
-            playerThatWon: playerP2,
-            teamThatWon: teamP2,
-            scoreFromTeamThatWon: scoreP2,
-            playerThatLost: playerP1,
-            teamThatLost: teamP1,
-            scoreFromTeamThatLost: scoreP1,
-            draw: false,
-            penalties: false,
-            scoringDifference: Math.abs(scoreP1 - scoreP2), // Es indistinto el orden, pues calculo valor absoluto.
-          });
+          playerThatWon: playerP2,
+          teamThatWon: teamP2,
+          scoreFromTeamThatWon: scoreP2,
+          playerThatLost: playerP1,
+          teamThatLost: teamP1,
+          scoreFromTeamThatLost: scoreP1,
+          draw: false,
+          penalties: false,
+          scoringDifference: Math.abs(scoreP1 - scoreP2), // Es indistinto el orden, pues calculo valor absoluto.
+        });
     } else if (scoreP1 - scoreP2 === 0 && penaltyScoreP1 && penaltyScoreP2) {
       // Empate, y hubo penales
       penaltyScoreP1 > penaltyScoreP2
         ? (outcome = {
-            playerThatWon: playerP1,
-            teamThatWon: teamP1,
-            scoreFromTeamThatWon: penaltyScoreP1,
-            playerThatLost: playerP2,
-            teamThatLost: teamP2,
-            scoreFromTeamThatLost: penaltyScoreP2,
-            draw: true,
-            penalties: true,
-            scoringDifference: 0,
-          })
+          playerThatWon: playerP1,
+          teamThatWon: teamP1,
+          scoreFromTeamThatWon: penaltyScoreP1,
+          playerThatLost: playerP2,
+          teamThatLost: teamP2,
+          scoreFromTeamThatLost: penaltyScoreP2,
+          draw: true,
+          penalties: true,
+          scoringDifference: 0,
+        })
         : (outcome = {
-            playerThatWon: playerP2,
-            teamThatWon: teamP2,
-            scoreFromTeamThatWon: penaltyScoreP2,
-            playerThatLost: playerP1,
-            teamThatLost: teamP1,
-            scoreFromTeamThatLost: penaltyScoreP1,
-            draw: true,
-            penalties: true,
-            scoringDifference: 0,
-          });
+          playerThatWon: playerP2,
+          teamThatWon: teamP2,
+          scoreFromTeamThatWon: penaltyScoreP2,
+          playerThatLost: playerP1,
+          teamThatLost: teamP1,
+          scoreFromTeamThatLost: penaltyScoreP1,
+          draw: true,
+          penalties: true,
+          scoringDifference: 0,
+        });
     } else {
       // Empate, pero no hubo penales!
       outcome = {
@@ -1473,8 +1445,8 @@ app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
       rivalOfP2,
       outcome,
       tournament: {
-        name: tournamentName,
-        id: tournamentId,
+        name,
+        id,
         format,
         origin,
       },
@@ -1484,13 +1456,6 @@ app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
       // Para actualizar las rachas y la tabla, SI NO EMPATAN
 
       // ACTUALIZO TABLA DE POSICIONES //
-
-      const tournament = await tournamentsModel.findById(
-        tournamentId,
-        "teams fixture"
-      );
-
-      const teams = tournament.teams;
 
       const indexOfWinningTeam = teams.findIndex(
         (element) => element.team === match.outcome.teamThatWon
@@ -1552,9 +1517,15 @@ app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
         }
       );
 
-      // ACTUALIZO EL FIXTURE //
+      // CREO EL PARTIDO Y LO SUBO A LA BD, TAMBIÉN OBTENGO SU ID //
 
-      const fixture = tournament.fixture;
+      const createdMatch = await matchesModel.create(match);
+
+      const matchId = createdMatch.id;
+
+      console.log(matchId)
+
+      // ACTUALIZO EL FIXTURE //
 
       let index = fixture.findIndex((element) => {
         return (
@@ -1562,8 +1533,6 @@ app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
           element.teamP2 === match.outcome.teamThatLost
         );
       });
-
-      console.log(index);
 
       if (index !== -1) {
         await tournamentsModel.updateOne(
@@ -1580,6 +1549,7 @@ app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
             $set: {
               "fixture.$.scoreP1": Number(match.outcome.scoreFromTeamThatWon),
               "fixture.$.scoreP2": Number(match.outcome.scoreFromTeamThatLost),
+              "fixture.$.matchId": matchId,
             },
           }
         );
@@ -1600,6 +1570,7 @@ app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
             $set: {
               "fixture.$.scoreP1": Number(match.outcome.scoreFromTeamThatLost),
               "fixture.$.scoreP2": Number(match.outcome.scoreFromTeamThatWon),
+              "fixture.$.matchId": matchId,
             },
           }
         );
@@ -1607,42 +1578,35 @@ app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
 
       // ACTUALIZO RACHAS //
 
-      let winner = await playersModel.findOne({
-        name: match.outcome.playerThatWon,
-      });
-      let loser = await playersModel.findOne({
-        name: match.outcome.playerThatLost,
-      });
+      // let winner = await playersModel.findOne({
+      //   name: match.outcome.playerThatWon,
+      // });
+      // let loser = await playersModel.findOne({
+      //   name: match.outcome.playerThatLost,
+      // });
 
-      winner.losingStreak = 0;
-      winner.drawStreak = 0;
-      winner.winningStreak++;
+      // winner.losingStreak = 0;
+      // winner.drawStreak = 0;
+      // winner.winningStreak++;
 
-      if (winner.winningStreak > winner.longestWinningStreak) {
-        winner.longestWinningStreak++;
-      }
+      // if (winner.winningStreak > winner.longestWinningStreak) {
+      //   winner.longestWinningStreak++;
+      // }
 
-      loser.winningStreak = 0;
-      loser.drawStreak = 0;
-      loser.losingStreak++;
+      // loser.winningStreak = 0;
+      // loser.drawStreak = 0;
+      // loser.losingStreak++;
 
-      if (loser.losingStreak > loser.longestLosingStreak) {
-        loser.longestLosingStreak++;
-      }
+      // if (loser.losingStreak > loser.longestLosingStreak) {
+      //   loser.longestLosingStreak++;
+      // }
 
-      await winner.save();
-      await loser.save();
+      // await winner.save();
+      // await loser.save();
     }
     // SI EMPATAN //
     else {
       // TABLA DE POSICIONES //
-
-      const tournament = await tournamentsModel.findById(
-        tournamentId,
-        "teams fixture"
-      );
-
-      const teams = tournament.teams;
 
       const indexOfFirstTeam = teams.findIndex(
         (element) => element.team === teamP1
@@ -1694,9 +1658,15 @@ app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
         }
       );
 
-      // ACTUALIZO EL FIXTURE //
+      // CREO EL PARTIDO Y LO SUBO A LA BD, TAMBIÉN OBTENGO SU ID //
 
-      const fixture = tournament.fixture;
+      const createdMatch = await matchesModel.create(match);
+
+      const matchId = createdMatch.id;
+
+      console.log(matchId)
+
+      // ACTUALIZO EL FIXTURE //
 
       let index = fixture.findIndex((element) => {
         return element.teamP1 === teamP1 && element.teamP2 === teamP2;
@@ -1712,6 +1682,7 @@ app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
             $set: {
               "fixture.$.scoreP1": Number(scoreP1),
               "fixture.$.scoreP2": Number(scoreP2),
+              "fixture.$.matchId": matchId
             },
           }
         );
@@ -1727,6 +1698,7 @@ app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
             $set: {
               "fixture.$.scoreP1": Number(scoreP2),
               "fixture.$.scoreP2": Number(scoreP1),
+              "fixture.$.matchId": matchId,
             },
           }
         );
@@ -1734,33 +1706,125 @@ app.post("/upload-games-from-tournament", isAuth, async (req, res) => {
 
       // ACTUALIZO RACHAS //
 
-      let playerOne = await playersModel.findOne({ name: playerP1 });
-      let playerTwo = await playersModel.findOne({ name: playerP2 });
+      // let playerOne = await playersModel.findOne({ name: playerP1 });
+      // let playerTwo = await playersModel.findOne({ name: playerP2 });
 
-      playerOne.winningStreak = 0;
-      playerOne.losingStreak = 0;
-      playerOne.drawStreak++;
+      // playerOne.winningStreak = 0;
+      // playerOne.losingStreak = 0;
+      // playerOne.drawStreak++;
 
-      playerTwo.winningStreak = 0;
-      playerTwo.losingStreak = 0;
-      playerTwo.drawStreak++;
+      // playerTwo.winningStreak = 0;
+      // playerTwo.losingStreak = 0;
+      // playerTwo.drawStreak++;
 
-      if (playerOne.drawStreak > playerOne.longestDrawStreak) {
-        playerOne.longestDrawStreak++;
-      }
+      // if (playerOne.drawStreak > playerOne.longestDrawStreak) {
+      //   playerOne.longestDrawStreak++;
+      // }
 
-      if (playerTwo.drawStreak > playerTwo.longestDrawStreak) {
-        playerTwo.longestDrawStreak++;
-      }
+      // if (playerTwo.drawStreak > playerTwo.longestDrawStreak) {
+      //   playerTwo.longestDrawStreak++;
+      // }
 
-      await playerOne.save();
-      await playerTwo.save();
+      // await playerOne.save();
+      // await playerTwo.save();
     }
 
-    await matchesModel.create(match);
-
-    res.redirect("/upload-games");
+    res.redirect(`/fixture/${tournamentId}`);
   } catch (err) {
+    if (err.name === "ValidationError") {
+      const errors = {};
+
+      Object.keys(err.errors).forEach((key) => {
+        errors[key] = err.errors[key].message;
+      });
+
+      return res.status(400).send(errors);
+    }
+    res.status(500).send("Something went wrong" + err);
+  }
+});
+
+app.post("/update-games/:id/:matchId", methodOverride('_method'), async (req, res) => {
+
+  try {
+
+    const tournamentId = req.params.id;
+    const matchId = req.params.matchId;
+
+    let { teamP1, teamP2, scoreP1, scoreP2, playerP1, playerP2 } = req.body;
+
+    // Actualizo face-to-face //
+
+    const match = await matchesModel.findById(matchId, "teamP1 teamP2 outcome")
+
+    let outcome;
+
+    if (scoreP1 - scoreP2 !== 0) {
+      scoreP1 > scoreP2
+        ? (outcome = {
+          playerThatWon: playerP1,
+          teamThatWon: teamP1,
+          scoreFromTeamThatWon: Number(scoreP1),
+          playerThatLost: playerP2,
+          teamThatLost: teamP2,
+          scoreFromTeamThatLost: Number(scoreP2),
+          draw: false,
+          penalties: false,
+          scoringDifference: Math.abs(scoreP1 - scoreP2),
+        })
+        : (outcome = {
+          playerThatWon: playerP2,
+          teamThatWon: teamP2,
+          scoreFromTeamThatWon: Number(scoreP2),
+          playerThatLost: playerP1,
+          teamThatLost: teamP1,
+          scoreFromTeamThatLost: Number(scoreP1),
+          draw: false,
+          penalties: false,
+          scoringDifference: Math.abs(scoreP1 - scoreP2),
+        });
+    } else {
+      // Empate
+      outcome = {
+        playerThatWon: "none",
+        teamThatWon: "none",
+        scoreFromTeamThatWon: "none",
+        playerThatLost: "none",
+        teamThatLost: "none",
+        scoreFromTeamThatLost: "none",
+        draw: true,
+        penalties: false,
+        scoringDifference: 0,
+      };
+    }
+
+    if (match) {
+      match.teamP1 === teamP1 ? await match.updateOne({ scoreP1, scoreP2, outcome }) : await match.updateOne({ scoreP1: scoreP2, scoreP2: scoreP1, outcome })
+    }
+
+    // Actualizo fixture //
+
+    await tournamentsModel.updateOne({
+      _id: tournamentId, fixture: {
+        $elemMatch: {
+          teamP1,
+          teamP2,
+        }
+      }
+    },
+      {
+        $set: {
+          "fixture.$.scoreP1": scoreP1,
+          "fixture.$.scoreP2": scoreP2,
+        },
+      });
+
+    // res.redirect(`/fixture/${tournamentId}`)
+
+    res.redirect(`/fixture/${tournamentId}`)
+
+  }
+  catch (err) {
     if (err.name === "ValidationError") {
       const errors = {};
 
@@ -1799,7 +1863,7 @@ app.post("/lottery-tournament-selection", async (req, res) => {
   }
 });
 
-app.get("/lottery/:id", isAuth, async (req, res) => {
+app.get("/lottery/:id", async (req, res) => {
   const idProvided = req.params.id;
   const { players, teams } = req.query;
   try {
@@ -1814,19 +1878,29 @@ app.get("/lottery/:id", isAuth, async (req, res) => {
   }
 });
 
-app.post("/lottery-assignment/:id", isAuth, async (req, res) => {
+app.post("/lottery-assignment/:id", async (req, res) => {
   try {
     const { players, teams } = req.body;
     const tournamentId = req.params.id;
     const assignmentArray = [];
-    teams.forEach((team, index) => {
+
+    const tournament = await tournamentsModel.findById(tournamentId, "teams");
+
+    const teamsFromTournament = tournament.teams;
+
+    teams.forEach(async (element, index) => {
+
+      let { id, team, logo } = teamsFromTournament.filter((filtered) => filtered.id == element.split("|")[0])[0]; // Me quedo el único elemento de la lista
+
       let assignment = {
+        id,
         player: players[index],
         team,
-        teamId: index,
+        logo
       };
+
       assignmentArray.push(assignment);
-    });
+    })
 
     // Actualizo "teams" dentro del torneo, para sumar la info de qué jugadores juegan con qué equipos. Es necesario para los standings //
 
@@ -1838,7 +1912,6 @@ app.post("/lottery-assignment/:id", isAuth, async (req, res) => {
         {
           $set: {
             "teams.$.player": assignment.player,
-            "teams.$.teamId": assignment.teamId,
           },
         }
       );
@@ -1853,12 +1926,87 @@ app.post("/lottery-assignment/:id", isAuth, async (req, res) => {
 
     await tournamentsModel.findByIdAndUpdate(tournamentId, {
       fixture: definitiveFixture,
+      fixtureStatus: true,
     });
 
     res.redirect(`/fixture/${tournamentId}`);
   } catch (err) {
     res.status(500).send("Something went wrong" + err);
   }
+
+  // let infoFromApi;
+  // let response;
+  // let newTeam;
+  // let counter = 0;
+
+  // filteredArrayFromValues.forEach(async (element, index) => {
+  //   if (
+  //     element === "Leo" ||
+  //     element === "Lucho" ||
+  //     element === "Max" ||
+  //     element === "Nico" ||
+  //     element === "Santi"
+  //   ) {
+  //     humanPlayers.push(element);
+  //     counter++;
+  //     console.log(counter);
+  //   } else {
+  //     console.log("response");
+  //     infoFromApi = await require(`./public/teams/${element.split("|")[1]
+  //       }-teams.json`);
+
+  //     // console.log(infoFromApi.response);
+
+  //     response = infoFromApi.response;
+
+  //     // console.log(response);
+
+  //     newTeam = response
+  //       .filter((filtered) => filtered.team.id == element.split("|")[0])
+  //       .map(({ team: { id, name, code, logo } }) => {
+  //         return {
+  //           id,
+  //           team: name,
+  //           teamCode: code,
+  //           countryCode: element.split("|")[1],
+  //           logo,
+  //           played: 0,
+  //           wins: 0,
+  //           draws: 0,
+  //           losses: 0,
+  //           goalsFor: 0,
+  //           goalsAgainst: 0,
+  //           scoringDifference: 0,
+  //           points: 0,
+  //         };
+  //       })[0];
+
+  //     console.log(newTeam);
+
+  //     teams.push(newTeam);
+
+  //     counter++;
+  //     console.log(counter);
+  //   }
+
+  //   if (counter === filteredArrayFromValues.length) {
+  //     const tournament = {
+  //       name: tournamentName,
+  //       players: humanPlayers,
+  //       format,
+  //       origin,
+  //       teams,
+  //       fixtureStatus: false,
+  //       ongoing: true, // TO DO: I may use a PUT request to inform that a tournament has finished. //
+  //     };
+
+  //     await tournamentsModel.create(tournament);
+  //     res.redirect("/lottery-tournament-selection");
+  //   }
+  // });
+
+
+
 });
 
 // FUNCIÓN PARA GENERAR EL FIXTURE //
@@ -1936,8 +2084,10 @@ const fixture = (lotteryArray, playerArray) => {
         playerP2: randomTeamTwo.player,
         teamP1: randomTeamOne.team,
         teamP2: randomTeamTwo.team,
-        teamIdP1: randomTeamOne.teamId,
-        teamIdP2: randomTeamTwo.teamId,
+        teamIdP1: randomTeamOne.id,
+        teamIdP2: randomTeamTwo.id,
+        teamLogoP1: randomTeamOne.logo,
+        teamLogoP2: randomTeamTwo.logo
       };
       temporaryWeek.push(modifiedGame);
       // ÚLTIMO PARTIDO DE CADA FECHA //
@@ -1970,20 +2120,18 @@ const fixture = (lotteryArray, playerArray) => {
       firstCount === amountOfGamesForEachTeam
         ? lotteryArray.splice(firstTeamIndex, 1)
         : console.log(
-            `El equipo ${randomTeamOne.team} aun tiene ${
-              amountOfGamesForEachTeam - firstCount
-            } partidos por jugar`
-          );
+          `El equipo ${randomTeamOne.team} aun tiene ${amountOfGamesForEachTeam - firstCount
+          } partidos por jugar`
+        );
       // Como pude haber borrado un elemento, recién ahora debo calcular el índice del randomTeamTwo //
       let secondTeamIndex = lotteryArray.indexOf(randomTeamTwo);
       // Si randomTeamTwo alcanzó su máximo de partidos, lo elimino de lotteryArray (por performance): //
       secondCount === amountOfGamesForEachTeam
         ? lotteryArray.splice(secondTeamIndex, 1)
         : console.log(
-            `El equipo ${randomTeamTwo.team} aun tiene ${
-              amountOfGamesForEachTeam - secondCount
-            } partidos por jugar`
-          );
+          `El equipo ${randomTeamTwo.team} aun tiene ${amountOfGamesForEachTeam - secondCount
+          } partidos por jugar`
+        );
       firstTeamIndex; // ¿NECESARIO? //
       secondTeamIndex; // ¿NECESARIO? //
     }

@@ -1,7 +1,8 @@
 <%- include('./partials/header')-%>
 
     <main>
-        <form class="form" id="uploadGamesForm" action="/upload-games-from-tournament" method="post" autocomplete="off">
+        <form class="form" id="uploadGamesForm" action="/upload-games/<%=tournamentById._id%>" method="post"
+            autocomplete="off">
             <div class="form__container">
                 <div class="form__container-row">
                     <label>
