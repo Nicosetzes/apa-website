@@ -26,8 +26,33 @@
             text-decoration: none;
             width: 150px;
 
+            .logo-link {
+                margin: 0.25rem 0;
+            }
+
+            .player-link {
+                color: #ce0404;
+                cursor: pointer;
+                display: flex;
+
+                .match-info__player {
+                    border: 0;
+                    cursor: pointer;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    text-align: center;
+                    width: 75px;
+
+                    &:focus {
+                        outline: 0;
+                    }
+                }
+            }
+
             .match-info__team {
                 border: 0;
+                cursor: pointer;
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: center;
@@ -49,7 +74,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-evenly;
-            width: 100px;
+            // width: 125px;
 
             .match-score__goals {
                 border: 0;
@@ -71,14 +96,31 @@
                 }
             }
 
-            .fixture-edit {
-                background-color: #d76615;
-                border: 0;
-                border-radius: 10px;
-                color: #fff;
-                font-size: 0.75rem;
-                outline: #000 2px solid;
-                padding: 0.25rem 0.5rem;
+            .input__container {
+                display: flex;
+                padding: 0 0.125rem;
+
+                .fixture-edit {
+                    background-color: #ff852d;
+                    border: 0;
+                    border-radius: 10px;
+                    color: #fff;
+                    font-size: 0.75rem;
+                    margin-right: 0.25rem;
+                    outline: #000 2px solid;
+                    padding: 0.25rem 0.5rem;
+                }
+
+                .fixture-delete {
+                    background-color: #ce0404;
+                    border: 0;
+                    border-radius: 10px;
+                    color: #fff;
+                    font-size: 0.75rem;
+                    margin-left: 0.25rem;
+                    outline: #000 2px solid;
+                    padding: 0.25rem 0.5rem;
+                }
             }
 
             .fixture-submit {
@@ -92,7 +134,7 @@
             }
 
             .match-score__versus {
-                font-size: 1.5rem;
+                font-size: 1.25rem;
             }
 
             input {

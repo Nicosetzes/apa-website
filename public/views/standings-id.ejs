@@ -37,18 +37,21 @@
                                         <td>
                                             <img src="<%=tournament.sortedStanding[i].logo%>"
                                                 alt="<%=tournament.sortedStanding[i].team%>">
-                                            <a href="/fixture/<%=tournament.tournamentId%>/<%=tournament.sortedStanding[i].teamId%>"
+                                            <a href="/fixture/<%=tournament.tournamentId%>/<%=tournament.sortedStanding[i].id%>"
                                                 class="team-name">
                                                 <%=tournament.sortedStanding[i].team%>
                                             </a>
-                                            <a href="/fixture/<%=tournament.tournamentId%>/<%=tournament.sortedStanding[i].teamId%>"
+                                            <a href="/fixture/<%=tournament.tournamentId%>/<%=tournament.sortedStanding[i].id%>"
                                                 class="team-code">
                                                 <%=tournament.sortedStanding[i].teamCode%>
                                             </a>
                                         </td>
                                         <td>
-                                            <%=tournament.sortedStanding[i].player[0] +
-                                                tournament.sortedStanding[i].player[1].toUpperCase()%>
+                                            <a
+                                                href="/fixture/<%=tournament.tournamentId%>/<%=tournament.sortedStanding[i].player%>">
+                                                <%=tournament.sortedStanding[i].player[0] +
+                                                    tournament.sortedStanding[i].player[1].toUpperCase()%>
+                                            </a>
                                         </td>
                                         <td>
                                             <%=tournament.sortedStanding[i].played%>

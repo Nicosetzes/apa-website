@@ -889,13 +889,14 @@ app.get("/standings", async (req, res) => {
 
     let counter = 0;
 
-    tournaments.forEach(async (tournament, index) => {
+    tournaments.forEach(async (tournament) => {
 
       const standings = [];
 
       let matches = await matchesModel.find({ "tournament.id": tournament.id }, "teamP1 scoreP1 teamP2 scoreP2 outcome");
 
-      tournament.teams.forEach((team) => {
+      tournament.teams.forEach(async team => {
+
         let played = matches.filter(element => element.teamP1 === team.team || element.teamP2 === team.team).length;
         let wins = matches.filter(element => element.outcome.teamThatWon === team.team).length;
         let draws = matches.filter(element => (element.teamP1 === team.team || element.teamP2 === team.team) && element.outcome.draw).length;
@@ -1002,11 +1003,11 @@ app.get("/standings", async (req, res) => {
 //   }
 // });
 
-app.get("/create-tournament", (req, res) => {
+app.get("/create-tournament", isAuth, (req, res) => {
   res.render("create-tournament", {});
 });
 
-app.post("/create-tournament", async (req, res) => {
+app.post("/create-tournament", isAuth, async (req, res) => {
   try {
     const { tournamentName, format, origin } = req.body;
 
@@ -1310,12 +1311,12 @@ app.get("/face-to-face", async (req, res) => {
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
 });
 
-app.get("/upload-games", async (req, res) => {
+app.get("/upload-game", isAuth, async (req, res) => {
   const idProvided = false;
   try {
     const tournamentsFromBD = await tournamentsModel.find({ ongoing: true }); // Solo traigo los torneos que se encuentren en curso.
     if (!tournamentsFromBD.length) {
-      res.render("./errors/upload-games-error", { idProvided });
+      res.render("./errors/upload-game-error", { idProvided });
       return;
     }
     res.render("tournament-selection", { tournamentsFromBD });
@@ -1324,13 +1325,13 @@ app.get("/upload-games", async (req, res) => {
   }
 });
 
-app.post("/upload-games", (req, res) => {
+app.post("/upload-game", isAuth, (req, res) => {
   // POST O GET?
   const selectedTournamentId = req.body.selection; // I must use the select "name" property;
-  res.redirect(`/upload-games/${selectedTournamentId}`);
+  res.redirect(`/upload-game/${selectedTournamentId}`);
 });
 
-app.get("/upload-games/:id", async (req, res) => {
+app.get("/upload-game/:id", isAuth, async (req, res) => {
   const idProvided = req.params.id;
 
   // Chequeo mediante RegEx si, en potencia, el ID proporcionado es válido (en formato) //
@@ -1338,9 +1339,9 @@ app.get("/upload-games/:id", async (req, res) => {
   try {
     if (idProvided.match(/^[0-9a-fA-F]{24}$/)) {
       const tournamentById = await tournamentsModel.findById(idProvided);
-      res.render("upload-games", { tournamentById });
+      res.render("upload-game", { tournamentById });
     } else {
-      res.render("./errors/upload-games-error", { idProvided });
+      res.render("./errors/upload-game-error", { idProvided });
       return;
     }
   } catch (err) {
@@ -1348,7 +1349,7 @@ app.get("/upload-games/:id", async (req, res) => {
   }
 });
 
-app.post("/upload-games/:id", async (req, res) => {
+app.post("/upload-game/:id", isAuth, async (req, res) => {
   try {
 
     const tournamentId = req.params.id;
@@ -1457,73 +1458,71 @@ app.post("/upload-games/:id", async (req, res) => {
 
       // ACTUALIZO TABLA DE POSICIONES //
 
-      const indexOfWinningTeam = teams.findIndex(
-        (element) => element.team === match.outcome.teamThatWon
-      );
+      // const indexOfWinningTeam = teams.findIndex(
+      //   (element) => element.team === match.outcome.teamThatWon
+      // );
 
-      const updatedWinnerPlayed = Number(teams[indexOfWinningTeam].played) + 1;
-      const updatedWinnerWins = Number(teams[indexOfWinningTeam].wins) + 1;
-      const updatedWinnerGoalsFor =
-        Number(teams[indexOfWinningTeam].goalsFor) +
-        Number(match.outcome.scoreFromTeamThatWon);
-      const updatedWinnerGoalsAgainst =
-        Number(teams[indexOfWinningTeam].goalsAgainst) +
-        Number(match.outcome.scoreFromTeamThatLost);
-      const updatedWinnerScoringDifference =
-        Number(teams[indexOfWinningTeam].scoringDifference) +
-        Number(match.outcome.scoringDifference);
-      const updatedWinnerPoints = Number(teams[indexOfWinningTeam].points) + 3;
+      // const updatedWinnerPlayed = Number(teams[indexOfWinningTeam].played) + 1;
+      // const updatedWinnerWins = Number(teams[indexOfWinningTeam].wins) + 1;
+      // const updatedWinnerGoalsFor =
+      //   Number(teams[indexOfWinningTeam].goalsFor) +
+      //   Number(match.outcome.scoreFromTeamThatWon);
+      // const updatedWinnerGoalsAgainst =
+      //   Number(teams[indexOfWinningTeam].goalsAgainst) +
+      //   Number(match.outcome.scoreFromTeamThatLost);
+      // const updatedWinnerScoringDifference =
+      //   Number(teams[indexOfWinningTeam].scoringDifference) +
+      //   Number(match.outcome.scoringDifference);
+      // const updatedWinnerPoints = Number(teams[indexOfWinningTeam].points) + 3;
 
-      await tournamentsModel.updateOne(
-        { _id: tournamentId, "teams.team": match.outcome.teamThatWon },
-        {
-          $set: {
-            "teams.$.played": updatedWinnerPlayed,
-            "teams.$.wins": updatedWinnerWins,
-            "teams.$.goalsFor": updatedWinnerGoalsFor,
-            "teams.$.goalsAgainst": updatedWinnerGoalsAgainst,
-            "teams.$.scoringDifference": updatedWinnerScoringDifference,
-            "teams.$.points": updatedWinnerPoints,
-          },
-        }
-      );
+      // await tournamentsModel.updateOne(
+      //   { _id: tournamentId, "teams.team": match.outcome.teamThatWon },
+      //   {
+      //     $set: {
+      //       "teams.$.played": updatedWinnerPlayed,
+      //       "teams.$.wins": updatedWinnerWins,
+      //       "teams.$.goalsFor": updatedWinnerGoalsFor,
+      //       "teams.$.goalsAgainst": updatedWinnerGoalsAgainst,
+      //       "teams.$.scoringDifference": updatedWinnerScoringDifference,
+      //       "teams.$.points": updatedWinnerPoints,
+      //     },
+      //   }
+      // );
 
-      const indexOfLosingTeam = teams.findIndex(
-        (element) => element.team === match.outcome.teamThatLost
-      );
+      // const indexOfLosingTeam = teams.findIndex(
+      //   (element) => element.team === match.outcome.teamThatLost
+      // );
 
-      const updatedLoserPlayed = Number(teams[indexOfLosingTeam].played) + 1;
-      const updatedLoserLosses = Number(teams[indexOfLosingTeam].losses) + 1;
-      const updatedLoserGoalsFor =
-        Number(teams[indexOfLosingTeam].goalsFor) +
-        Number(match.outcome.scoreFromTeamThatLost);
-      const updatedLoserGoalsAgainst =
-        Number(teams[indexOfLosingTeam].goalsAgainst) +
-        Number(match.outcome.scoreFromTeamThatWon);
-      const updatedLoserScoringDifference =
-        Number(teams[indexOfLosingTeam].scoringDifference) -
-        Number(match.outcome.scoringDifference);
+      // const updatedLoserPlayed = Number(teams[indexOfLosingTeam].played) + 1;
+      // const updatedLoserLosses = Number(teams[indexOfLosingTeam].losses) + 1;
+      // const updatedLoserGoalsFor =
+      //   Number(teams[indexOfLosingTeam].goalsFor) +
+      //   Number(match.outcome.scoreFromTeamThatLost);
+      // const updatedLoserGoalsAgainst =
+      //   Number(teams[indexOfLosingTeam].goalsAgainst) +
+      //   Number(match.outcome.scoreFromTeamThatWon);
+      // const updatedLoserScoringDifference =
+      //   Number(teams[indexOfLosingTeam].scoringDifference) -
+      //   Number(match.outcome.scoringDifference);
 
-      await tournamentsModel.updateOne(
-        { _id: tournamentId, "teams.team": match.outcome.teamThatLost },
-        {
-          $set: {
-            "teams.$.played": updatedLoserPlayed,
-            "teams.$.losses": updatedLoserLosses,
-            "teams.$.goalsFor": updatedLoserGoalsFor,
-            "teams.$.goalsAgainst": updatedLoserGoalsAgainst,
-            "teams.$.scoringDifference": updatedLoserScoringDifference,
-          },
-        }
-      );
+      // await tournamentsModel.updateOne(
+      //   { _id: tournamentId, "teams.team": match.outcome.teamThatLost },
+      //   {
+      //     $set: {
+      //       "teams.$.played": updatedLoserPlayed,
+      //       "teams.$.losses": updatedLoserLosses,
+      //       "teams.$.goalsFor": updatedLoserGoalsFor,
+      //       "teams.$.goalsAgainst": updatedLoserGoalsAgainst,
+      //       "teams.$.scoringDifference": updatedLoserScoringDifference,
+      //     },
+      //   }
+      // );
 
       // CREO EL PARTIDO Y LO SUBO A LA BD, TAMBIÉN OBTENGO SU ID //
 
       const createdMatch = await matchesModel.create(match);
 
       const matchId = createdMatch.id;
-
-      console.log(matchId)
 
       // ACTUALIZO EL FIXTURE //
 
@@ -1578,85 +1577,85 @@ app.post("/upload-games/:id", async (req, res) => {
 
       // ACTUALIZO RACHAS //
 
-      // let winner = await playersModel.findOne({
-      //   name: match.outcome.playerThatWon,
-      // });
-      // let loser = await playersModel.findOne({
-      //   name: match.outcome.playerThatLost,
-      // });
+      let winner = await playersModel.findOne({
+        name: match.outcome.playerThatWon,
+      });
+      let loser = await playersModel.findOne({
+        name: match.outcome.playerThatLost,
+      });
 
-      // winner.losingStreak = 0;
-      // winner.drawStreak = 0;
-      // winner.winningStreak++;
+      winner.losingStreak = 0;
+      winner.drawStreak = 0;
+      winner.winningStreak++;
 
-      // if (winner.winningStreak > winner.longestWinningStreak) {
-      //   winner.longestWinningStreak++;
-      // }
+      if (winner.winningStreak > winner.longestWinningStreak) {
+        winner.longestWinningStreak++;
+      }
 
-      // loser.winningStreak = 0;
-      // loser.drawStreak = 0;
-      // loser.losingStreak++;
+      loser.winningStreak = 0;
+      loser.drawStreak = 0;
+      loser.losingStreak++;
 
-      // if (loser.losingStreak > loser.longestLosingStreak) {
-      //   loser.longestLosingStreak++;
-      // }
+      if (loser.losingStreak > loser.longestLosingStreak) {
+        loser.longestLosingStreak++;
+      }
 
-      // await winner.save();
-      // await loser.save();
+      await winner.save();
+      await loser.save();
     }
     // SI EMPATAN //
     else {
       // TABLA DE POSICIONES //
 
-      const indexOfFirstTeam = teams.findIndex(
-        (element) => element.team === teamP1
-      );
+      // const indexOfFirstTeam = teams.findIndex(
+      //   (element) => element.team === teamP1
+      // );
 
-      const updatedFirstPlayed = Number(teams[indexOfFirstTeam].played) + 1;
-      const updatedFirstDraws = Number(teams[indexOfFirstTeam].draws) + 1;
-      const updatedFirstGoalsFor =
-        Number(teams[indexOfFirstTeam].goalsFor) + Number(scoreP1);
-      const updatedFirstGoalsAgainst =
-        Number(teams[indexOfFirstTeam].goalsAgainst) + Number(scoreP2);
-      const updatedFirstPoints = Number(teams[indexOfFirstTeam].points) + 1;
+      // const updatedFirstPlayed = Number(teams[indexOfFirstTeam].played) + 1;
+      // const updatedFirstDraws = Number(teams[indexOfFirstTeam].draws) + 1;
+      // const updatedFirstGoalsFor =
+      //   Number(teams[indexOfFirstTeam].goalsFor) + Number(scoreP1);
+      // const updatedFirstGoalsAgainst =
+      //   Number(teams[indexOfFirstTeam].goalsAgainst) + Number(scoreP2);
+      // const updatedFirstPoints = Number(teams[indexOfFirstTeam].points) + 1;
 
-      await tournamentsModel.updateOne(
-        { _id: tournamentId, "teams.team": teamP1 },
-        {
-          $set: {
-            "teams.$.played": updatedFirstPlayed,
-            "teams.$.draws": updatedFirstDraws,
-            "teams.$.goalsFor": updatedFirstGoalsFor,
-            "teams.$.goalsAgainst": updatedFirstGoalsAgainst,
-            "teams.$.points": updatedFirstPoints,
-          },
-        }
-      );
+      // await tournamentsModel.updateOne(
+      //   { _id: tournamentId, "teams.team": teamP1 },
+      //   {
+      //     $set: {
+      //       "teams.$.played": updatedFirstPlayed,
+      //       "teams.$.draws": updatedFirstDraws,
+      //       "teams.$.goalsFor": updatedFirstGoalsFor,
+      //       "teams.$.goalsAgainst": updatedFirstGoalsAgainst,
+      //       "teams.$.points": updatedFirstPoints,
+      //     },
+      //   }
+      // );
 
-      const indexOfSecondTeam = teams.findIndex(
-        (element) => element.team === teamP2
-      );
+      // const indexOfSecondTeam = teams.findIndex(
+      //   (element) => element.team === teamP2
+      // );
 
-      const updatedSecondPlayed = Number(teams[indexOfSecondTeam].played) + 1;
-      const updatedSecondDraws = Number(teams[indexOfSecondTeam].draws) + 1;
-      const updatedSecondGoalsFor =
-        Number(teams[indexOfSecondTeam].goalsFor) + Number(scoreP2);
-      const updatedSecondGoalsAgainst =
-        Number(teams[indexOfSecondTeam].goalsAgainst) + Number(scoreP1);
-      const updatedSecondPoints = Number(teams[indexOfSecondTeam].points) + 1;
+      // const updatedSecondPlayed = Number(teams[indexOfSecondTeam].played) + 1;
+      // const updatedSecondDraws = Number(teams[indexOfSecondTeam].draws) + 1;
+      // const updatedSecondGoalsFor =
+      //   Number(teams[indexOfSecondTeam].goalsFor) + Number(scoreP2);
+      // const updatedSecondGoalsAgainst =
+      //   Number(teams[indexOfSecondTeam].goalsAgainst) + Number(scoreP1);
+      // const updatedSecondPoints = Number(teams[indexOfSecondTeam].points) + 1;
 
-      await tournamentsModel.updateOne(
-        { _id: tournamentId, "teams.team": teamP2 },
-        {
-          $set: {
-            "teams.$.played": updatedSecondPlayed,
-            "teams.$.draws": updatedSecondDraws,
-            "teams.$.goalsFor": updatedSecondGoalsFor,
-            "teams.$.goalsAgainst": updatedSecondGoalsAgainst,
-            "teams.$.points": updatedSecondPoints,
-          },
-        }
-      );
+      // await tournamentsModel.updateOne(
+      //   { _id: tournamentId, "teams.team": teamP2 },
+      //   {
+      //     $set: {
+      //       "teams.$.played": updatedSecondPlayed,
+      //       "teams.$.draws": updatedSecondDraws,
+      //       "teams.$.goalsFor": updatedSecondGoalsFor,
+      //       "teams.$.goalsAgainst": updatedSecondGoalsAgainst,
+      //       "teams.$.points": updatedSecondPoints,
+      //     },
+      //   }
+      // );
 
       // CREO EL PARTIDO Y LO SUBO A LA BD, TAMBIÉN OBTENGO SU ID //
 
@@ -1706,27 +1705,27 @@ app.post("/upload-games/:id", async (req, res) => {
 
       // ACTUALIZO RACHAS //
 
-      // let playerOne = await playersModel.findOne({ name: playerP1 });
-      // let playerTwo = await playersModel.findOne({ name: playerP2 });
+      let playerOne = await playersModel.findOne({ name: playerP1 });
+      let playerTwo = await playersModel.findOne({ name: playerP2 });
 
-      // playerOne.winningStreak = 0;
-      // playerOne.losingStreak = 0;
-      // playerOne.drawStreak++;
+      playerOne.winningStreak = 0;
+      playerOne.losingStreak = 0;
+      playerOne.drawStreak++;
 
-      // playerTwo.winningStreak = 0;
-      // playerTwo.losingStreak = 0;
-      // playerTwo.drawStreak++;
+      playerTwo.winningStreak = 0;
+      playerTwo.losingStreak = 0;
+      playerTwo.drawStreak++;
 
-      // if (playerOne.drawStreak > playerOne.longestDrawStreak) {
-      //   playerOne.longestDrawStreak++;
-      // }
+      if (playerOne.drawStreak > playerOne.longestDrawStreak) {
+        playerOne.longestDrawStreak++;
+      }
 
-      // if (playerTwo.drawStreak > playerTwo.longestDrawStreak) {
-      //   playerTwo.longestDrawStreak++;
-      // }
+      if (playerTwo.drawStreak > playerTwo.longestDrawStreak) {
+        playerTwo.longestDrawStreak++;
+      }
 
-      // await playerOne.save();
-      // await playerTwo.save();
+      await playerOne.save();
+      await playerTwo.save();
     }
 
     res.redirect(`/fixture/${tournamentId}`);
@@ -1744,7 +1743,7 @@ app.post("/upload-games/:id", async (req, res) => {
   }
 });
 
-app.post("/update-games/:id/:matchId", methodOverride('_method'), async (req, res) => {
+app.post("/update-game/:id/:matchId", methodOverride('_method'), async (req, res) => {
 
   try {
 
@@ -1814,12 +1813,52 @@ app.post("/update-games/:id/:matchId", methodOverride('_method'), async (req, re
     },
       {
         $set: {
-          "fixture.$.scoreP1": scoreP1,
-          "fixture.$.scoreP2": scoreP2,
+          "fixture.$.scoreP1": Number(scoreP1),
+          "fixture.$.scoreP2": Number(scoreP2),
         },
       });
 
-    // res.redirect(`/fixture/${tournamentId}`)
+    res.redirect(`/fixture/${tournamentId}`)
+
+  }
+  catch (err) {
+    if (err.name === "ValidationError") {
+      const errors = {};
+
+      Object.keys(err.errors).forEach((key) => {
+        errors[key] = err.errors[key].message;
+      });
+
+      return res.status(400).send(errors);
+    }
+    res.status(500).send("Something went wrong" + err);
+  }
+});
+
+app.post("/delete-game/:id/:matchId", methodOverride('_method'), async (req, res) => {
+
+  try {
+
+    const tournamentId = req.params.id;
+    const matchId = req.params.matchId;
+
+    await matchesModel.findByIdAndRemove(matchId); // Borro el partido de la colección face-to-face //
+
+    // Actualizo fixture //
+
+    await tournamentsModel.updateOne({
+      _id: tournamentId, fixture: {
+        $elemMatch: {
+          matchId
+        }
+      },
+    },
+      {
+        $unset: {
+          "fixture.$.scoreP1": "",
+          "fixture.$.scoreP2": "",
+        },
+      });
 
     res.redirect(`/fixture/${tournamentId}`)
 
@@ -2245,26 +2284,16 @@ const fixture = (lotteryArray, playerArray) => {
   return reducedWeeks;
 };
 
-app.get("/fixture", async (req, res) => {
+app.get("/fixture", isAuth, async (req, res) => {
   try {
     const tournaments = await tournamentsModel.find({ ongoing: true }, "name");
     res.render("fixture", { tournaments });
   } catch (err) {
     return res.status(500).send("Something went wrong!" + err);
   }
-  // try {
-  //   const tournaments = await tournamentsModel.find({ ongoing: true });
-  //   if (!tournaments) {
-  //     res.render("./errors/tournaments-error", {});
-  //     return;
-  //   }
-  //   res.render("fixture", { tournaments })
-  // } catch (err) {
-  //   res.status(500).send("Something went wrong" + err);
-  // }
 });
 
-app.get("/fixture/:id", async (req, res) => {
+app.get("/fixture/:id", isAuth, async (req, res) => {
   const tournamentId = req.params.id;
   try {
     const tournamentById = await tournamentsModel.findById(tournamentId);
@@ -2278,10 +2307,10 @@ app.get("/fixture/:id", async (req, res) => {
   }
 });
 
-app.get("/fixture/:tournamentId/:teamId", async (req, res) => {
-  const { tournamentId, teamId } = req.params;
+app.get("/fixture/:tournamentId/:teamIdOrPlayerName", isAuth, async (req, res) => {
+  const { tournamentId, teamIdOrPlayerName } = req.params;
   try {
-    // { _id: tournamentId, "fixture": { "$elemMatch": { "teamP1": teamP1, "teamP2": teamP2 } } },
+
     const tournament = await tournamentsModel.findById(
       tournamentId,
       "name fixture"
@@ -2293,26 +2322,52 @@ app.get("/fixture/:tournamentId/:teamId", async (req, res) => {
 
     const tournamentName = tournament.name;
 
-    const filteredFixtureFromTournament = tournament.fixture.filter(
-      (element) => {
-        return element.teamIdP1 == teamId || element.teamIdP2 == teamId;
+    if (isNaN(teamIdOrPlayerName)) { // El param es el playerName
+
+      const playerName = teamIdOrPlayerName;
+
+      const filteredFixtureFromTournament = tournament.fixture.filter(
+        (element) => {
+          return element.playerP1 === playerName || element.playerP2 === playerName;
+        }
+      );
+
+      console.log(filteredFixtureFromTournament);
+
+      res.render("fixture-id-player", {
+        tournamentName,
+        playerName,
+        tournamentId,
+        filteredFixtureFromTournament,
+      });
+    }
+    else { // El param es el teamId
+
+      const teamId = teamIdOrPlayerName;
+
+      const filteredFixtureFromTournament = tournament.fixture.filter(
+        (element) => {
+          return element.teamIdP1 == teamId || element.teamIdP2 == teamId;
+        }
+      );
+
+      let teamName;
+
+      if (filteredFixtureFromTournament[0].teamIdP1 == teamId) {
+        teamName = filteredFixtureFromTournament[0].teamP1;
+      } else {
+        teamName = filteredFixtureFromTournament[0].teamP2;
       }
-    );
 
-    let teamName;
-
-    if (filteredFixtureFromTournament[0].teamIdP1 == teamId) {
-      teamName = filteredFixtureFromTournament[0].teamP1;
-    } else {
-      teamName = filteredFixtureFromTournament[0].teamP2;
+      res.render("fixture-id-team", {
+        tournamentName,
+        teamName,
+        tournamentId,
+        filteredFixtureFromTournament,
+      });
     }
 
-    res.render("fixture-id-team", {
-      tournamentName,
-      teamName,
-      tournamentId,
-      filteredFixtureFromTournament,
-    });
+
   } catch (err) {
     res.status(500).send("Something went wrong" + err);
   }

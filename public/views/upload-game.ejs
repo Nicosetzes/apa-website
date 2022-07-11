@@ -1,7 +1,7 @@
 <%- include('./partials/header')-%>
 
     <main>
-        <form class="form" id="uploadGamesForm" action="/upload-games/<%=tournamentById._id%>" method="post"
+        <form class="form" id="uploadGamesForm" action="/upload-game/<%=tournamentById._id%>" method="post"
             autocomplete="off">
             <div class="form__container">
                 <div class="form__container-row">
@@ -166,6 +166,6 @@
             </div>
         </form>
     </main>
-    <script src="./../js/upload-games.js"></script>
+    <script src="./../js/upload-game.js"></script>
 
     <%- include('./partials/footer')-%>

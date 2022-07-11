@@ -8,21 +8,23 @@
         <div class="container__fixture-id">
             <%filteredFixtureFromTournament.forEach(function(element, index) {%>
                 <%if(element.scoreP1 !==undefined){%>
-                    <form class="fixture-match finished"
-                        action="/update-games/<%=tournamentId%>/<%=element.matchId%>?_method=PUT" method="post"
+                    <form class="fixture-match finished deleteMatchForm"
+                        action="/delete-game/<%=tournamentId%>/<%=element.matchId%>?_method=DELETE" method="post"
                         autocomplete="off">
                         <%} else {%>
-                            <form class="fixture-match" action="/upload-games/<%=tournamentId%>" method="post"
+                            <form class="fixture-match" action="/upload-game/<%=tournamentId%>" method="post"
                                 autocomplete="off">
                                 <%};%>
                                     <div class="match-info">
                                         <input name="teamP1" class="match-info__team" value="<%=element.teamP1%>"
                                             readonly>
-                                        <a href="/fixture/<%=tournamentId%>/<%=element.teamIdP1%>">
-                                            <img src="<%=element.logoTeamP1%>" alt="<%=element.teamP1%>">
+                                        <a href="/fixture/<%=tournamentId%>/<%=element.teamIdP1%>" class="logo-link">
+                                            <img src="<%=element.teamLogoP1%>" alt="<%=element.teamP1%>">
                                         </a>
-                                        <input name="playerP1" class="match-info__team" value="<%=element.playerP1%>"
-                                            readonly>
+                                        <a href="/fixture/<%=tournamentId%>/<%=element.playerP1%>" class="player-link">
+                                            <input name="playerP1" class="match-info__player"
+                                                value="<%=element.playerP1%>" readonly>
+                                        </a>
                                     </div>
                                     <div class="match-score">
                                         <%if(element.scoreP1 !==undefined){%>
@@ -37,7 +39,12 @@
                                                     <%if(element.scoreP2 !==undefined){%>
                                                         <input name="scoreP2" class=" match-score__goals"
                                                             value="<%=element.scoreP2%>">
-                                                        <input type="submit" value="Editar" class="fixture-submit">
+                                                        <div class="input__container">
+                                                            <input type="submit"
+                                                                formaction="/update-game/<%=tournamentId%>/<%=element.matchId%>?_method=PUT"
+                                                                value="Editar" class="fixture-edit">
+                                                            <input type="submit" value="Borrar" class="fixture-delete">
+                                                        </div>
                                                         <%} else {%>
                                                             <input name="scoreP2" class="match-score__goals"
                                                                 type="number" min="0" required>
@@ -49,11 +56,13 @@
                                     <div class="match-info">
                                         <input name="teamP2" class="match-info__team" value="<%=element.teamP2%>"
                                             readonly>
-                                        <a href="/fixture/<%=tournamentId%>/<%=element.teamIdP2%>">
-                                            <img src="<%=element.logoTeamP2%>" alt="<%=element.teamP2%>">
+                                        <a href="/fixture/<%=tournamentId%>/<%=element.teamIdP2%>" class="logo-link">
+                                            <img src="<%=element.teamLogoP2%>" alt="<%=element.teamP2%>">
                                         </a>
-                                        <input name="playerP2" class="match-info__team" value="<%=element.playerP2%>"
-                                            readonly>
+                                        <a href="/fixture/<%=tournamentId%>/<%=element.playerP2%>" class="player-link">
+                                            <input name="playerP2" class="match-info__player"
+                                                value="<%=element.playerP2%>" readonly>
+                                        </a>
                                     </div>
                             </form>
 
@@ -76,4 +85,5 @@
             <div>Volver al <a href="/">home</a></div>
         </div>
     </main>
+    <script src="./../js/delete-game.js"></script>
     <%- include('./partials/footer')-%>

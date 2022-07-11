@@ -1432,8 +1432,36 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
   text-decoration: none;
   width: 150px;
 }
+.container__fixture-id .fixture-match .match-info .logo-link {
+  margin: 0.25rem 0;
+}
+.container__fixture-id .fixture-match .match-info .player-link {
+  color: #ce0404;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.container__fixture-id .fixture-match .match-info .player-link .match-info__player {
+  border: 0;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+  width: 75px;
+}
+.container__fixture-id .fixture-match .match-info .player-link .match-info__player:focus {
+  outline: 0;
+}
 .container__fixture-id .fixture-match .match-info .match-info__team {
   border: 0;
+  cursor: pointer;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1463,7 +1491,6 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
   -webkit-box-pack: space-evenly;
       -ms-flex-pack: space-evenly;
           justify-content: space-evenly;
-  width: 100px;
 }
 .container__fixture-id .fixture-match .match-score .match-score__goals {
   border: 0;
@@ -1485,12 +1512,29 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
 .container__fixture-id .fixture-match .match-score .match-score__goals:focus {
   outline: 0;
 }
-.container__fixture-id .fixture-match .match-score .fixture-edit {
-  background-color: #d76615;
+.container__fixture-id .fixture-match .match-score .input__container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0 0.125rem;
+}
+.container__fixture-id .fixture-match .match-score .input__container .fixture-edit {
+  background-color: #ff852d;
   border: 0;
   border-radius: 10px;
   color: #fff;
   font-size: 0.75rem;
+  margin-right: 0.25rem;
+  outline: #000 2px solid;
+  padding: 0.25rem 0.5rem;
+}
+.container__fixture-id .fixture-match .match-score .input__container .fixture-delete {
+  background-color: #ce0404;
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.75rem;
+  margin-left: 0.25rem;
   outline: #000 2px solid;
   padding: 0.25rem 0.5rem;
 }
@@ -1504,7 +1548,7 @@ main .container__tournament .container__trajectory .trajectory-trophies .small-d
   padding: 0.25rem 0.5rem;
 }
 .container__fixture-id .fixture-match .match-score .match-score__versus {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 .container__fixture-id .fixture-match .match-score input {
   font-size: 1rem;
