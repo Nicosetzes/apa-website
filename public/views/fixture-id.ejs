@@ -1,8 +1,7 @@
 <%- include('./partials/header')-%>
     <main>
         <div>FIXTURE</div>
-        <div>FIXTURE del torneo
-            <%-tournamentById.name-%>
+        <div>FIXTURE del torneo <%-tournamentById.name-%>
         </div>
         <div class="container__fixture-id">
             <%tournamentById.fixture.forEach(function(element, index) {%>
@@ -15,8 +14,8 @@
                                 autocomplete="off">
                                 <%};%>
                                     <div class="match-info">
-                                        <input name="teamP1" class="match-info__team" value="<%=element.teamP1%>"
-                                            readonly>
+                                        <textarea name="teamP1" wrap="soft" class="match-info__team"
+                                            value="<%=element.teamP1%>" readonly><%=element.teamP1%></textarea>
                                         <a href="/fixture/<%=tournamentById.id%>/<%=element.teamIdP1%>"
                                             class="logo-link">
                                             <img src="<%=element.teamLogoP1%>" alt="<%=element.teamP1%>">
@@ -67,18 +66,12 @@
                                         </a>
                                     </div>
                             </form>
-
                             <%});%>
         </div>
         <div class="return">
-            <div>Volver a <a href="/fixture">
-                    Fixtures
-                </a>
+            <div>Volver a <a href="/fixture"> Fixtures </a>
             </div>
-            <div>Ir a
-                <a href="/standings">
-                    Clasificación
-                </a>
+            <div>Ir a <a href="/standings"> Clasificación </a>
             </div>
             <div>Volver al <a href="/">home</a></div>
         </div>

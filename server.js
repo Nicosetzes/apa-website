@@ -480,8 +480,18 @@ app.get("/records", async (req, res) => {
       const arrayOfTeamsWithWins = [];
 
       arrayOfTeams.forEach(async (element) => {
+
         let amountOfMatches = await matchesModel.countDocuments({
-          $or: [{ teamP1: element.team }, { teamP2: element.team }],
+          $or: [
+            {
+              $and:
+                [{ playerP1: playerQuery }, { teamP1: element.team }]
+            },
+            {
+              $and:
+                [{ playerP2: playerQuery }, { teamP2: element.team }],
+            },
+          ],
         });
         arrayOfTeamsWithWins.push({
           team: element.team,
@@ -893,7 +903,7 @@ app.get("/standings", async (req, res) => {
 
       const standings = [];
 
-      let matches = await matchesModel.find({ "tournament.id": tournament.id }, "teamP1 scoreP1 teamP2 scoreP2 outcome");
+      let matches = await matchesModel.find({ "tournament.id": tournament.id }, "teamP1 scoreP1 teamP2 scoreP2 outcome").sort({ _id: -1 });
 
       tournament.teams.forEach(async team => {
 

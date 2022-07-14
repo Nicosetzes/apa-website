@@ -2,7 +2,8 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 1rem 0;
+    padding: 0.5rem 0;
+    width: 300px;
 
     .fixture-match {
         align-items: center;
@@ -12,7 +13,7 @@
         margin: 0.5rem;
         outline: #dc3545 3px solid;
         padding: 0.5rem 0;
-        width: 400px;
+        width: 100%;
 
         &.finished {
             outline-color: #3c9e39;
@@ -24,7 +25,7 @@
             display: flex;
             flex-direction: column;
             text-decoration: none;
-            width: 150px;
+            // width: 150px;
 
             .logo-link {
                 margin: 0.25rem 0;
@@ -42,7 +43,7 @@
                     flex-wrap: wrap;
                     justify-content: center;
                     text-align: center;
-                    width: 75px;
+                    width: 50px;
 
                     &:focus {
                         outline: 0;
@@ -53,11 +54,13 @@
             .match-info__team {
                 border: 0;
                 cursor: pointer;
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
+                // display: flex;
+                // flex-wrap: wrap;
+                // height: 30px;
+                // justify-content: center;
+                resize: none;
                 text-align: center;
-                width: 150px;
+                width: 130px;
 
                 &:focus {
                     outline: 0;
@@ -65,7 +68,7 @@
             }
 
             img {
-                max-width: 100px;
+                max-width: 75px;
             }
         }
 
@@ -141,6 +144,157 @@
                 font-size: 1rem;
             }
 
+        }
+    }
+}
+
+@media only screen and (min-width: 450px) {
+
+    .container__fixture-id {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 1rem 0;
+        width: auto;
+
+        .fixture-match {
+            align-items: center;
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            margin: 0.5rem;
+            outline: #dc3545 3px solid;
+            padding: 0.5rem 0;
+            width: 400px;
+
+            &.finished {
+                outline-color: #3c9e39;
+            }
+
+            .match-info {
+                align-items: center;
+                color: #000;
+                display: flex;
+                flex-direction: column;
+                text-decoration: none;
+                width: 150px;
+
+                .logo-link {
+                    margin: 0.25rem 0;
+                }
+
+                .player-link {
+                    color: #ce0404;
+                    cursor: pointer;
+                    display: flex;
+
+                    .match-info__player {
+                        border: 0;
+                        cursor: pointer;
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                        text-align: center;
+                        width: 75px;
+
+                        &:focus {
+                            outline: 0;
+                        }
+                    }
+                }
+
+                .match-info__team {
+                    border: 0;
+                    cursor: pointer;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    text-align: center;
+                    width: 150px;
+
+                    &:focus {
+                        outline: 0;
+                    }
+                }
+
+                img {
+                    max-width: 100px;
+                }
+            }
+
+            .match-score {
+                align-items: center;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-evenly;
+                // width: 125px;
+
+                .match-score__goals {
+                    border: 0;
+                    display: flex;
+                    font-size: 3rem;
+                    justify-content: center;
+                    text-align: center;
+                    width: 30px;
+
+                    /* Para retirar flechas en los input de tipo número */
+                    &::-webkit-outer-spin-button,
+                    &::-webkit-inner-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
+
+                    &:focus {
+                        outline: 0;
+                    }
+                }
+
+                .input__container {
+                    display: flex;
+                    padding: 0 0.125rem;
+
+                    .fixture-edit {
+                        background-color: #ff852d;
+                        border: 0;
+                        border-radius: 10px;
+                        color: #fff;
+                        font-size: 0.75rem;
+                        margin-right: 0.25rem;
+                        outline: #000 2px solid;
+                        padding: 0.25rem 0.5rem;
+                    }
+
+                    .fixture-delete {
+                        background-color: #ce0404;
+                        border: 0;
+                        border-radius: 10px;
+                        color: #fff;
+                        font-size: 0.75rem;
+                        margin-left: 0.25rem;
+                        outline: #000 2px solid;
+                        padding: 0.25rem 0.5rem;
+                    }
+                }
+
+                .fixture-submit {
+                    background-color: rgb(81, 179, 72);
+                    border: 0;
+                    border-radius: 10px;
+                    color: #fff;
+                    font-size: 0.75rem;
+                    outline: #000 2px solid;
+                    padding: 0.25rem 0.5rem;
+                }
+
+                .match-score__versus {
+                    font-size: 1.25rem;
+                }
+
+                input {
+                    font-size: 1rem;
+                }
+
+            }
         }
     }
 }
