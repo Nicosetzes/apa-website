@@ -10,9 +10,9 @@ header {
     z-index: 5000;
 
     img {
-        height: 90px;
-        margin-left: 2rem;
-        width: 145px;
+        height: 80px;
+        margin-left: 1rem;
+        width: 125px;
     }
 
     form {
@@ -25,9 +25,9 @@ header {
             background-color: $mainGold;
             border: $secondaryGold 2px solid;
             color: $mainBlue;
-            font-size: 0.875rem;
+            font-size: 0.75rem;
             font-weight: 800;
-            padding: 0.25rem 0.75rem;
+            padding: 0.25rem 0.5rem;
         }
     }
 
@@ -78,6 +78,7 @@ header {
                     color: #7b4f1f;
                     text-transform: uppercase;
                     font-weight: 400;
+                    font-size: 0.875rem;
                     opacity: 0;
                     transition: opacity 150ms ease-in-out; //fade-out
                 }
@@ -94,7 +95,7 @@ header {
         display: flex;
         font-size: 1.75rem;
         height: 100%;
-        margin-right: 2rem;
+        margin-right: 1.5rem;
         position: absolute;
         top: 0;
         right: 0;
