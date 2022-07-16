@@ -1,7 +1,6 @@
 <%- include('./partials/header')-%>
     <main>
-        <div>FIXTURE del torneo
-            <%-tournamentName-%>
+        <div>FIXTURE del torneo <%-tournamentName-%>
         </div>
         <div>Partidos de <%-playerName-%>
         </div>
@@ -17,86 +16,87 @@
                                 <%};%>
                                     <div class="match-info">
                                         <%if(element.teamP1.split(" ").length > 1){%>
-                                            <textarea name=" teamP1" rows="2" cols="10" wrap="soft"
+                                            <textarea name="teamP1" rows="2" cols="10" wrap="soft"
                                             class="match-info__team" value="<%=element.teamP1%>" 
                                             readonly><%=element.teamP1%></textarea>
                                                 <%} else {%>
-                                                    <textarea name="teamP1" rows="1" cols="10" wrap="soft" class="match-info__team" value="<%=element.teamP1%>"
+                                                    <textarea name="teamP1" rows="1" cols="10" wrap="soft"
+                                                        class="match-info__team" value="<%=element.teamP1%>"
                                                         readonly><%=element.teamP1%></textarea>
                                                     <%};%>
-                                        <a href="/fixture/<%=tournamentId%>/<%=element.teamIdP1%>" class="logo-link">
-                                            <img src="<%=element.teamLogoP1%>" alt="<%=element.teamP1%>">
-                                        </a>
-                                        <a href="/fixture/<%=tournamentId%>/<%=element.playerP1%>" class="player-link">
-                                            <input name="playerP1" class="match-info__player"
-                                                value="<%=element.playerP1%>" readonly>
-                                        </a>
+                                                        <a href="/fixture/<%=tournamentId%>/<%=element.teamIdP1%>"
+                                                            class="logo-link">
+                                                            <img src="<%=element.teamLogoP1%>"
+                                                                alt="<%=element.teamP1%>">
+                                                        </a>
+                                                        <a href="/fixture/<%=tournamentId%>/<%=element.playerP1%>"
+                                                            class="player-link">
+                                                            <input name="playerP1" class="match-info__player"
+                                                                value="<%=element.playerP1%>" readonly>
+                                                        </a>
                                     </div>
                                     <div class="match-score">
                                         <div class="match__container">
-                                        <%if(element.scoreP1 !==undefined){%>
-                                            <input name="scoreP1" class="match-score__goals"
-                                                value="<%=element.scoreP1%>">
-                                            <span class="match-score__versus">-</span>
-                                            <%} else {%>
-                                                <input name="scoreP1" class="match-score__goals" type="number" min="0"
-                                                    required>
-                                                <span class="match-score__versus">vs</span>
-                                                <%};%>
-                                                    <%if(element.scoreP2 !==undefined){%>
-                                                        <input name="scoreP2" class=" match-score__goals"
-                                                            value="<%=element.scoreP2%>">
-                                                            </div>
-                                                        <div class="input__container">
-                                                            <input type="submit" value="&#xf044" formaction="/update-game/<%=tournamentId%>/<%=element.matchId%>?_method=PUT"
-                                                                class="fixture-edit fas">
-                                                            <input type="submit" value="&#xf2ed" class="fixture-delete fas" name="fixture-delete">
-                                                        </div>
-                                                        <%} else {%>
-                                                            <input name="scoreP2" class="match-score__goals"
-                                                                type="number" min="0" required>
-                                                                </div>
-                                                                <div class="input__container">
-                                                            <input type="submit" value="Confirmar"
-                                                                class="fixture-submit">
-                                                                </div>
-                                                            <%};%>
-                                    </div>
-                                    <div class="match-info">
-                                        <%if(element.teamP2.split(" ").length > 1){%>
-                                            <textarea name="teamP2" rows="2" cols="10" wrap="soft" class="match-info__team" value="<%=element.teamP2%>" 
-                                                readonly><%=element.teamP2%></textarea>
+                                            <%if(element.scoreP1 !==undefined){%>
+                                                <input name="scoreP1" class="match-score__goals"
+                                                    value="<%=element.scoreP1%>">
+                                                <span class="match-score__versus">-</span>
                                                 <%} else {%>
-                                                    <textarea name="teamP2" rows="1" cols="10" wrap="soft" class="match-info__team" value="<%=element.teamP2%>"
-                                                        readonly><%=element.teamP2%></textarea>
+                                                    <input name="scoreP1" class="match-score__goals" type="number"
+                                                        min="0" required>
+                                                    <span class="match-score__versus">vs</span>
                                                     <%};%>
-                                        <a href="/fixture/<%=tournamentId%>/<%=element.teamIdP2%>" class="logo-link">
-                                            <img src="<%=element.teamLogoP2%>" alt="<%=element.teamP2%>">
-                                        </a>
-                                        <a href="/fixture/<%=tournamentId%>/<%=element.playerP2%>" class="player-link">
-                                            <input name="playerP2" class="match-info__player"
-                                                value="<%=element.playerP2%>" readonly>
-                                        </a>
+                                                        <%if(element.scoreP2 !==undefined){%>
+                                                            <input name="scoreP2" class=" match-score__goals"
+                                                                value="<%=element.scoreP2%>">
+                                        </div>
+                                        <div class="input__container">
+                                            <input type="submit" value="&#xf044"
+                                                formaction="/update-game/<%=tournamentId%>/<%=element.matchId%>?_method=PUT"
+                                                class="fixture-edit fas">
+                                            <input type="submit" value="&#xf2ed" class="fixture-delete fas"
+                                                name="fixture-delete">
+                                        </div>
+                                        <%} else {%>
+                                            <input name="scoreP2" class="match-score__goals" type="number" min="0"
+                                                required>
                                     </div>
-                            </form>
-                            <%});%>
+                                    <div class="input__container">
+                                        <input type="submit" value="Confirmar" class="fixture-submit">
+                                    </div>
+                                    <%};%>
         </div>
-        <div class="return">
-            <div>Volver a <a href="/fixture">
-                    Fixtures
-                </a>
-            </div>
-            <div>Fixture <a href="/fixture/<%-tournamentId-%>">
-                    <%-tournamentName-%>
-                </a>
-            </div>
-            <div>Ir a
-                <a href="/standings">
-                    Clasificación
-                </a>
-            </div>
-            <div>Volver al <a href="/">home</a></div>
+        <div class="match-info">
+            <%if(element.teamP2.split(" ").length > 1){%>
+                                            <textarea name="teamP2" rows="2" cols="10" wrap="soft"
+                class="match-info__team" value="<%=element.teamP2%>" 
+                readonly><%=element.teamP2%></textarea>
+                    <%} else {%>
+                        <textarea name="teamP2" rows="1" cols="10" wrap="soft" class="match-info__team"
+                            value="<%=element.teamP2%>" readonly><%=element.teamP2%></textarea>
+                        <%};%>
+                            <a href="/fixture/<%=tournamentId%>/<%=element.teamIdP2%>" class="logo-link">
+                                <img src="<%=element.teamLogoP2%>" alt="<%=element.teamP2%>">
+                            </a>
+                            <a href="/fixture/<%=tournamentId%>/<%=element.playerP2%>" class="player-link">
+                                <input name="playerP2" class="match-info__player" value="<%=element.playerP2%>"
+                                    readonly>
+                            </a>
         </div>
+        </form>
+        <%});%>
+            </div>
+            <div class="return">
+                <div>Volver a <a href="/fixture">Fixtures</a>
+                </div>
+                <div>Fixture <a href="/fixture/<%-tournamentId-%>">
+                        <%-tournamentName-%>
+                    </a>
+                </div>
+                <div>Ir a <a href="/standings"> Clasificación </a>
+                </div>
+                <div>Volver al <a href="/">home</a></div>
+            </div>
     </main>
-    <script src="./../js/delete-game.js"></script>
+    <script src="./../../js/delete-game.js"></script>
     <%- include('./partials/footer')-%>

@@ -470,9 +470,9 @@ app.get("/records", async (req, res) => {
           );
           indexOfElement === -1
             ? arrayOfTeams.push({
-                team: element.outcome.teamThatWon,
-                victories: 1,
-              })
+              team: element.outcome.teamThatWon,
+              victories: 1,
+            })
             : arrayOfTeams[indexOfElement].victories++;
         }
       });
@@ -1037,11 +1037,11 @@ app.get("/standings", async (req, res) => {
 //   }
 // });
 
-app.get("/create-tournament", (req, res) => {
+app.get("/create-tournament", isAuth, (req, res) => {
   res.render("create-tournament", {});
 });
 
-app.post("/create-tournament", async (req, res) => {
+app.post("/create-tournament", isAuth, async (req, res) => {
   try {
     const { tournamentName, format, origin } = req.body;
 
@@ -1074,9 +1074,8 @@ app.post("/create-tournament", async (req, res) => {
         console.log(counter);
       } else {
         console.log("response");
-        infoFromApi = await require(`./public/teams/${
-          element.split("|")[1]
-        }-teams.json`);
+        infoFromApi = await require(`./public/teams/${element.split("|")[1]
+          }-teams.json`);
 
         // console.log(infoFromApi.response);
 
@@ -1346,7 +1345,7 @@ app.get("/face-to-face", async (req, res) => {
   console.log(`Ruta: ${req.url}, Método: ${req.method}`);
 });
 
-app.get("/upload-game", async (req, res) => {
+app.get("/upload-game", isAuth, async (req, res) => {
   const idProvided = false;
   try {
     const tournamentsFromBD = await tournamentsModel.find({ ongoing: true }); // Solo traigo los torneos que se encuentren en curso.
@@ -1360,7 +1359,7 @@ app.get("/upload-game", async (req, res) => {
   }
 });
 
-app.post("/upload-game", (req, res) => {
+app.post("/upload-game", isAuth, (req, res) => {
   // POST O GET?
   const selectedTournamentId = req.body.selection; // I must use the select "name" property;
   res.redirect(`/upload-game/${selectedTournamentId}`);
@@ -1384,7 +1383,7 @@ app.get("/upload-game/:id", async (req, res) => {
   }
 });
 
-app.post("/upload-game/:id", async (req, res) => {
+app.post("/upload-game/:id", isAuth, async (req, res) => {
   try {
     const tournamentId = req.params.id;
 
@@ -1412,52 +1411,52 @@ app.post("/upload-game/:id", async (req, res) => {
     if (scoreP1 - scoreP2 !== 0) {
       scoreP1 > scoreP2
         ? (outcome = {
-            playerThatWon: playerP1,
-            teamThatWon: teamP1,
-            scoreFromTeamThatWon: scoreP1,
-            playerThatLost: playerP2,
-            teamThatLost: teamP2,
-            scoreFromTeamThatLost: scoreP2,
-            draw: false,
-            penalties: false,
-            scoringDifference: Math.abs(scoreP1 - scoreP2), // Es indistinto el orden, pues calculo valor absoluto.
-          })
+          playerThatWon: playerP1,
+          teamThatWon: teamP1,
+          scoreFromTeamThatWon: scoreP1,
+          playerThatLost: playerP2,
+          teamThatLost: teamP2,
+          scoreFromTeamThatLost: scoreP2,
+          draw: false,
+          penalties: false,
+          scoringDifference: Math.abs(scoreP1 - scoreP2), // Es indistinto el orden, pues calculo valor absoluto.
+        })
         : (outcome = {
-            playerThatWon: playerP2,
-            teamThatWon: teamP2,
-            scoreFromTeamThatWon: scoreP2,
-            playerThatLost: playerP1,
-            teamThatLost: teamP1,
-            scoreFromTeamThatLost: scoreP1,
-            draw: false,
-            penalties: false,
-            scoringDifference: Math.abs(scoreP1 - scoreP2), // Es indistinto el orden, pues calculo valor absoluto.
-          });
+          playerThatWon: playerP2,
+          teamThatWon: teamP2,
+          scoreFromTeamThatWon: scoreP2,
+          playerThatLost: playerP1,
+          teamThatLost: teamP1,
+          scoreFromTeamThatLost: scoreP1,
+          draw: false,
+          penalties: false,
+          scoringDifference: Math.abs(scoreP1 - scoreP2), // Es indistinto el orden, pues calculo valor absoluto.
+        });
     } else if (scoreP1 - scoreP2 === 0 && penaltyScoreP1 && penaltyScoreP2) {
       // Empate, y hubo penales
       penaltyScoreP1 > penaltyScoreP2
         ? (outcome = {
-            playerThatWon: playerP1,
-            teamThatWon: teamP1,
-            scoreFromTeamThatWon: penaltyScoreP1,
-            playerThatLost: playerP2,
-            teamThatLost: teamP2,
-            scoreFromTeamThatLost: penaltyScoreP2,
-            draw: true,
-            penalties: true,
-            scoringDifference: 0,
-          })
+          playerThatWon: playerP1,
+          teamThatWon: teamP1,
+          scoreFromTeamThatWon: penaltyScoreP1,
+          playerThatLost: playerP2,
+          teamThatLost: teamP2,
+          scoreFromTeamThatLost: penaltyScoreP2,
+          draw: true,
+          penalties: true,
+          scoringDifference: 0,
+        })
         : (outcome = {
-            playerThatWon: playerP2,
-            teamThatWon: teamP2,
-            scoreFromTeamThatWon: penaltyScoreP2,
-            playerThatLost: playerP1,
-            teamThatLost: teamP1,
-            scoreFromTeamThatLost: penaltyScoreP1,
-            draw: true,
-            penalties: true,
-            scoringDifference: 0,
-          });
+          playerThatWon: playerP2,
+          teamThatWon: teamP2,
+          scoreFromTeamThatWon: penaltyScoreP2,
+          playerThatLost: playerP1,
+          teamThatLost: teamP1,
+          scoreFromTeamThatLost: penaltyScoreP1,
+          draw: true,
+          penalties: true,
+          scoringDifference: 0,
+        });
     } else {
       // Empate, pero no hubo penales!
       outcome = {
@@ -1493,68 +1492,6 @@ app.post("/upload-game/:id", async (req, res) => {
 
     if (!match.outcome.draw) {
       // Para actualizar las rachas y la tabla, SI NO EMPATAN
-
-      // ACTUALIZO TABLA DE POSICIONES //
-
-      // const indexOfWinningTeam = teams.findIndex(
-      //   (element) => element.team === match.outcome.teamThatWon
-      // );
-
-      // const updatedWinnerPlayed = Number(teams[indexOfWinningTeam].played) + 1;
-      // const updatedWinnerWins = Number(teams[indexOfWinningTeam].wins) + 1;
-      // const updatedWinnerGoalsFor =
-      //   Number(teams[indexOfWinningTeam].goalsFor) +
-      //   Number(match.outcome.scoreFromTeamThatWon);
-      // const updatedWinnerGoalsAgainst =
-      //   Number(teams[indexOfWinningTeam].goalsAgainst) +
-      //   Number(match.outcome.scoreFromTeamThatLost);
-      // const updatedWinnerScoringDifference =
-      //   Number(teams[indexOfWinningTeam].scoringDifference) +
-      //   Number(match.outcome.scoringDifference);
-      // const updatedWinnerPoints = Number(teams[indexOfWinningTeam].points) + 3;
-
-      // await tournamentsModel.updateOne(
-      //   { _id: tournamentId, "teams.team": match.outcome.teamThatWon },
-      //   {
-      //     $set: {
-      //       "teams.$.played": updatedWinnerPlayed,
-      //       "teams.$.wins": updatedWinnerWins,
-      //       "teams.$.goalsFor": updatedWinnerGoalsFor,
-      //       "teams.$.goalsAgainst": updatedWinnerGoalsAgainst,
-      //       "teams.$.scoringDifference": updatedWinnerScoringDifference,
-      //       "teams.$.points": updatedWinnerPoints,
-      //     },
-      //   }
-      // );
-
-      // const indexOfLosingTeam = teams.findIndex(
-      //   (element) => element.team === match.outcome.teamThatLost
-      // );
-
-      // const updatedLoserPlayed = Number(teams[indexOfLosingTeam].played) + 1;
-      // const updatedLoserLosses = Number(teams[indexOfLosingTeam].losses) + 1;
-      // const updatedLoserGoalsFor =
-      //   Number(teams[indexOfLosingTeam].goalsFor) +
-      //   Number(match.outcome.scoreFromTeamThatLost);
-      // const updatedLoserGoalsAgainst =
-      //   Number(teams[indexOfLosingTeam].goalsAgainst) +
-      //   Number(match.outcome.scoreFromTeamThatWon);
-      // const updatedLoserScoringDifference =
-      //   Number(teams[indexOfLosingTeam].scoringDifference) -
-      //   Number(match.outcome.scoringDifference);
-
-      // await tournamentsModel.updateOne(
-      //   { _id: tournamentId, "teams.team": match.outcome.teamThatLost },
-      //   {
-      //     $set: {
-      //       "teams.$.played": updatedLoserPlayed,
-      //       "teams.$.losses": updatedLoserLosses,
-      //       "teams.$.goalsFor": updatedLoserGoalsFor,
-      //       "teams.$.goalsAgainst": updatedLoserGoalsAgainst,
-      //       "teams.$.scoringDifference": updatedLoserScoringDifference,
-      //     },
-      //   }
-      // );
 
       // CREO EL PARTIDO Y LO SUBO A LA BD, TAMBIÉN OBTENGO SU ID //
 
@@ -1643,57 +1580,6 @@ app.post("/upload-game/:id", async (req, res) => {
     }
     // SI EMPATAN //
     else {
-      // TABLA DE POSICIONES //
-
-      // const indexOfFirstTeam = teams.findIndex(
-      //   (element) => element.team === teamP1
-      // );
-
-      // const updatedFirstPlayed = Number(teams[indexOfFirstTeam].played) + 1;
-      // const updatedFirstDraws = Number(teams[indexOfFirstTeam].draws) + 1;
-      // const updatedFirstGoalsFor =
-      //   Number(teams[indexOfFirstTeam].goalsFor) + Number(scoreP1);
-      // const updatedFirstGoalsAgainst =
-      //   Number(teams[indexOfFirstTeam].goalsAgainst) + Number(scoreP2);
-      // const updatedFirstPoints = Number(teams[indexOfFirstTeam].points) + 1;
-
-      // await tournamentsModel.updateOne(
-      //   { _id: tournamentId, "teams.team": teamP1 },
-      //   {
-      //     $set: {
-      //       "teams.$.played": updatedFirstPlayed,
-      //       "teams.$.draws": updatedFirstDraws,
-      //       "teams.$.goalsFor": updatedFirstGoalsFor,
-      //       "teams.$.goalsAgainst": updatedFirstGoalsAgainst,
-      //       "teams.$.points": updatedFirstPoints,
-      //     },
-      //   }
-      // );
-
-      // const indexOfSecondTeam = teams.findIndex(
-      //   (element) => element.team === teamP2
-      // );
-
-      // const updatedSecondPlayed = Number(teams[indexOfSecondTeam].played) + 1;
-      // const updatedSecondDraws = Number(teams[indexOfSecondTeam].draws) + 1;
-      // const updatedSecondGoalsFor =
-      //   Number(teams[indexOfSecondTeam].goalsFor) + Number(scoreP2);
-      // const updatedSecondGoalsAgainst =
-      //   Number(teams[indexOfSecondTeam].goalsAgainst) + Number(scoreP1);
-      // const updatedSecondPoints = Number(teams[indexOfSecondTeam].points) + 1;
-
-      // await tournamentsModel.updateOne(
-      //   { _id: tournamentId, "teams.team": teamP2 },
-      //   {
-      //     $set: {
-      //       "teams.$.played": updatedSecondPlayed,
-      //       "teams.$.draws": updatedSecondDraws,
-      //       "teams.$.goalsFor": updatedSecondGoalsFor,
-      //       "teams.$.goalsAgainst": updatedSecondGoalsAgainst,
-      //       "teams.$.points": updatedSecondPoints,
-      //     },
-      //   }
-      // );
 
       // CREO EL PARTIDO Y LO SUBO A LA BD, TAMBIÉN OBTENGO SU ID //
 
@@ -1783,7 +1669,7 @@ app.post("/upload-game/:id", async (req, res) => {
 
 app.post(
   "/update-game/:id/:matchId",
-  methodOverride("_method"),
+  methodOverride("_method"), isAuth,
   async (req, res) => {
     try {
       const tournamentId = req.params.id;
@@ -1803,27 +1689,27 @@ app.post(
       if (scoreP1 - scoreP2 !== 0) {
         scoreP1 > scoreP2
           ? (outcome = {
-              playerThatWon: playerP1,
-              teamThatWon: teamP1,
-              scoreFromTeamThatWon: Number(scoreP1),
-              playerThatLost: playerP2,
-              teamThatLost: teamP2,
-              scoreFromTeamThatLost: Number(scoreP2),
-              draw: false,
-              penalties: false,
-              scoringDifference: Math.abs(scoreP1 - scoreP2),
-            })
+            playerThatWon: playerP1,
+            teamThatWon: teamP1,
+            scoreFromTeamThatWon: Number(scoreP1),
+            playerThatLost: playerP2,
+            teamThatLost: teamP2,
+            scoreFromTeamThatLost: Number(scoreP2),
+            draw: false,
+            penalties: false,
+            scoringDifference: Math.abs(scoreP1 - scoreP2),
+          })
           : (outcome = {
-              playerThatWon: playerP2,
-              teamThatWon: teamP2,
-              scoreFromTeamThatWon: Number(scoreP2),
-              playerThatLost: playerP1,
-              teamThatLost: teamP1,
-              scoreFromTeamThatLost: Number(scoreP1),
-              draw: false,
-              penalties: false,
-              scoringDifference: Math.abs(scoreP1 - scoreP2),
-            });
+            playerThatWon: playerP2,
+            teamThatWon: teamP2,
+            scoreFromTeamThatWon: Number(scoreP2),
+            playerThatLost: playerP1,
+            teamThatLost: teamP1,
+            scoreFromTeamThatLost: Number(scoreP1),
+            draw: false,
+            penalties: false,
+            scoringDifference: Math.abs(scoreP1 - scoreP2),
+          });
       } else {
         // Empate
         outcome = {
@@ -1843,10 +1729,10 @@ app.post(
         match.teamP1 === teamP1
           ? await match.updateOne({ scoreP1, scoreP2, outcome })
           : await match.updateOne({
-              scoreP1: scoreP2,
-              scoreP2: scoreP1,
-              outcome,
-            });
+            scoreP1: scoreP2,
+            scoreP2: scoreP1,
+            outcome,
+          });
       }
 
       // Actualizo fixture //
@@ -1887,7 +1773,7 @@ app.post(
 
 app.post(
   "/delete-game/:id/:matchId",
-  methodOverride("_method"),
+  methodOverride("_method"), isAuth,
   async (req, res) => {
     try {
       const tournamentId = req.params.id;
@@ -1930,7 +1816,7 @@ app.post(
   }
 );
 
-app.get("/lottery-tournament-selection", async (req, res) => {
+app.get("/lottery-tournament-selection", isAuth, async (req, res) => {
   try {
     const tournamentsFromBD = await tournamentsModel.find({ ongoing: true }); // Solo traigo los torneos que se encuentren en curso.
     if (!tournamentsFromBD.length) {
@@ -1943,7 +1829,7 @@ app.get("/lottery-tournament-selection", async (req, res) => {
   }
 });
 
-app.post("/lottery-tournament-selection", async (req, res) => {
+app.post("/lottery-tournament-selection", isAuth, async (req, res) => {
   try {
     const { tournament, players, teams } = req.body;
     if (tournament.match(/^[0-9a-fA-F]{24}$/)) {
@@ -1955,7 +1841,7 @@ app.post("/lottery-tournament-selection", async (req, res) => {
   }
 });
 
-app.get("/lottery/:id", async (req, res) => {
+app.get("/lottery/:id", isAuth, async (req, res) => {
   const idProvided = req.params.id;
   const { players, teams } = req.query;
   try {
@@ -1970,7 +1856,7 @@ app.get("/lottery/:id", async (req, res) => {
   }
 });
 
-app.post("/lottery-assignment/:id", async (req, res) => {
+app.post("/lottery-assignment/:id", isAuth, async (req, res) => {
   try {
     const { players, teams } = req.body;
     const tournamentId = req.params.id;
@@ -2139,20 +2025,18 @@ const fixture = (lotteryArray, playerArray) => {
       firstCount === amountOfGamesForEachTeam
         ? lotteryArray.splice(firstTeamIndex, 1)
         : console.log(
-            `El equipo ${randomTeamOne.team} aun tiene ${
-              amountOfGamesForEachTeam - firstCount
-            } partidos por jugar`
-          );
+          `El equipo ${randomTeamOne.team} aun tiene ${amountOfGamesForEachTeam - firstCount
+          } partidos por jugar`
+        );
       // Como pude haber borrado un elemento, recién ahora debo calcular el índice del randomTeamTwo //
       let secondTeamIndex = lotteryArray.indexOf(randomTeamTwo);
       // Si randomTeamTwo alcanzó su máximo de partidos, lo elimino de lotteryArray (por performance): //
       secondCount === amountOfGamesForEachTeam
         ? lotteryArray.splice(secondTeamIndex, 1)
         : console.log(
-            `El equipo ${randomTeamTwo.team} aun tiene ${
-              amountOfGamesForEachTeam - secondCount
-            } partidos por jugar`
-          );
+          `El equipo ${randomTeamTwo.team} aun tiene ${amountOfGamesForEachTeam - secondCount
+          } partidos por jugar`
+        );
       firstTeamIndex; // ¿NECESARIO? //
       secondTeamIndex; // ¿NECESARIO? //
     }
@@ -2266,7 +2150,7 @@ const fixture = (lotteryArray, playerArray) => {
   return reducedWeeks;
 };
 
-app.get("/fixture", async (req, res) => {
+app.get("/fixture", isAuth, async (req, res) => {
   try {
     const tournaments = await tournamentsModel.find({ ongoing: true }, "name");
     res.render("fixture", { tournaments });
@@ -2275,7 +2159,7 @@ app.get("/fixture", async (req, res) => {
   }
 });
 
-app.get("/fixture/:id", async (req, res) => {
+app.get("/fixture/:id", isAuth, async (req, res) => {
   const tournamentId = req.params.id;
   try {
     const tournamentById = await tournamentsModel.findById(tournamentId);
@@ -2289,7 +2173,49 @@ app.get("/fixture/:id", async (req, res) => {
   }
 });
 
-app.get("/fixture/:tournamentId/:teamIdOrPlayerName", async (req, res) => {
+app.post("/fixture/:tournamentId/players", isAuth, async (req, res) => {
+  const tournamentId = req.params.tournamentId;
+  const { players } = req.body;
+  try {
+    if (!players) {
+      res.redirect(`/fixture/${tournamentId}`)
+      return;
+    }
+    if (players && !Array.isArray(players)) {
+      res.redirect(`/fixture/${tournamentId}/${players}`);
+      return;
+    }
+    if (players && players.length === 2) {
+      const tournament = await tournamentsModel.findById(
+        tournamentId,
+        "name fixture"
+      );
+      const tournamentName = tournament.name;
+      const filteredFixtureFromTournament = tournament.fixture.filter(
+        (element) => {
+          return (
+            (element.playerP1 === players[0] && element.playerP2 === players[1]) || (element.playerP1 === players[1] && element.playerP2 === players[0])
+          );
+        }
+      );
+      res.render("fixture-id-players", {
+        tournamentName,
+        players,
+        tournamentId,
+        filteredFixtureFromTournament,
+      })
+    }
+    if (players && players.length > 2) {
+      res.redirect(`/fixture/${tournamentId}`);
+    }
+  } catch (err) {
+    res.status(500).send("Something went wrong" + err);
+  }
+
+
+});
+
+app.get("/fixture/:tournamentId/:teamIdOrPlayerName", isAuth, async (req, res) => {
   const { tournamentId, teamIdOrPlayerName } = req.params;
   try {
     const tournament = await tournamentsModel.findById(
@@ -2315,8 +2241,6 @@ app.get("/fixture/:tournamentId/:teamIdOrPlayerName", async (req, res) => {
           );
         }
       );
-
-      console.log(filteredFixtureFromTournament);
 
       res.render("fixture-id-player", {
         tournamentName,
